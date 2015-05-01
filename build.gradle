@@ -34,3 +34,5 @@ task fatJar(type: Jar) {
     }
     with jar
 }
+
+fatJar.dependsOn check

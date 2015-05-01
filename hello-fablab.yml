@@ -1,2 +1,1 @@
-template: Hello, %s!
-defaultName: Fablab User
+src/dist/hello-fablab.yml

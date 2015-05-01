@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'application'
 
 //application entry point
 def mainClass = 'de.fau.cs.mad.fablab.rest.server.ServerApplication'
@@ -19,20 +20,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
 
-//create a fat Jar containing all dependencies
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Fablab REST Server',
-                'Implementation-Version': version,
-                'Main-Class': mainClass
-    }
-    baseName = project.name + '-fat'
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-    with jar
+mainClassName = mainClass
+run {
+    args 'server', 'hello-fablab.yml'
 }
-
-fatJar.dependsOn check

@@ -1,0 +1,36 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+//application entry point
+def mainClass = 'de.fau.cs.mad.fablab.rest.server.ServerApplication'
+//set the dropwizard version to use here
+def dropwizardVersion = '0.8.1'
+version = '0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.dropwizard:dropwizard-core:' + dropwizardVersion
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
+
+//create a fat Jar containing all dependencies
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Fablab REST Server',
+                'Implementation-Version': version,
+                'Main-Class': mainClass
+    }
+    baseName = project.name + '-fat'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}

@@ -1,4 +1,5 @@
-# fablab-server
+# fablab-server [![Build Status](https://travis-ci.org/FAU-Inf2/fablab-server.svg?branch=master)](https://travis-ci.org/FAU-Inf2/fablab-server)
+
 
 REST server based on [Dropwizard](http://www.dropwizard.io)
 

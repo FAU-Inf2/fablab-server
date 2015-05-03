@@ -80,7 +80,7 @@ if [ "$CLEAN_CONTAINER" == "yes" ]; then
 	# now delete the container files
 	TO_DELETE=$(docker ps -a -q)
 
-	if [ -z $TO_DELETE ];then
+	if [ -z "$TO_DELETE" ]; then
 		echo nothing to do...
 	else
 		docker rm $TO_DELETE
@@ -92,7 +92,7 @@ if [ "$CLEAN_IMAGES" == "yes" ]; then
 	echo Cleaning docker images files:
 	docker images
 
-	if [ "$FORCE" != "yes" ];then
+	if [ "$FORCE" != "yes" ]; then
 		echo Is this ok? y=yes 
 		read -n 1 c
 		if [ "$c" != "y" ];then
@@ -103,7 +103,7 @@ if [ "$CLEAN_IMAGES" == "yes" ]; then
 
 	#delete the images
 	TO_DELETE=$(docker images -q)
-	if [ -z $TO_DELETE ]; then
+	if [ -z "$TO_DELETE" ]; then
 		echo nothing to do...
 	else
 		docker rmi $TO_DELETE

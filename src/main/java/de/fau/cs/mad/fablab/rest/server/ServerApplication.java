@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.HelloFablabResource;
+import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -37,6 +38,8 @@ class ServerApplication extends Application<ServerConfiguration>
         //add healthcheck and resource to our jersey environment
         environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
         environment.jersey().register(helloFablabResource);
+        //set the security handler for admin resources
+        environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler());
     }
 
     public static void main(String[] args)

@@ -2,7 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
-import de.fau.cs.mad.fablab.rest.server.core.WelcomeUser;
+import de.fau.cs.mad.fablab.rest.entities.WelcomeUser;
 import io.dropwizard.jersey.params.BooleanParam;
 
 import javax.ws.rs.*;

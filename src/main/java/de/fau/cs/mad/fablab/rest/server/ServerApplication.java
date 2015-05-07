@@ -1,7 +1,9 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
+import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
 import de.fau.cs.mad.fablab.rest.server.resources.HelloFablabResource;
+import de.fau.cs.mad.fablab.rest.server.resources.SpaceAPIResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
@@ -31,6 +33,10 @@ class ServerApplication extends Application<ServerConfiguration>
                 configuration.getDefaultName()
         );
 
+        final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
+                SpaceAPIService.ENDPOINT
+        );
+
         //Create our basic healthcheck
         final HelloFablabHealthCheck helloFablabHealthCheck =
             new HelloFablabHealthCheck(configuration.getTemplate());
@@ -38,6 +44,8 @@ class ServerApplication extends Application<ServerConfiguration>
         //add healthcheck and resource to our jersey environment
         environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
         environment.jersey().register(helloFablabResource);
+        environment.jersey().register(spaceAPIResource);
+
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler());
     }

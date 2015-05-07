@@ -16,6 +16,8 @@ dependencies {
     compile project (':../fablab-common')
     compile fileTree(dir: '../fablab-common/build/libs', include: 'fablab-common-1.0.jar')
     compile 'io.dropwizard:dropwizard-core:' + dropwizardVersion
+    compile 'io.dropwizard:dropwizard-client:' + dropwizardVersion
+    compile 'org.glassfish.jersey.ext:jersey-proxy-client:2.17'
 }
 
 task wrapper(type: Wrapper) {

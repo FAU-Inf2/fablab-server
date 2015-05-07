@@ -2,7 +2,6 @@ package de.fau.cs.mad.fablab.rest.server.remote;
 
 
 import net.spaceapi.HackerSpace;
-import net.spaceapi.SpaceAPI;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

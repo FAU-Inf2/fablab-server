@@ -1,0 +1,26 @@
+FROM ubuntu:latest
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# install packages
+RUN apt-get update
+RUN apt-get install -y apache2 libapache2-mod-php5 php5-mysql php5-gd php-db telnet git drush
+
+# download drupal
+RUN cd /var; rm -r www/; drush dl drupal; mv drupal*/ www/
+RUN chown -R www-data:www-data /var/www/
+
+ADD start.sh start.sh
+RUN chmod +x start.sh
+
+RUN rm /etc/apache2/sites-available/000-default.conf
+ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
+
+EXPOSE 80
+
+#ENTRYPOINT ["./start.sh"]
+#CMD ["/usr/sbin/apache2"]
+#CMD ["/bin/bash", "/start.sh"]
+
+# start bash, start.sh must be executed manually
+ENTRYPOINT ["/bin/bash"]

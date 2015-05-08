@@ -18,9 +18,8 @@ ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 80
 
-#ENTRYPOINT ["./start.sh"]
-#CMD ["/usr/sbin/apache2"]
-#CMD ["/bin/bash", "/start.sh"]
+# -- start bash, start.sh must be executed manually
+#ENTRYPOINT ["/bin/bash"]
 
-# start bash, start.sh must be executed manually
-ENTRYPOINT ["/bin/bash"]
+# execute .start.sh and the start bash
+CMD bash -C './start.sh';'/bin/bash'

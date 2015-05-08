@@ -4,11 +4,13 @@ fablab-server is a REST server based on [Dropwizard](http://www.dropwizard.io) n
 
 ## Build
 
-To build and run the server, just type
+To build and run the server, just type:
 
+    export adminUsername=secret
+    export adminPassword=secret
     ./gradlew run
 
-The server will listen on port 8080 for application requests and port 8081 for administrative requests.
+The server will listen on port 8080 for application requests and port 8081 for administrative requests. User credentials for the administrative interface, which is protected by a basic HTTP authentication challenge, have to be provided by the environment variables 'adminUsername' and 'adminPassword'.
 
 ## Libraries
 fablab-server uses the following libraries and software:

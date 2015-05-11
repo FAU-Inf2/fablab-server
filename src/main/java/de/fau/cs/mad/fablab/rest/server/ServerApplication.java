@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
 import de.fau.cs.mad.fablab.rest.server.resources.HelloFablabResource;
+import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.server.resources.ProductResource;
 import de.fau.cs.mad.fablab.rest.server.resources.SpaceAPIResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
@@ -40,6 +41,8 @@ class ServerApplication extends Application<ServerConfiguration>
 
         final ProductResource productResource = new ProductResource();
 
+        final NewsResource newsResource = new NewsResource();
+
         //Create our basic healthcheck
         final HelloFablabHealthCheck helloFablabHealthCheck =
             new HelloFablabHealthCheck(configuration.getTemplate());
@@ -50,6 +53,7 @@ class ServerApplication extends Application<ServerConfiguration>
         environment.jersey().register(helloFablabResource);
         environment.jersey().register(spaceAPIResource);
         environment.jersey().register(productResource);
+        environment.jersey().register(newsResource);
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler());

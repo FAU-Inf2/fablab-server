@@ -8,6 +8,7 @@ RUN apt-get install -y apache2 libapache2-mod-php5 php5-mysql php5-gd php-db tel
 
 # download drupal
 RUN cd /var; rm -r www/; drush dl drupal; mv drupal*/ www/
+#RUN cd /var; rm -r www/; drush dl drupal-6.35; mv drupal*/ www/
 RUN chown -R www-data:www-data /var/www/
 
 ADD start.sh start.sh
@@ -21,5 +22,5 @@ EXPOSE 80
 # -- start bash, start.sh must be executed manually
 #ENTRYPOINT ["/bin/bash"]
 
-# execute .start.sh and the start bash
+# execute .start.sh and the start bash -- it works!
 CMD bash -C './start.sh';'/bin/bash'

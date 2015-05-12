@@ -1,13 +1,14 @@
 package de.fau.cs.mad.fablab.rest.server.openerp;
 
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
+import de.fau.cs.mad.fablab.rest.entities.Product;
 
 import java.net.MalformedURLException;
+import java.util.List;
 
 public interface OpenErpInterface {
 
     public void authenticate() throws MalformedURLException;
-    public JSONRPC2Response getProducts(int limit, int offset);
-    public JSONRPC2Response searchForProducts(int limit, int offset, String value);
+    public List<Product> getProducts(int limit, int offset);
+    public List<Product> searchForProducts(int limit, int offset, String value);
 
 }

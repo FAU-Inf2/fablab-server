@@ -1,9 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
-import de.fau.cs.mad.fablab.rest.server.core.News;
+import de.fau.cs.mad.fablab.rest.server.core.*;
 
-import de.fau.cs.mad.fablab.rest.server.core.NewsDAO;
-import de.fau.cs.mad.fablab.rest.server.core.NewsApi;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
@@ -14,13 +12,14 @@ import java.util.List;
 /**
  * Created by EE on 11.05.15.
  */
-@Path("/news")
+@Path("/ical")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class NewsResource implements NewsApi {
+public class ICalResource implements ICalApi {
 
-    private final NewsDAO dao;
-    public NewsResource(NewsDAO dao) {
+    private final ICalDAO dao;
+
+    public ICalResource(ICalDAO dao) {
         this.dao = dao;
     }
 
@@ -28,32 +27,31 @@ public class NewsResource implements NewsApi {
     @UnitOfWork
     @Path("/{id}")
     @Override
-    public News findById(@PathParam("id")long id) {
-        return  dao.findById(id);
+    public ICal findById(@PathParam("id")long id) {
+        return dao.findById(id);
     }
 
     @GET
     @UnitOfWork
     @Override
-    public List<News> findAll() {
+    public List<ICal> findAll() {
         return dao.findAll();
     }
 
     @POST
     @UnitOfWork
     @Override
-    public News create(News news) {
-        return dao.create(news);
+    public ICal create(ICal obj) {
+        return dao.create(obj);
     }
 
 
     @PUT
     @UnitOfWork
     @Override
-    public News update(News news) {
-        return dao.update(news);
+    public ICal update(ICal obj) {
+       return null;// return dao.update(obj);
     }
-
     @DELETE
     @UnitOfWork
     @Path("/{id}")

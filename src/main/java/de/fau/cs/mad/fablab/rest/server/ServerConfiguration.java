@@ -2,7 +2,11 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
+import io.dropwizard.db.DataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * Configuration class containing environment specific parameters
@@ -38,5 +42,13 @@ class ServerConfiguration extends Configuration
     @JsonProperty
     public void setDefaultName(String name) {
         this.defaultName = name;
+    }
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private DataSourceFactory database = new DataSourceFactory();
+    public DataSourceFactory getDatabase() {
+        return database;
     }
 }

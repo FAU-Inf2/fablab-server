@@ -1,2 +1,25 @@
 template: Hello, %s!
 defaultName: Fablab User
+
+
+# POSTGRES DB
+#database:
+#    driverClass: org.postgresql.Driver
+#    user: dw
+#    password: dw
+#    url: jdbc:postgresql://localhost:5433/dw
+#    properties:
+#            hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+#            hibernate.hbm2ddl.auto: create
+
+# H2 DB
+database:
+    driverClass: org.h2.Driver
+    user: sa
+    password:
+    logValidationErrors: false
+    url: jdbc:h2:./server-db
+
+    properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.hbm2ddl.auto: create

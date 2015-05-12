@@ -9,6 +9,6 @@ public interface OpenErpInterface {
 
     public void authenticate() throws MalformedURLException;
     public List<Product> getProducts(int limit, int offset);
-    public List<Product> searchForProducts(int limit, int offset, String value);
+    public List<Product> searchForProducts(String searchString, int maxResults, int offset);
 
 }

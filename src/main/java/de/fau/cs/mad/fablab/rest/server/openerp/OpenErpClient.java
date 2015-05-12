@@ -62,7 +62,6 @@ public class OpenErpClient implements OpenErpInterface {
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -115,7 +114,7 @@ public class OpenErpClient implements OpenErpInterface {
     }
 
     @Override
-    public List<Product> searchForProducts(final int limit, final int offset, final String aValue) {
+    public List<Product> searchForProducts(String searchString, int maxResults, int offset) {
         JSONRPC2Response jsonRPC2Response = null;
         try {
             mJsonSession.setURL(new URL(mHostname + REQUEST_SEARCH_READ));
@@ -130,12 +129,12 @@ public class OpenErpClient implements OpenErpInterface {
             JSONArray whereNameLike = new JSONArray();
             whereNameLike.add(0, "name");
             whereNameLike.add(1, "ilike");
-            whereNameLike.add(2, aValue);
+            whereNameLike.add(2, searchString);
 
             JSONArray whereDefaultCodeLike = new JSONArray();
             whereDefaultCodeLike.add(0, "default_code");
             whereDefaultCodeLike.add(1, "ilike");
-            whereDefaultCodeLike.add(2, aValue);
+            whereDefaultCodeLike.add(2, searchString);
 
             domain.add(0, "|");
             domain.add(1, whereNameLike);
@@ -160,7 +159,7 @@ public class OpenErpClient implements OpenErpInterface {
             productParams.put("context", mUserContext);
             productParams.put("domain", domain);
             productParams.put("model", "product.product");
-            productParams.put("limit", limit);
+            productParams.put("limit", maxResults);
             productParams.put("sort", "");
             productParams.put("offset", offset);
             productParams.put("fields", fields);

@@ -56,8 +56,7 @@ public class OpenErpClient implements OpenErpInterface {
         mUser = System.getenv().get(OPENERP_USER_KEY);
         mPassword = System.getenv().get(OPENERP_PASSWORD_KEY);
         mDatabase = System.getenv().get(OPENERP_DATABASE_KEY);
-        if(mHostname == null || mUser == null || mPassword == null || mDatabase == null)
-        {
+        if (mHostname == null || mUser == null || mPassword == null || mDatabase == null) {
             System.exit(1);
         }
     }
@@ -188,10 +187,22 @@ public class OpenErpClient implements OpenErpInterface {
 
         for (Object productObject : records) {
             JSONObject productJson = (JSONObject) productObject;
-            String name = (String) productJson.getOrDefault("name", "unknown");
-            Long id = (Long) productJson.getOrDefault("id", "-1");
-            Double price = (Double) productJson.getOrDefault("list_price", "-1");
-            JSONArray categoryArray = (JSONArray) productJson.getOrDefault("categ_id", new JSONArray());
+
+            String name = (productJson.get("name") == null)
+                    ? "unknown"
+                    : (String) productJson.get("name");
+
+            Long id = (productJson.get("id") == null)
+                    ? -1
+                    : (Long) productJson.get("id");
+
+            Double price = (productJson.get("list_price") == null)
+                    ? -1
+                    : (Double) productJson.get("list_price");
+
+            JSONArray categoryArray = (productJson.get("categ_id") == null)
+                    ? new JSONArray()
+                    : (JSONArray) productJson.get("categ_id");
 
             long categoryId = -1;
             String categoryString = "unknown category";

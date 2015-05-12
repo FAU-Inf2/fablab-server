@@ -27,6 +27,24 @@ public class OpenErpClient implements OpenErpInterface {
     private JSONObject mUserContext;
     private String mSessionId;
 
+    private static JSONArray fields = new JSONArray();
+
+    static {
+        fields.add(0, "code");
+        fields.add(1, "reception_count");
+        fields.add(2, "name");
+        fields.add(3, "virtual_available");
+        fields.add(4, "lst_price");
+        fields.add(5, "list_price");
+        fields.add(6, "color");
+        fields.add(7, "qty_available");
+        fields.add(8, "type");
+        fields.add(9, "uom_id");
+        fields.add(10, "delivery_count");
+        fields.add(11, "__last_update");
+        fields.add(12, "categ_id");
+    }
+
     public OpenErpClient(String host, String database, String password, String user) {
         mHostname = host;
         mUser = user;
@@ -40,13 +58,13 @@ public class OpenErpClient implements OpenErpInterface {
         mJsonSession = new JSONRPC2Session(new URL(mHostname + REQUEST_AUTHENTICATE));
         mJsonSession.getOptions().acceptCookies(true);
 
-        Map<String, Object> authParams = new HashMap<String, Object>();
+        Map<String, Object> authParams = new HashMap<>();
         authParams.put("db", mDatabase);
         authParams.put("login", mUser);
         authParams.put("password", mPassword);
 
         JSONRPC2Request authRequest = new JSONRPC2Request(METHOD, authParams, generateRequestID());
-        JSONRPC2Response jsonRPC2Response = null;
+        JSONRPC2Response jsonRPC2Response;
 
         try {
             jsonRPC2Response = mJsonSession.send(authRequest);
@@ -72,25 +90,6 @@ public class OpenErpClient implements OpenErpInterface {
             mJsonSession.setURL(new URL(mHostname + REQUEST_SEARCH_READ));
 
             JSONArray domain = new JSONArray();
-            JSONArray whereSaleOk = new JSONArray();
-            whereSaleOk.add(0, "sale_ok");
-            whereSaleOk.add(1, "=");
-            whereSaleOk.add(2, "1");
-            domain.add(0, whereSaleOk);
-
-            JSONArray fields = new JSONArray();
-            fields.add(0, "code");
-            fields.add(1, "reception_count");
-            fields.add(2, "name");
-            fields.add(3, "virtual_available");
-            fields.add(4, "lst_price");
-            fields.add(5, "list_price");
-            fields.add(6, "color");
-            fields.add(7, "qty_available");
-            fields.add(8, "type");
-            fields.add(9, "uom_id");
-            fields.add(10, "delivery_count");
-            fields.add(11, "__last_update");
 
             Map<String, Object> productParams = new HashMap<String, Object>();
             productParams.put("session_id", mSessionId);
@@ -105,6 +104,7 @@ public class OpenErpClient implements OpenErpInterface {
             JSONRPC2Request productRequest = new JSONRPC2Request(METHOD, productParams, generateRequestID());
             System.out.println("Request of all products: " + productRequest);
             jsonRPC2Response = mJsonSession.send(productRequest);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (JSONRPC2SessionException e) {
@@ -119,13 +119,6 @@ public class OpenErpClient implements OpenErpInterface {
         try {
             mJsonSession.setURL(new URL(mHostname + REQUEST_SEARCH_READ));
 
-            JSONArray domain = new JSONArray();
-
-            JSONArray whereSaleOk = new JSONArray();
-            whereSaleOk.add(0, "sale_ok");
-            whereSaleOk.add(1, "=");
-            whereSaleOk.add(2, "1");
-
             JSONArray whereNameLike = new JSONArray();
             whereNameLike.add(0, "name");
             whereNameLike.add(1, "ilike");
@@ -136,23 +129,10 @@ public class OpenErpClient implements OpenErpInterface {
             whereDefaultCodeLike.add(1, "ilike");
             whereDefaultCodeLike.add(2, searchString);
 
+            JSONArray domain = new JSONArray();
             domain.add(0, "|");
             domain.add(1, whereNameLike);
             domain.add(2, whereDefaultCodeLike);
-
-            JSONArray fields = new JSONArray();
-            fields.add(0, "code");
-            fields.add(1, "reception_count");
-            fields.add(2, "name");
-            fields.add(3, "virtual_available");
-            fields.add(4, "lst_price");
-            fields.add(5, "list_price");
-            fields.add(6, "color");
-            fields.add(7, "qty_available");
-            fields.add(8, "type");
-            fields.add(9, "uom_id");
-            fields.add(10, "delivery_count");
-            fields.add(11, "__last_update");
 
             Map<String, Object> productParams = new HashMap<String, Object>();
             productParams.put("session_id", mSessionId);
@@ -167,6 +147,7 @@ public class OpenErpClient implements OpenErpInterface {
             JSONRPC2Request searchRequest = new JSONRPC2Request(METHOD, productParams, generateRequestID());
             System.out.println("Request of search for name: " + searchRequest);
             jsonRPC2Response = mJsonSession.send(searchRequest);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (JSONRPC2SessionException e) {
@@ -175,6 +156,11 @@ public class OpenErpClient implements OpenErpInterface {
         return generateProductListFromJson(jsonRPC2Response);
     }
 
+    /**
+     * Generate a random request id
+     *
+     * @return
+     */
     private String generateRequestID() {
         return "rid" + new Random().nextInt(Integer.MAX_VALUE);
     }
@@ -197,11 +183,21 @@ public class OpenErpClient implements OpenErpInterface {
             String name = (String) productJson.getOrDefault("name", "unknown");
             Long id = (Long) productJson.getOrDefault("id", "-1");
             Double price = (Double) productJson.getOrDefault("list_price", "-1");
-            JSONArray categoryArray = (JSONArray) productJson.getOrDefault("categ_id", "unknown");
-            long categoryId = (Long) categoryArray.get(0);
-            String categoryString = (String) categoryArray.get(1);
+            JSONArray categoryArray = (JSONArray) productJson.getOrDefault("categ_id", new JSONArray());
+
+            long categoryId = -1;
+            String categoryString = "unknown category";
+            //ensure our array contains the needed elements
+            if (categoryArray.size() == 2) {
+                categoryId = (Long) categoryArray.get(0);
+                categoryString = (String) categoryArray.get(1);
+            }
+            //Create a product and put it in the result list
             Product product = new Product(id, name, price, categoryId, categoryString);
             productList.add(product);
+        }
+        for (Product tmp : productList) {
+            System.out.println(tmp.toString());
         }
         return productList;
     }

@@ -57,6 +57,8 @@ class ServerApplication extends Application<ServerConfiguration>
         environment.jersey().register(new NewsResource(new NewsDAO(hibernate.getSessionFactory())));
         environment.jersey().register(new ICalResource(new ICalDAO(hibernate.getSessionFactory())));
         environment.jersey().register(new ProductResource(new ProductDAO(hibernate.getSessionFactory())));
+        environment.jersey().register(new CartResource(new CartDAO(hibernate.getSessionFactory())));
+
         environment.healthChecks().register("DBHealthCheck", new DatabaseHealthCheck(hibernate));
 
 
@@ -75,7 +77,7 @@ class ServerApplication extends Application<ServerConfiguration>
         }
     }
 
-    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(News.class, ICal.class, Product.class) {
+    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(News.class, ICal.class, Product.class, Cart.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
             return configuration.getDatabase();

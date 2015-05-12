@@ -14,6 +14,12 @@ import java.util.*;
 
 public class OpenErpClient implements OpenErpInterface {
 
+    //Keys for the environment variables containing the data for openerp access
+    static final String OPENERP_HOST_KEY = "openerp_hostname";
+    static final String OPENERP_DATABASE_KEY = "openerp_database";
+    static final String OPENERP_USER_KEY = "openerp_user";
+    static final String OPENERP_PASSWORD_KEY = "openerp_password";
+
     static final String REQUEST_AUTHENTICATE = "/web/session/authenticate";
     static final String REQUEST_SEARCH_READ = "/web/dataset/search_read";
     static final String METHOD = "call";
@@ -45,11 +51,15 @@ public class OpenErpClient implements OpenErpInterface {
         fields.add(12, "categ_id");
     }
 
-    public OpenErpClient(String host, String database, String password, String user) {
-        mHostname = host;
-        mUser = user;
-        mPassword = password;
-        mDatabase = database;
+    public OpenErpClient() {
+        mHostname = System.getenv().get(OPENERP_HOST_KEY);
+        mUser = System.getenv().get(OPENERP_USER_KEY);
+        mPassword = System.getenv().get(OPENERP_PASSWORD_KEY);
+        mDatabase = System.getenv().get(OPENERP_DATABASE_KEY);
+        if(mHostname == null || mUser == null || mPassword == null || mDatabase == null)
+        {
+            System.exit(1);
+        }
     }
 
     @Override
@@ -102,7 +112,6 @@ public class OpenErpClient implements OpenErpInterface {
             productParams.put("fields", fields);
 
             JSONRPC2Request productRequest = new JSONRPC2Request(METHOD, productParams, generateRequestID());
-            System.out.println("Request of all products: " + productRequest);
             jsonRPC2Response = mJsonSession.send(productRequest);
 
         } catch (MalformedURLException e) {
@@ -145,7 +154,6 @@ public class OpenErpClient implements OpenErpInterface {
             productParams.put("fields", fields);
 
             JSONRPC2Request searchRequest = new JSONRPC2Request(METHOD, productParams, generateRequestID());
-            System.out.println("Request of search for name: " + searchRequest);
             jsonRPC2Response = mJsonSession.send(searchRequest);
 
         } catch (MalformedURLException e) {
@@ -195,9 +203,6 @@ public class OpenErpClient implements OpenErpInterface {
             //Create a product and put it in the result list
             Product product = new Product(id, name, price, categoryId, categoryString);
             productList.add(product);
-        }
-        for (Product tmp : productList) {
-            System.out.println(tmp.toString());
         }
         return productList;
     }

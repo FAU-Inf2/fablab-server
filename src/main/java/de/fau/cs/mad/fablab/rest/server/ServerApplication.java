@@ -1,17 +1,11 @@
 package de.fau.cs.mad.fablab.rest.server;
 
-import de.fau.cs.mad.fablab.rest.server.core.ICal;
-import de.fau.cs.mad.fablab.rest.server.core.ICalDAO;
+import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
-import de.fau.cs.mad.fablab.rest.server.resources.HelloFablabResource;
-import de.fau.cs.mad.fablab.rest.server.resources.ICalResource;
-import de.fau.cs.mad.fablab.rest.server.resources.SpaceAPIResource;
+import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
-import de.fau.cs.mad.fablab.rest.server.core.News;
-import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
-import de.fau.cs.mad.fablab.rest.server.core.NewsDAO;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -62,6 +56,7 @@ class ServerApplication extends Application<ServerConfiguration>
 
         environment.jersey().register(new NewsResource(new NewsDAO(hibernate.getSessionFactory())));
         environment.jersey().register(new ICalResource(new ICalDAO(hibernate.getSessionFactory())));
+        environment.jersey().register(new ProductResource(new ProductDAO(hibernate.getSessionFactory())));
         environment.healthChecks().register("DBHealthCheck", new DatabaseHealthCheck(hibernate));
 
 
@@ -80,7 +75,7 @@ class ServerApplication extends Application<ServerConfiguration>
         }
     }
 
-    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(News.class, ICal.class) {
+    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(News.class, ICal.class, Product.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
             return configuration.getDatabase();

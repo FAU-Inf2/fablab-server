@@ -39,7 +39,6 @@ public class OpenErpClient implements OpenErpInterface {
 
         mJsonSession = new JSONRPC2Session(new URL(mHostname + REQUEST_AUTHENTICATE));
         mJsonSession.getOptions().acceptCookies(true);
-        mJsonSession.getOptions().trustAllCerts(true);
 
         Map<String, Object> authParams = new HashMap<String, Object>();
         authParams.put("db", mDatabase);

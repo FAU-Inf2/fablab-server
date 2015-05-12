@@ -13,9 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-/**
- * Created by johannes on 12.05.15.
- */
 public class OpenErpClient implements  OpenErpInterface {
     static final String REQUEST_AUTHENTICATE = "/web/session/authenticate";
     static final String REQUEST_SEARCH_READ = "/web/dataset/search_read";

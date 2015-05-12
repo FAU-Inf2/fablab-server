@@ -50,7 +50,7 @@ public class ICalResource implements ICalApi {
     @UnitOfWork
     @Override
     public ICal update(ICal obj) {
-       return null;// return dao.update(obj);
+       return dao.update(obj);
     }
     @DELETE
     @UnitOfWork

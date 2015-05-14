@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 
+import de.fau.cs.mad.fablab.rest.core.ICal;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 

@@ -1,9 +1,10 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
-import de.fau.cs.mad.fablab.rest.server.core.News;
+import de.fau.cs.mad.fablab.rest.core.News;
 
 import de.fau.cs.mad.fablab.rest.server.core.NewsDAO;
-import de.fau.cs.mad.fablab.rest.server.core.NewsApi;
+import de.fau.cs.mad.fablab.rest.api.NewsApi;
+import de.fau.cs.mad.fablab.rest.server.core.NewsFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
@@ -14,58 +15,32 @@ import java.util.List;
 /**
  * Created by EE on 11.05.15.
  */
-@Path("/news")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+
+//TODO: RESPONSES like  404 and so on...
 public class NewsResource implements NewsApi {
 
-    private final NewsDAO dao;
-    public NewsResource(NewsDAO dao) {
-        this.dao = dao;
+    private final NewsFacade facade;
+
+
+    public NewsResource(NewsFacade facade) {
+        this.facade = facade;
     }
 
-    @GET
     @UnitOfWork
-    @Path("/{id}")
     @Override
-    public News findById(@PathParam("id")long id) {
-        return  dao.findById(id);
+    public News findById(long id) {
+        return  this.facade.findById(id);
     }
 
-    @GET
     @UnitOfWork
     @Override
     public List<News> findAll() {
-        return dao.findAll();
+        return this.facade.findAll();
     }
 
-    @POST
     @UnitOfWork
     @Override
-    public News create(News news) {
-        return dao.create(news);
-    }
-
-
-    @PUT
-    @UnitOfWork
-    @Override
-    public News update(News news) {
-        return dao.update(news);
-    }
-
-    @DELETE
-    @UnitOfWork
-    @Path("/{id}")
-    @Override
-    public void delete(@PathParam("id") long id) {
-        dao.delete(id);
-    }
-
-    @DELETE
-    @UnitOfWork
-    @Override
-    public void deleteAll() {
-        dao.deleteAll();
+    public List<News> find(int offset, int limit) {
+        return this.facade.find(offset, limit);
     }
 }

@@ -1,9 +1,10 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 
+import de.fau.cs.mad.fablab.rest.core.Cart;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
-
+import de.fau.cs.mad.fablab.rest.core.Product;
 import java.util.List;
 
 /**
@@ -17,10 +18,7 @@ public class CartDAO extends AbstractDAO<Cart> {
 
     //GET
     public Cart findById(long id) {
-        Cart n = super.get(id);
-        if(n == null)
-            return new Cart();
-        return n;
+        return super.get(id);
     }
 
     @SuppressWarnings("unchecked")
@@ -42,6 +40,7 @@ public class CartDAO extends AbstractDAO<Cart> {
         this.persist(stored);
         return stored;
     }
+
 
     public Cart addProduct(long id, Product product, double amount){
         Cart c = findById(id);

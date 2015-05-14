@@ -1,5 +1,9 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
+import de.fau.cs.mad.fablab.rest.api.NewsApi;
+import de.fau.cs.mad.fablab.rest.api.ProductApi;
+import de.fau.cs.mad.fablab.rest.core.News;
+import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -11,58 +15,34 @@ import java.util.List;
 /**
  * Created by EE on 12.05.15.
  */
-@Path("/product")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+//TODO: RESPONSES like  404 and so on...
 public class ProductResource implements ProductApi {
 
-    private final ProductDAO dao;
+    private final ProductFacade facade;
 
-    public ProductResource(ProductDAO dao) {
-        this.dao = dao;
+
+    public ProductResource(ProductFacade facade) {
+        this.facade = facade;
     }
 
-    @GET
-    @UnitOfWork
-    @Path("/{id}")
+
     @Override
-    public Product findById(@PathParam("id")long id) {
-        return dao.findById(id);
+    public Product findById(@PathParam("id") long id) {
+        return this.facade.findById(id);
     }
 
-    @GET
-    @UnitOfWork
+    @Override
+    public List<Product> findByName(@PathParam("name") String name) {
+        return this.facade.findByName(name);
+    }
+
+    @Override
+    public List<Product> findByCategory(@PathParam("category") String category) {
+        return this.facade.findByCategory(category);
+    }
+
     @Override
     public List<Product> findAll() {
-        return dao.findAll();
-    }
-
-    @POST
-    @UnitOfWork
-    @Override
-    public Product create(Product obj) {
-        return dao.create(obj);
-    }
-
-
-    @PUT
-    @UnitOfWork
-    @Override
-    public Product update(Product obj) {
-       return dao.update(obj);
-    }
-    @DELETE
-    @UnitOfWork
-    @Path("/{id}")
-    @Override
-    public void delete(@PathParam("id") long id) {
-        dao.delete(id);
-    }
-
-    @DELETE
-    @UnitOfWork
-    @Override
-    public void deleteAll() {
-        dao.deleteAll();
+        return this.facade.findAll();
     }
 }

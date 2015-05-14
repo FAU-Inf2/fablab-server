@@ -1,6 +1,8 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
+import de.fau.cs.mad.fablab.rest.core.News;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
@@ -26,6 +28,16 @@ public class NewsDAO extends AbstractDAO<News> {
     public List<News> findAll() {
         return super.currentSession().createQuery("FROM News").list();
     }
+
+
+    @SuppressWarnings("unchecked")
+    public List<News> find(int offset, int limit) {
+        Query q = currentSession().createQuery("FROM News");
+        q.setFirstResult(offset);
+        q.setMaxResults(limit);
+        return q.list();
+    }
+
 
     //Create
     public News create(News obj){
@@ -61,7 +73,6 @@ public class NewsDAO extends AbstractDAO<News> {
     }
 
     public void deleteAll(){
-
         System.out.println("DELETED: ALL!!! ");
         currentSession().createQuery("delete FROM News").executeUpdate();
     }

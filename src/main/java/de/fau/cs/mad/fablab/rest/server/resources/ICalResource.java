@@ -1,7 +1,9 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
-import de.fau.cs.mad.fablab.rest.server.core.*;
+import de.fau.cs.mad.fablab.rest.api.ICalApi;
+import de.fau.cs.mad.fablab.rest.core.ICal;
 
+import de.fau.cs.mad.fablab.rest.server.core.ICalFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
@@ -17,53 +19,23 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ICalResource implements ICalApi {
 
-    private final ICalDAO dao;
+    private final ICalFacade facade;
 
-    public ICalResource(ICalDAO dao) {
-        this.dao = dao;
+
+    public ICalResource(ICalFacade facade) {
+        this.facade = facade;
     }
 
-    @GET
     @UnitOfWork
-    @Path("/{id}")
     @Override
-    public ICal findById(@PathParam("id")long id) {
-        return dao.findById(id);
+    public ICal findById(long id) {
+        return  this.facade.findById(id);
     }
 
-    @GET
     @UnitOfWork
     @Override
     public List<ICal> findAll() {
-        return dao.findAll();
+        return this.facade.findAll();
     }
 
-    @POST
-    @UnitOfWork
-    @Override
-    public ICal create(ICal obj) {
-        return dao.create(obj);
-    }
-
-
-    @PUT
-    @UnitOfWork
-    @Override
-    public ICal update(ICal obj) {
-       return dao.update(obj);
-    }
-    @DELETE
-    @UnitOfWork
-    @Path("/{id}")
-    @Override
-    public void delete(@PathParam("id") long id) {
-        dao.delete(id);
-    }
-
-    @DELETE
-    @UnitOfWork
-    @Override
-    public void deleteAll() {
-        dao.deleteAll();
-    }
 }

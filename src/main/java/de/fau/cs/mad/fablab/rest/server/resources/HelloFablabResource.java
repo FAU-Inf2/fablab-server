@@ -2,7 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
-import de.fau.cs.mad.fablab.rest.entities.Product;
+import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.entities.WelcomeUser;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpInterface;
@@ -10,7 +10,6 @@ import io.dropwizard.jersey.params.BooleanParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -35,11 +34,11 @@ public class HelloFablabResource {
         greetCounter = new AtomicLong();
 
         mOpenErp = new OpenErpClient();
-        try {
-            mOpenErp.authenticate();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            mOpenErp.authenticate();
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @GET

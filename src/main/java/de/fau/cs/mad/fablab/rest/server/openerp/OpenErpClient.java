@@ -52,12 +52,22 @@ public class OpenErpClient implements OpenErpInterface {
     }
 
     public OpenErpClient() {
+
         mHostname = System.getenv().get(OPENERP_HOST_KEY);
         mUser = System.getenv().get(OPENERP_USER_KEY);
         mPassword = System.getenv().get(OPENERP_PASSWORD_KEY);
         mDatabase = System.getenv().get(OPENERP_DATABASE_KEY);
+
+        //If any of these variables is null, print an error message and exit(1)
         if (mHostname == null || mUser == null || mPassword == null || mDatabase == null) {
-           // System.exit(1);
+            
+            System.err.println("ERROR while initializing OpenErpClient. Environment vars missing.\n" +
+                    "the following variables have to be defined :\n" +
+                    "\t"+OPENERP_HOST_KEY+"=\"openerp hostname\"\n" +
+                    "\t"+OPENERP_DATABASE_KEY+"=\"openerp database name\"\n" +
+                    "\t"+OPENERP_USER_KEY+"=\"openerp username\"\n" +
+                    "\t"+OPENERP_PASSWORD_KEY+"=\"openerp user password\"\n");
+            System.exit(1);
         }
     }
 

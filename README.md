@@ -5,10 +5,19 @@ fablab-server is a REST server based on [Dropwizard](http://www.dropwizard.io) n
 ## Build
 
 To build and run the server, just type:
-
+    
+    //set environment variables needed for admin authentication
     export adminUsername=secret
     export adminPassword=secret
+    
+    //set environment variables for openerp client
+    export openerp_hostname="openerp hostname"
+    export openerp_database="openerp database"
+    export openerp_user="openerp user"
+    export openerp_password="openerp user password"
     ./gradlew run
+    
+<b>NOTE : if any environment variable is missing, the server will not start!</b>
 
 The server will listen on port 8080 for application requests and port 8081 for administrative requests. User credentials for the administrative interface, which is protected by a basic HTTP authentication challenge, have to be provided by the environment variables 'adminUsername' and 'adminPassword'.
 

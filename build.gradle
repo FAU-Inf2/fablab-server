@@ -30,5 +30,5 @@ task wrapper(type: Wrapper) {
 
 mainClassName = mainClass
 run {
-    args 'server', 'hello-fablab.yml'
+    args 'server', 'config.yml'
 }

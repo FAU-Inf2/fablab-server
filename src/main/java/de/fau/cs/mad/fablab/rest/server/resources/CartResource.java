@@ -26,16 +26,19 @@ public class CartResource implements CartApi {
         this.facade = facade;
     }
 
+    @UnitOfWork
     @Override
     public Cart create(Cart obj) {
         return this.facade.create(obj);
     }
 
+    @UnitOfWork
     @Override
     public Cart update(Cart obj) {
         return this.facade.update(obj);
     }
 
+    @UnitOfWork
     @Override
     public void delete(long id) {
         this.facade.delete(id);

@@ -18,10 +18,7 @@ public class NewsDAO extends AbstractDAO<News> {
 
     //GET
     public News findById(long id) {
-        News n = super.get(id);
-        if(n == null)
-            return new News();
-        return n;
+        return super.get(id);
     }
 
     @SuppressWarnings("unchecked")

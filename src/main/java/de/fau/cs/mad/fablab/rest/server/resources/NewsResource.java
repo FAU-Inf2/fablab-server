@@ -1,14 +1,10 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
 import de.fau.cs.mad.fablab.rest.core.News;
-
-import de.fau.cs.mad.fablab.rest.server.core.NewsDAO;
 import de.fau.cs.mad.fablab.rest.api.NewsApi;
 import de.fau.cs.mad.fablab.rest.server.core.NewsFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 

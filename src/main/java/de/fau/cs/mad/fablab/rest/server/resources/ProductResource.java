@@ -26,21 +26,25 @@ public class ProductResource implements ProductApi {
     }
 
 
+    @UnitOfWork
     @Override
-    public Product findById(@PathParam("id") long id) {
+    public Product findById(long id) {
         return this.facade.findById(id);
     }
 
+    @UnitOfWork
     @Override
-    public List<Product> findByName(@PathParam("name") String name) {
+    public List<Product> findByName(String name) {
         return this.facade.findByName(name);
     }
 
+    @UnitOfWork
     @Override
-    public List<Product> findByCategory(@PathParam("category") String category) {
+    public List<Product> findByCategory(String category) {
         return this.facade.findByCategory(category);
     }
 
+    @UnitOfWork
     @Override
     public List<Product> findAll() {
         return this.facade.findAll();

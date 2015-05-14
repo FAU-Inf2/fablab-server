@@ -18,10 +18,7 @@ public class ICalDAO extends AbstractDAO<ICal> {
 
     //GET
     public ICal findById(long id) {
-        ICal n = super.get(id);
-        if(n == null)
-            return new ICal();
-        return n;
+        return super.get(id);
     }
 
     @SuppressWarnings("unchecked")

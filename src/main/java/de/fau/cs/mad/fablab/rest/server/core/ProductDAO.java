@@ -67,8 +67,8 @@ public class ProductDAO extends AbstractDAO<Product> {
 
     //Update
     public Product update(Product modified) {
-        Product stored = this.get(modified.getId());
-        stored.setId(modified.getId());
+        Product stored = this.get(modified.getProductId());
+        stored.setProductId(modified.getProductId());
         stored.setName(modified.getName());
         stored.setPrice(modified.getPrice());
         stored.setDescription(modified.getDescription());

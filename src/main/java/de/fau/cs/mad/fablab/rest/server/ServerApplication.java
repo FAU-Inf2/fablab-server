@@ -34,6 +34,7 @@ class ServerApplication extends Application<ServerConfiguration> {
     public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
 
         bootstrap.addBundle(hibernate);
+        //enables the use of environment variables in yaml config file
         bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
                 bootstrap.getConfigurationSourceProvider(),
                 new EnvironmentVariableSubstitutor()

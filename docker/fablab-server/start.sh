@@ -8,5 +8,5 @@ docker run -d \
     -e openerp_password=$openerp_password \
     -e adminUsername=$adminUsername \
     -e adminPassword=$adminPassword \
-    -e FABLAB_KEYSTORE_PASSWORD=$FABLAB_KEYSTORE_PASSWORD \
+    -e FABLAB_KEYSTORE_PASSWORD="$FABLAB_KEYSTORE_PASSWORD" \
     container-fablab-server

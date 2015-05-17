@@ -24,6 +24,9 @@ public class OpenErpClient implements OpenErpInterface {
     static final String REQUEST_SEARCH_READ = "/web/dataset/search_read";
     static final String METHOD = "call";
 
+    private URL mAuthenticateUrl;
+    private URL mSearchReadUrl;
+
     private String mHostname;
     private String mUser;
     private String mPassword;
@@ -51,7 +54,7 @@ public class OpenErpClient implements OpenErpInterface {
         fields.add(12, "categ_id");
     }
 
-    public OpenErpClient() {
+    public OpenErpClient() throws MalformedURLException {
 
         mHostname = System.getenv().get(OPENERP_HOST_KEY);
         mUser = System.getenv().get(OPENERP_USER_KEY);
@@ -69,12 +72,15 @@ public class OpenErpClient implements OpenErpInterface {
                     "\t"+OPENERP_PASSWORD_KEY+"=\"openerp user password\"\n");
             System.exit(1);
         }
+
+        mAuthenticateUrl = new URL(mHostname + REQUEST_AUTHENTICATE);
+        mSearchReadUrl = new URL(mHostname + REQUEST_SEARCH_READ);
     }
 
     @Override
-    public void authenticate() throws MalformedURLException {
+    public void authenticate() {
 
-        mJsonSession = new JSONRPC2Session(new URL(mHostname + REQUEST_AUTHENTICATE));
+        mJsonSession = new JSONRPC2Session(mAuthenticateUrl);
         mJsonSession.getOptions().acceptCookies(true);
 
         Map<String, Object> authParams = new HashMap<>();
@@ -106,7 +112,7 @@ public class OpenErpClient implements OpenErpInterface {
 
         JSONRPC2Response jsonRPC2Response = null;
         try {
-            mJsonSession.setURL(new URL(mHostname + REQUEST_SEARCH_READ));
+            mJsonSession.setURL(mSearchReadUrl);
 
             JSONArray domain = new JSONArray();
 
@@ -123,8 +129,6 @@ public class OpenErpClient implements OpenErpInterface {
             JSONRPC2Request productRequest = new JSONRPC2Request(METHOD, productParams, generateRequestID());
             jsonRPC2Response = mJsonSession.send(productRequest);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
@@ -135,7 +139,7 @@ public class OpenErpClient implements OpenErpInterface {
     public List<Product> searchForProducts(String searchString, int maxResults, int offset) {
         JSONRPC2Response jsonRPC2Response = null;
         try {
-            mJsonSession.setURL(new URL(mHostname + REQUEST_SEARCH_READ));
+            mJsonSession.setURL(mSearchReadUrl);
 
             JSONArray whereNameLike = new JSONArray();
             whereNameLike.add(0, "name");
@@ -165,8 +169,6 @@ public class OpenErpClient implements OpenErpInterface {
             JSONRPC2Request searchRequest = new JSONRPC2Request(METHOD, productParams, generateRequestID());
             jsonRPC2Response = mJsonSession.send(searchRequest);
 
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }

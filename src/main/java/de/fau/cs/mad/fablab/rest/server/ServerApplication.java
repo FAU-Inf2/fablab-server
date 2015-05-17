@@ -12,6 +12,8 @@ import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import io.dropwizard.Application;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -30,7 +32,12 @@ class ServerApplication extends Application<ServerConfiguration> {
      */
     @Override
     public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
+
         bootstrap.addBundle(hibernate);
+        bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
+                bootstrap.getConfigurationSourceProvider(),
+                new EnvironmentVariableSubstitutor()
+        ));
     }
 
     @Override

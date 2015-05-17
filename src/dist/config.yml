@@ -8,14 +8,14 @@ server:
     - type: https
       port: 8082
       keyStorePath: src/dist/fablab-rest-server.keystore
-      keyStorePassword: ${DW_KEYSTORE_PASSWORD}
+      keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
       validateCerts: false
 
   adminConnectors:
     - type: https
       port: 8081
       keyStorePath: src/dist/fablab-rest-server.keystore
-      keyStorePassword: ${DW_KEYSTORE_PASSWORD}
+      keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
       validateCerts: false
 
 

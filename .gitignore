@@ -142,3 +142,8 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 
+#keystore file to prevent accidental check in
+*.keystore
+
+#database files
+server-db.*.db

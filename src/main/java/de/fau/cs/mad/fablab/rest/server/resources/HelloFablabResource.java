@@ -10,6 +10,7 @@ import io.dropwizard.jersey.params.BooleanParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -33,12 +34,12 @@ public class HelloFablabResource {
         this.counter = new AtomicLong();
         greetCounter = new AtomicLong();
 
-        mOpenErp = new OpenErpClient();
-//        try {
-//            mOpenErp.authenticate();
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            mOpenErp = new OpenErpClient();
+            mOpenErp.authenticate();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     @GET

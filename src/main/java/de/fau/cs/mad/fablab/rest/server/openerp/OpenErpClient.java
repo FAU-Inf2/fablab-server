@@ -222,7 +222,8 @@ public class OpenErpClient implements OpenErpInterface {
                 categoryString = (String) categoryArray.get(1);
             }
             //Create a product and put it in the result list
-            Product product = new Product(id, name, price, categoryId, categoryString);
+            //TODO what is unit here? (last param in the Product Constructor not used right now)
+            Product product = new Product(id, name, price, categoryId, categoryString, "");
             productList.add(product);
         }
         return productList;

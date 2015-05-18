@@ -25,6 +25,7 @@ public class OpenErpClient implements OpenErpInterface {
     static final String METHOD = "call";
 
     private static JSONArray fields = new JSONArray();
+
     static {
         fields.add(0, "code");
         fields.add(1, "reception_count");
@@ -54,6 +55,7 @@ public class OpenErpClient implements OpenErpInterface {
     /***
      * Creates a jsonSession and gets a session id by calling authenticate()
      * If any environment variable is missing, it will shutdown the whole application with exit code 1
+     *
      * @throws MalformedURLException if the hostname is not a valid url
      */
     public OpenErpClient() throws MalformedURLException {
@@ -81,8 +83,51 @@ public class OpenErpClient implements OpenErpInterface {
     }
 
     /***
+     * Authenticates this JsonSession to the service.
+     * This method has to be called before doing any requests to the service.
+     */
+    private void authenticate() {
+
+        mJsonSession = new JSONRPC2Session(mAuthenticateUrl);
+        mJsonSession.getOptions().acceptCookies(true);
+
+        Map<String, Object> authParams = new HashMap<>();
+        authParams.put("db", mDatabase);
+        authParams.put("login", mUser);
+        authParams.put("password", mPassword);
+
+        JSONRPC2Request authRequest = new JSONRPC2Request(METHOD, authParams, generateRequestID());
+        JSONRPC2Response jsonRPC2Response;
+
+        try {
+            jsonRPC2Response = mJsonSession.send(authRequest);
+            mSessionId = ((JSONObject) jsonRPC2Response.getResult()).get("session_id").toString();
+
+            //get the user_context from the connection result, to send to OpenERP in the next request
+            mUserContext = (JSONObject) ((JSONObject) jsonRPC2Response.getResult()).get("user_context");
+            mUserContext.put("lang", "de_DE");
+            mUserContext.put("tz", "Europe/Berlin");
+            mUserContext.put("uid", "27");
+            mUserContext.put("search_default_filter_to_sell", "1");
+
+        } catch (JSONRPC2SessionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Generate a random request id
+     *
+     * @return
+     */
+    private String generateRequestID() {
+        return "rid" + new Random().nextInt(Integer.MAX_VALUE);
+    }
+
+    /***
      * Requests a list of products at the openerp web service
-     * @param limit the maximum number of products to return
+     *
+     * @param limit  the maximum number of products to return
      * @param offset the record offset
      * @return a List of {@link Product}
      */
@@ -115,12 +160,12 @@ public class OpenErpClient implements OpenErpInterface {
         return generateProductListFromJson(jsonRPC2Response);
     }
 
-
     /***
      * searches for a substring inside product namesat the openerp web service
+     *
      * @param searchString the substring to search for inside product names
-     * @param limit the maximum number of products to return
-     * @param offset the record offset
+     * @param limit        the maximum number of products to return
+     * @param offset       the record offset
      * @return a List of {@link Product}
      */
     @Override
@@ -164,98 +209,10 @@ public class OpenErpClient implements OpenErpInterface {
         return generateProductListFromJson(jsonRPC2Response);
     }
 
-
-    /**
-     * Generate a random request id
-     * @return
-     */
-    private String generateRequestID() {
-        return "rid" + new Random().nextInt(Integer.MAX_VALUE);
-    }
-
-
-    /**
-     * Parses a {@link JSONRPC2Response} object and creates a {@link Product} element for each
-     * entry
-     *
-     * @param jsonResponse the {@link JSONRPC2Response} object to parse
-     * @return a List containing {@link Product} elements
-     * @throws OpenErpException if jsonResponse contains no result
-     */
-    protected List<Product> generateProductListFromJson(JSONRPC2Response jsonResponse) throws OpenErpException {
-        List<Product> productList = new LinkedList<>();
-
-        JSONObject result = (JSONObject) jsonResponse.getResult();
-        if(result == null){
-            //something went wrong;
-            throw new OpenErpException("JsonResponse contains no result", jsonResponse.getError().getMessage());
-        }
-        JSONArray records = (JSONArray) result.get("records");
-
-        for (Object productObject : records) {
-            JSONObject productJson = (JSONObject) productObject;
-
-            String name = (productJson.get("name") == null) ? "unknown" : (String) productJson.get("name");
-
-            Long id = (productJson.get("id") == null) ? -1 : (Long) productJson.get("id");
-
-            Double price = (productJson.get("list_price") == null) ? -1 : (Double) productJson.get("list_price");
-
-            JSONArray categoryArray = (productJson.get("categ_id") == null)
-                                      ? new JSONArray()
-                                      : (JSONArray) productJson.get("categ_id");
-
-            long categoryId = -1;
-            String categoryString = "unknown category";
-            //ensure our array contains the needed elements
-            if (categoryArray.size() == 2) {
-                categoryId = (Long) categoryArray.get(0);
-                categoryString = (String) categoryArray.get(1);
-            }
-            //Create a product and put it in the result list
-            //TODO what is unit here? (last param in the Product Constructor not used right now)
-            Product product = new Product(id, name, price, categoryId, categoryString, "");
-            productList.add(product);
-        }
-        return productList;
-    }
-
-    /***
-     * Authenticates this JsonSession to the service.
-     * This method has to be called before doing any requests to the service.
-     */
-    private void authenticate() {
-
-        mJsonSession = new JSONRPC2Session(mAuthenticateUrl);
-        mJsonSession.getOptions().acceptCookies(true);
-
-        Map<String, Object> authParams = new HashMap<>();
-        authParams.put("db", mDatabase);
-        authParams.put("login", mUser);
-        authParams.put("password", mPassword);
-
-        JSONRPC2Request authRequest = new JSONRPC2Request(METHOD, authParams, generateRequestID());
-        JSONRPC2Response jsonRPC2Response;
-
-        try {
-            jsonRPC2Response = mJsonSession.send(authRequest);
-            mSessionId = ((JSONObject) jsonRPC2Response.getResult()).get("session_id").toString();
-
-            //get the user_context from the connection result, to send to OpenERP in the next request
-            mUserContext = (JSONObject) ((JSONObject) jsonRPC2Response.getResult()).get("user_context");
-            mUserContext.put("lang", "de_DE");
-            mUserContext.put("tz", "Europe/Berlin");
-            mUserContext.put("uid", "27");
-            mUserContext.put("search_default_filter_to_sell", "1");
-
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
-        }
-    }
-
     /***
      * Builds a HashMap containing parameters used for a product.product search-read
-     * @param limit the max count of records which should be returned
+     *
+     * @param limit  the max count of records which should be returned
      * @param offset the offset to start the records
      * @param domain additional, domain specific parameters, given as {@link JSONArray}
      * @return
@@ -280,6 +237,7 @@ public class OpenErpClient implements OpenErpInterface {
      * if so, it might be an expired session.
      * If the param contains an error 300, this method re-authenticates the client and throws an
      * {@link OpenErpSessionExpiredException}
+     *
      * @param response the {@link JSONRPC2Response} to check
      * @throws OpenErpSessionExpiredException when response contains error code 300
      */
@@ -292,5 +250,57 @@ public class OpenErpClient implements OpenErpInterface {
                 throw new OpenErpSessionExpiredException();
             }
         }
+    }
+
+    /**
+     * Parses a {@link JSONRPC2Response} object and creates a {@link Product} element for each
+     * entry
+     *
+     * @param jsonResponse the {@link JSONRPC2Response} object to parse
+     * @return a List containing {@link Product} elements
+     * @throws OpenErpException if jsonResponse contains no result
+     */
+    protected List<Product> generateProductListFromJson(JSONRPC2Response jsonResponse) throws OpenErpException {
+        List<Product> productList = new LinkedList<>();
+
+        JSONObject result = (JSONObject) jsonResponse.getResult();
+        if (result == null) {
+            //something went wrong;
+            throw new OpenErpException("JsonResponse contains no result", jsonResponse.getError().getMessage());
+        }
+        JSONArray records = (JSONArray) result.get("records");
+
+        for (Object productObject : records) {
+            JSONObject productJson = (JSONObject) productObject;
+
+            String name = (productJson.get("name") == null)
+                          ? "unknown"
+                          : (String) productJson.get("name");
+
+            Long id = (productJson.get("id") == null)
+                      ? -1
+                      : (Long) productJson.get("id");
+
+            Double price = (productJson.get("list_price") == null)
+                           ? -1
+                           : (Double) productJson.get("list_price");
+
+            JSONArray categoryArray = (productJson.get("categ_id") == null)
+                                      ? new JSONArray()
+                                      : (JSONArray) productJson.get("categ_id");
+
+            long categoryId = -1;
+            String categoryString = "unknown category";
+            //ensure our array contains the needed elements
+            if (categoryArray.size() == 2) {
+                categoryId = (Long) categoryArray.get(0);
+                categoryString = (String) categoryArray.get(1);
+            }
+            //Create a product and put it in the result list
+            //TODO what is unit here? (last param in the Product Constructor not used right now)
+            Product product = new Product(id, name, price, categoryId, categoryString, "");
+            productList.add(product);
+        }
+        return productList;
     }
 }

@@ -5,13 +5,16 @@ import com.google.common.base.Optional;
 import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.entities.WelcomeUser;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
+import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpException;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpInterface;
 import io.dropwizard.jersey.params.BooleanParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
@@ -36,7 +39,6 @@ public class HelloFablabResource {
 
         try {
             mOpenErp = new OpenErpClient();
-            mOpenErp.authenticate();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -68,9 +70,13 @@ public class HelloFablabResource {
      */
     @GET
     @Path("/products/search")
-    public List<Product> searchProductByName(@QueryParam("name") String name,
+    public Response searchProductByName(@QueryParam("name") String name,
                                              @QueryParam("max") int max) {
-        return mOpenErp.searchForProducts(name, max, 0);
+        try {
+            return Response.ok(mOpenErp.searchForProducts(name, max, 0)).build();
+        } catch (OpenErpException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON).build();
+        }
     }
 
     /***
@@ -81,8 +87,12 @@ public class HelloFablabResource {
      */
     @GET
     @Path("/products")
-    public List<Product> getProducts(@QueryParam("max") int max,
+    public Response getProducts(@QueryParam("max") int max,
                                      @QueryParam("offset") int offset) {
-        return mOpenErp.getProducts(max, offset);
+        try {
+            return Response.ok(mOpenErp.getProducts(max, offset)).build();
+        } catch (OpenErpException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON).build();
+        }
     }
 }

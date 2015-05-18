@@ -6,9 +6,6 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 public interface OpenErpInterface {
-
-    public void authenticate() throws MalformedURLException;
-    public List<Product> getProducts(int limit, int offset);
-    public List<Product> searchForProducts(String searchString, int maxResults, int offset);
-
+    List<Product> getProducts(int limit, int offset) throws OpenErpException;
+    List<Product> searchForProducts(String searchString, int limit, int offset) throws OpenErpException;
 }

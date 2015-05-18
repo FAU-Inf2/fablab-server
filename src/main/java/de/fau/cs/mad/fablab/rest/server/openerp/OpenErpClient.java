@@ -14,6 +14,8 @@ import java.util.*;
 
 public class OpenErpClient implements OpenErpInterface {
 
+    static OpenErpInterface instance;
+
     //Keys for the environment variables containing the data for openerp access
     static final String OPENERP_HOST_KEY = "openerp_hostname";
     static final String OPENERP_DATABASE_KEY = "openerp_database";
@@ -52,13 +54,32 @@ public class OpenErpClient implements OpenErpInterface {
     private JSONObject mUserContext;
     private String mSessionId;
 
+
+    /***
+     * Singleton getInstance()
+     * @return
+     */
+    public static OpenErpInterface getInstance(){
+        if(instance == null){
+            try {
+                instance = new OpenErpClient();
+            } catch (MalformedURLException e) {
+                System.err.println("ERROR - MalformedURLException while initializing OpenErpClient. \n" +
+                                           "The Reason is : "+e.getMessage()+"\n"+
+                                           "Your hostname is : "+System.getenv().get(OPENERP_HOST_KEY));
+                System.exit(1);
+            }
+        }
+        return instance;
+    }
+
     /***
      * Creates a jsonSession and gets a session id by calling authenticate()
      * If any environment variable is missing, it will shutdown the whole application with exit code 1
      *
      * @throws MalformedURLException if the hostname is not a valid url
      */
-    public OpenErpClient() throws MalformedURLException {
+    private OpenErpClient() throws MalformedURLException {
 
         mHostname = System.getenv().get(OPENERP_HOST_KEY);
         mUser = System.getenv().get(OPENERP_USER_KEY);

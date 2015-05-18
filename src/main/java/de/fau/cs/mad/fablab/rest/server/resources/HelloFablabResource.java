@@ -37,11 +37,7 @@ public class HelloFablabResource {
         this.counter = new AtomicLong();
         greetCounter = new AtomicLong();
 
-        try {
-            mOpenErp = new OpenErpClient();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        mOpenErp = OpenErpClient.getInstance();
     }
 
     @GET

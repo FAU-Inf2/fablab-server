@@ -14,7 +14,7 @@ import javax.ws.rs.PathParam;
 @Path("/")
 public interface SpaceAPIService {
 
-   static public final String ENDPOINT = "https://spaceapi.net";
+   static public final String ENDPOINT = "http://spaceapi.net";
 
    @GET
    @Path("/cache/{space}")

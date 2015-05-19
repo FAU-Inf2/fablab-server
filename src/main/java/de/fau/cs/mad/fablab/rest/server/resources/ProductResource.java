@@ -5,9 +5,9 @@ import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.ws.rs.InternalServerErrorException;
 import java.util.List;
 
-//TODO: RESPONSES like  404 and so on...
 public class ProductResource implements ProductApi {
 
     private final ProductFacade facade;
@@ -27,7 +27,11 @@ public class ProductResource implements ProductApi {
     @UnitOfWork
     @Override
     public List<Product> findByName(String name, int limit, int offset) {
-        return this.facade.findByName(name, limit, offset);
+        List<Product> result = this.facade.findByName(name, limit, offset);
+        if(result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
     }
 
     @UnitOfWork
@@ -39,6 +43,11 @@ public class ProductResource implements ProductApi {
     @UnitOfWork
     @Override
     public List<Product> findAll(int limit, int offset) {
-        return this.facade.findAll(limit, offset);
+
+        List<Product> result = this.facade.findAll(limit, offset);
+        if(result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
     }
 }

@@ -40,11 +40,11 @@ public class SpaceAPIResource implements SpaceApi
     @Override
     public HackerSpace getSpace(String name) {
 
-        WebTarget target = ClientBuilder.newClient().register(JacksonJsonProvider.class).target(endpoint);
-        SpaceAPIService api = WebResourceFactory.newResource(SpaceAPIService.class, target);
-
         if (!name.equalsIgnoreCase(spaceName))
             throw new NotAllowedException("This is not allowed");
+
+        WebTarget target = ClientBuilder.newClient().register(JacksonJsonProvider.class).target(endpoint);
+        SpaceAPIService api = WebResourceFactory.newResource(SpaceAPIService.class, target);
 
         return api.space(name);
     }

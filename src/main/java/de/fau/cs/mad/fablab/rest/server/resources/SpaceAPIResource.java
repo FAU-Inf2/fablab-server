@@ -31,9 +31,8 @@ public class SpaceAPIResource implements SpaceApi
     @Override
     public String updateDoorState(String key, String data) {
 
-        if (key.isEmpty() || data.isEmpty())
+        if (key == null || data == null || key.isEmpty() || data.isEmpty())
             throw new NotAuthorizedException("no credentials provided");
-
 
         return "{success:true}";
     }

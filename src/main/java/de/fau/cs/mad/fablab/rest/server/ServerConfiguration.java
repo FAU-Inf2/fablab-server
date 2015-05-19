@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -43,6 +44,12 @@ class ServerConfiguration extends Configuration
     public void setDefaultName(String name) {
         this.defaultName = name;
     }
+
+    @NotNull
+    @Valid
+    @JsonProperty
+    private SpaceApiConfiguration spaceapi;
+    public SpaceApiConfiguration getSpaceApiConfiguration(){ return spaceapi; }
 
     @Valid
     @NotNull

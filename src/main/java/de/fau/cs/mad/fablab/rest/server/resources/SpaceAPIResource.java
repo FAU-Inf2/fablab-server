@@ -38,6 +38,7 @@ public class SpaceAPIResource implements SpaceApi
         return "{success:true}";
     }
 
+    @Override
     public HackerSpace getSpace(String name) {
 
         WebTarget target = ClientBuilder.newClient().register(JacksonJsonProvider.class).target(endpoint);

@@ -2,13 +2,13 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.Product;
+import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.core.ICal;
 import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
-import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import io.dropwizard.Application;
@@ -49,9 +49,11 @@ class ServerApplication extends Application<ServerConfiguration> {
                 configuration.getDefaultName()
         );
 
+        SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
+
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                SpaceAPIService.ENDPOINT,
-                "FAU+FabLab"
+                spaceApiConfiguration.getEndpoint(),
+                spaceApiConfiguration.getSpace()
         );
 
 

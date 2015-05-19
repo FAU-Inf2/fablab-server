@@ -1,6 +1,10 @@
 template: Hello, %s!
 defaultName: Fablab User
 
+spaceapi:
+  endpoint: http://spaceapi.net
+  space: FAU+FabLab
+
 server:
   applicationConnectors:
     - type: http

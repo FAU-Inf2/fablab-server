@@ -50,7 +50,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         );
 
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                SpaceAPIService.ENDPOINT
+                SpaceAPIService.ENDPOINT,
+                "FAU+FabLab"
         );
 
 

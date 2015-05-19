@@ -1,20 +1,12 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
-import de.fau.cs.mad.fablab.rest.api.NewsApi;
 import de.fau.cs.mad.fablab.rest.api.ProductApi;
-import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-
-/**
- * Created by EE on 12.05.15.
- */
 //TODO: RESPONSES like  404 and so on...
 public class ProductResource implements ProductApi {
 
@@ -34,8 +26,8 @@ public class ProductResource implements ProductApi {
 
     @UnitOfWork
     @Override
-    public List<Product> findByName(String name) {
-        return this.facade.findByName(name);
+    public List<Product> findByName(String name, int limit, int offset) {
+        return this.facade.findByName(name, limit, offset);
     }
 
     @UnitOfWork
@@ -46,7 +38,7 @@ public class ProductResource implements ProductApi {
 
     @UnitOfWork
     @Override
-    public List<Product> findAll() {
-        return this.facade.findAll();
+    public List<Product> findAll(int limit, int offset) {
+        return this.facade.findAll(limit, offset);
     }
 }

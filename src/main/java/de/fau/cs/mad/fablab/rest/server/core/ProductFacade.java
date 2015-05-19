@@ -4,9 +4,6 @@ import de.fau.cs.mad.fablab.rest.core.Product;
 
 import java.util.List;
 
-/**
- * Created by EE on 14.05.15.
- */
 public class ProductFacade {
     private final ProductDAO dao;
 
@@ -18,16 +15,16 @@ public class ProductFacade {
         return this.dao.findById(id);
     }
 
-    public List<Product> findAll(){
+    public List<Product> findAll(int limit, int offset) {
         return this.dao.findAll();
     }
 
-    public List<Product> findByName(String name) {
+    public List<Product> findByName(String name, int limit, int offset) {
         return this.dao.findByName(name);
     }
 
-    public  List<Product> findByCategory(String cat){
-        return this.dao.findByCategory(cat);
+    public List<Product> findByCategory(String category) {
+        return this.dao.findByCategory(category);
     }
 
     public Product create(Product obj) {

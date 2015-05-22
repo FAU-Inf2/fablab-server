@@ -28,6 +28,8 @@ public class OpenErpClient implements OpenErpInterface {
 
     private static JSONArray fields = new JSONArray();
 
+
+
     static {
         fields.add(0, "code");
         fields.add(1, "reception_count");
@@ -190,7 +192,7 @@ public class OpenErpClient implements OpenErpInterface {
      * @return a List of {@link Product}
      */
     @Override
-    public List<Product> searchForProducts(String searchString, int limit, int offset) throws OpenErpException {
+    public List<Product> searchForProductsByName(String searchString, int limit, int offset) throws OpenErpException {
         JSONRPC2Response jsonRPC2Response = null;
         try {
             mJsonSession.setURL(mSearchReadUrl);
@@ -229,6 +231,79 @@ public class OpenErpClient implements OpenErpInterface {
         }
         return generateProductListFromJson(jsonRPC2Response);
     }
+
+
+    @Override
+    public List<Product> searchForProductsByCategory(String searchString, int limit, int offset) throws OpenErpException {
+        JSONRPC2Response jsonRPC2Response = null;
+        try {
+            mJsonSession.setURL(mSearchReadUrl);
+
+            //the domain specific values to search
+            JSONArray whereNameLike = new JSONArray();
+            whereNameLike.add(0, "category_string");
+            whereNameLike.add(1, "ilike");
+            whereNameLike.add(2, searchString);
+
+
+            JSONArray domain = new JSONArray();
+            domain.add(0, whereNameLike);
+
+            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
+                    getProductParams(limit, offset, domain),
+                    generateRequestID()));
+
+            try {
+                assertSessionNotExpired(jsonRPC2Response);
+            } catch (OpenErpSessionExpiredException e) {
+                //do the request one more time.
+                mJsonSession.setURL(mSearchReadUrl);
+                jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
+                        getProductParams(limit, offset, domain),
+                        generateRequestID()));
+            }
+        } catch (JSONRPC2SessionException e) {
+            e.printStackTrace();
+        }
+        return generateProductListFromJson(jsonRPC2Response);
+    }
+
+
+    @Override
+    public Product searchForProductsById(long id) throws OpenErpException {
+        JSONRPC2Response jsonRPC2Response = null;
+        try {
+            mJsonSession.setURL(mSearchReadUrl);
+
+            //the domain specific values to search
+            JSONArray whereNameLike = new JSONArray();
+            whereNameLike.add(0, "id");
+            whereNameLike.add(1, "=");
+            whereNameLike.add(2, String.valueOf(id));
+
+
+            JSONArray domain = new JSONArray();
+            domain.add(0, whereNameLike);
+
+            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
+                    getProductParams(1, 0, domain),
+                    generateRequestID()));
+
+            try {
+                assertSessionNotExpired(jsonRPC2Response);
+            } catch (OpenErpSessionExpiredException e) {
+                //do the request one more time.
+                mJsonSession.setURL(mSearchReadUrl);
+                jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
+                        getProductParams(1, 0, domain),
+                        generateRequestID()));
+            }
+        } catch (JSONRPC2SessionException e) {
+            e.printStackTrace();
+        }
+        return generateProductListFromJson(jsonRPC2Response).get(0);
+    }
+
 
     /***
      * Builds a HashMap containing parameters used for a product.product search-read

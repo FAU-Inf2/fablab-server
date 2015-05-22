@@ -36,8 +36,8 @@ public class ProductResource implements ProductApi {
 
     @UnitOfWork
     @Override
-    public List<Product> findByCategory(String category) {
-        return this.facade.findByCategory(category);
+    public List<Product> findByCategory(String category, int limit, int offset) {
+        return this.facade.findByCategory(category, limit, offset);
     }
 
     @UnitOfWork

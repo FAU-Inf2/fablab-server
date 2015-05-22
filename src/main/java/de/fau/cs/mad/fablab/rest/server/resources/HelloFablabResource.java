@@ -69,7 +69,7 @@ public class HelloFablabResource {
     public Response searchProductByName(@QueryParam("name") String name,
                                              @QueryParam("max") int max) {
         try {
-            return Response.ok(mOpenErp.searchForProducts(name, max, 0)).build();
+            return Response.ok(mOpenErp.searchForProductsByName(name, max, 0)).build();
         } catch (OpenErpException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).type(MediaType.APPLICATION_JSON).build();
         }

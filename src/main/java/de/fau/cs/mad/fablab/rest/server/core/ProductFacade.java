@@ -17,10 +17,6 @@ public class ProductFacade {
         this.mOpenErp = OpenErpClient.getInstance();
     }
 
-    public Product findById(Long id) {
-        return this.dao.findById(id);
-    }
-
     public List<Product> findAll(int limit, int offset) {
         try {
             return mOpenErp.getProducts(limit, offset);
@@ -32,15 +28,31 @@ public class ProductFacade {
 
     public List<Product> findByName(String name, int limit, int offset) {
         try {
-            return mOpenErp.searchForProducts(name, limit, offset);
+            return mOpenErp.searchForProductsByName(name, limit, offset);
         } catch (OpenErpException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public List<Product> findByCategory(String category) {
-        return this.dao.findByCategory(category);
+    public List<Product> findByCategory(String category, int limit, int offset) {
+        try {
+            return mOpenErp.searchForProductsByCategory(category, limit, offset);
+        } catch (OpenErpException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+    public Product findById(Long id) {
+        try {
+            return mOpenErp.searchForProductsById(id);
+        } catch (OpenErpException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     public Product create(Product obj) {

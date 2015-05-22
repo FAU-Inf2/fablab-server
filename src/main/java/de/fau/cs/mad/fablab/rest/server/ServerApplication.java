@@ -77,6 +77,10 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler());
+
+
+        dummyData.createDummyData(hibernate);
+
     }
 
     public static void main(String[] args) {

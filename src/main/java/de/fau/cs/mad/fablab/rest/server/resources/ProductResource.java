@@ -50,4 +50,13 @@ public class ProductResource implements ProductApi {
         }
         return result;
     }
+
+    @Override
+    public List<String> findAllNames() {
+        List<String> result = this.facade.findAllNames();
+        if(result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
+    }
 }

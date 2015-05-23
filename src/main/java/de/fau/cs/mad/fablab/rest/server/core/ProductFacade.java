@@ -5,6 +5,7 @@ import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpException;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductFacade {
@@ -26,6 +27,17 @@ public class ProductFacade {
         }
     }
 
+    public List<String> findAllNames() {
+        List<String> names = new ArrayList<>();
+        try {
+            for(Product p : mOpenErp.getProducts(Integer.MAX_VALUE, 0))
+                names.add(p.getName());
+        } catch (OpenErpException e) {
+            e.printStackTrace();
+        }
+        return names;
+    }
+
     public List<Product> findByName(String name, int limit, int offset) {
         try {
             return mOpenErp.searchForProductsByName(name, limit, offset);
@@ -42,7 +54,6 @@ public class ProductFacade {
             e.printStackTrace();
             return null;
         }
-
     }
 
     public Product findById(Long id) {

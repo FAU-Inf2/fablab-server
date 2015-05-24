@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.Product;
+import de.fau.cs.mad.fablab.rest.server.configuration.AdminConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.core.ICal;
@@ -76,7 +77,7 @@ class ServerApplication extends Application<ServerConfiguration> {
 
 
         //set the security handler for admin resources
-        environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler());
+        environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));
 
 
         dummyData.createDummyData(hibernate);

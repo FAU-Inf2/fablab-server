@@ -1,5 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.security;
 
+import de.fau.cs.mad.fablab.rest.server.configuration.AdminConfiguration;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
@@ -15,18 +16,19 @@ public class AdminConstraintSecurityHandler extends ConstraintSecurityHandler
 {
     private static final String ADMIN_ROLE = "admin";
 
-    public AdminConstraintSecurityHandler()
+    public AdminConstraintSecurityHandler(AdminConfiguration admin)
     {
         //create constraint for admin with authentication
         final Constraint constraint = new Constraint(Constraint.__BASIC_AUTH, ADMIN_ROLE);
         constraint.setRoles(new String[]{ADMIN_ROLE});
         constraint.setAuthenticate(true);
+
         //create the mapping for this constraint
         final ConstraintMapping adminConstraintMapping = new ConstraintMapping();
         adminConstraintMapping.setConstraint(constraint);
         adminConstraintMapping.setPathSpec("/*");
         setAuthenticator(new BasicAuthenticator());
         addConstraintMapping(adminConstraintMapping);
-        setLoginService(new AdminMappedLoginService(ADMIN_ROLE));
+        setLoginService(new AdminMappedLoginService(admin));
     }
 }

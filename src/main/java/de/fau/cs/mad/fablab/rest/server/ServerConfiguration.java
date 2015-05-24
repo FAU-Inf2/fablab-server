@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.fau.cs.mad.fablab.rest.server.configuration.AdminConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
@@ -58,4 +59,10 @@ class ServerConfiguration extends Configuration
     public DataSourceFactory getDatabase() {
         return database;
     }
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private AdminConfiguration admin = new AdminConfiguration();
+    public AdminConfiguration getAdminConfiguration() { return admin; }
 }

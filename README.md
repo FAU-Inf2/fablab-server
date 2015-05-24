@@ -16,7 +16,7 @@ To build and run the server, just type:
     export openerp_user="openerp user"
     export openerp_password="openerp user password"
     
-    // private key password fopr ssl certificate
+    // private key password for ssl certificate
     export FABLAB_KEYSTORE_PASSWORD="certificate password"
     
     ./gradlew run

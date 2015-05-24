@@ -49,3 +49,9 @@ admin:
     role: admin
     username: ${adminUsername}
     password: ${adminPassword}
+
+openerp:
+    username: ${openerp_user}
+    password: ${openerp_password}
+    hostname: ${openerp_hostname}
+    database: ${openerp_database}

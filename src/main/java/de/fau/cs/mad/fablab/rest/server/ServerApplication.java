@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server;
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
+import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.core.ICal;
 import de.fau.cs.mad.fablab.rest.core.News;
@@ -51,6 +52,9 @@ class ServerApplication extends Application<ServerConfiguration> {
         // add health check and resource to our jersey environment
         environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
         environment.healthChecks().register("DBHealthCheck", new DatabaseHealthCheck(hibernate));
+
+        // configure OpenERP client
+        OpenErpClient.setConfiguration(configuration.getOpenErpConfiguration());
 
         // create an instance of our HelloFablabResource
         final HelloFablabResource helloFablabResource = new HelloFablabResource(

@@ -5,6 +5,7 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import de.fau.cs.mad.fablab.rest.core.Product;
+import de.fau.cs.mad.fablab.rest.server.configuration.OpenErpConfiguration;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
@@ -14,22 +15,14 @@ import java.util.*;
 
 public class OpenErpClient implements OpenErpInterface {
 
-    static OpenErpInterface instance;
-
-    //Keys for the environment variables containing the data for openerp access
-    static final String OPENERP_HOST_KEY = "openerp_hostname";
-    static final String OPENERP_DATABASE_KEY = "openerp_database";
-    static final String OPENERP_USER_KEY = "openerp_user";
-    static final String OPENERP_PASSWORD_KEY = "openerp_password";
+    private static OpenErpInterface instance;
+    private static OpenErpConfiguration config = null;
 
     static final String REQUEST_AUTHENTICATE = "/web/session/authenticate";
     static final String REQUEST_SEARCH_READ = "/web/dataset/search_read";
     static final String METHOD = "call";
 
     private static JSONArray fields = new JSONArray();
-
-
-
     static {
         fields.add(0, "code");
         fields.add(1, "reception_count");
@@ -48,10 +41,6 @@ public class OpenErpClient implements OpenErpInterface {
 
     private URL mAuthenticateUrl;
     private URL mSearchReadUrl;
-    private String mHostname;
-    private String mUser;
-    private String mPassword;
-    private String mDatabase;
     private JSONRPC2Session mJsonSession;
     private JSONObject mUserContext;
     private String mSessionId;
@@ -68,11 +57,16 @@ public class OpenErpClient implements OpenErpInterface {
             } catch (MalformedURLException e) {
                 System.err.println("ERROR - MalformedURLException while initializing OpenErpClient. \n" +
                                            "The Reason is : "+e.getMessage()+"\n"+
-                                           "Your hostname is : "+System.getenv().get(OPENERP_HOST_KEY));
+                                           "Your hostname is : " + config.getHostname());
                 System.exit(1);
             }
         }
         return instance;
+    }
+
+    public static void setConfiguration(OpenErpConfiguration c)
+    {
+        config = c;
     }
 
     /***
@@ -83,25 +77,17 @@ public class OpenErpClient implements OpenErpInterface {
      */
     private OpenErpClient() throws MalformedURLException {
 
-        mHostname = System.getenv().get(OPENERP_HOST_KEY);
-        mUser = System.getenv().get(OPENERP_USER_KEY);
-        mPassword = System.getenv().get(OPENERP_PASSWORD_KEY);
-        mDatabase = System.getenv().get(OPENERP_DATABASE_KEY);
-
         //If any of these variables is null, print an error message and exit(1)
-        if (mHostname == null || mUser == null || mPassword == null || mDatabase == null) {
+        if (config == null || !config.validate()) {
 
-            System.err.println("ERROR while initializing OpenErpClient. Environment vars missing.\n" +
-                                       "the following variables have to be defined :\n" +
-                                       "\t" + OPENERP_HOST_KEY + "=\"openerp hostname\"\n" +
-                                       "\t" + OPENERP_DATABASE_KEY + "=\"openerp database name\"\n" +
-                                       "\t" + OPENERP_USER_KEY + "=\"openerp username\"\n" +
-                                       "\t" + OPENERP_PASSWORD_KEY + "=\"openerp user password\"\n");
+            System.err.println("ERROR while initializing OpenErpClient. Configuration vars missing.\n" +
+                    "The configuration (username, password, hostname and database) has to be set \n " +
+                    "using the class OpenErpConfiguration.\n");
             System.exit(1);
         }
 
-        mAuthenticateUrl = new URL(mHostname + REQUEST_AUTHENTICATE);
-        mSearchReadUrl = new URL(mHostname + REQUEST_SEARCH_READ);
+        mAuthenticateUrl = new URL(config.getHostname() + REQUEST_AUTHENTICATE);
+        mSearchReadUrl = new URL(config.getHostname() + REQUEST_SEARCH_READ);
         authenticate();
     }
 
@@ -115,9 +101,9 @@ public class OpenErpClient implements OpenErpInterface {
         mJsonSession.getOptions().acceptCookies(true);
 
         Map<String, Object> authParams = new HashMap<>();
-        authParams.put("db", mDatabase);
-        authParams.put("login", mUser);
-        authParams.put("password", mPassword);
+        authParams.put("db", config.getDatabase());
+        authParams.put("login", config.getUsername());
+        authParams.put("password", config.getPassword());
 
         JSONRPC2Request authRequest = new JSONRPC2Request(METHOD, authParams, generateRequestID());
         JSONRPC2Response jsonRPC2Response;

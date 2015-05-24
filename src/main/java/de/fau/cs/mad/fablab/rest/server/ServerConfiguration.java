@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fau.cs.mad.fablab.rest.server.configuration.AdminConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.OpenErpConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
@@ -65,4 +66,10 @@ class ServerConfiguration extends Configuration
     @JsonProperty
     private AdminConfiguration admin = new AdminConfiguration();
     public AdminConfiguration getAdminConfiguration() { return admin; }
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private OpenErpConfiguration openerp = new OpenErpConfiguration();
+    public OpenErpConfiguration getOpenErpConfiguration() { return openerp; }
 }

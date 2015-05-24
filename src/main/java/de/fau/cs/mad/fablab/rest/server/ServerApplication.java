@@ -2,7 +2,6 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.Product;
-import de.fau.cs.mad.fablab.rest.server.configuration.AdminConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.core.ICal;
@@ -44,44 +43,41 @@ class ServerApplication extends Application<ServerConfiguration> {
 
     @Override
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
-        //create an instance of our HelloFablabResource
+
+        // Create our basic health check
+        final HelloFablabHealthCheck helloFablabHealthCheck =
+                new HelloFablabHealthCheck(configuration.getTemplate());
+
+        // add health check and resource to our jersey environment
+        environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
+        environment.healthChecks().register("DBHealthCheck", new DatabaseHealthCheck(hibernate));
+
+        // create an instance of our HelloFablabResource
         final HelloFablabResource helloFablabResource = new HelloFablabResource(
                 configuration.getTemplate(),
                 configuration.getDefaultName()
         );
+        environment.jersey().register(helloFablabResource);
 
+        // create and register instance of SpaceApiResource
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
-
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
                 spaceApiConfiguration.getEndpoint(),
                 spaceApiConfiguration.getSpace()
         );
-
-
-        //Create our basic healthcheck
-        final HelloFablabHealthCheck helloFablabHealthCheck =
-                new HelloFablabHealthCheck(configuration.getTemplate());
-
-        //add healthcheck and resource to our jersey environment
-        environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
-
-        environment.jersey().register(helloFablabResource);
         environment.jersey().register(spaceAPIResource);
 
+        // create some resources
         environment.jersey().register(new NewsResource(new NewsFacade(new NewsDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ICalResource(new ICalFacade(new ICalDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ProductResource(new ProductFacade(new ProductDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
 
-        environment.healthChecks().register("DBHealthCheck", new DatabaseHealthCheck(hibernate));
-
-
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));
 
-
+        // create dummy data
         dummyData.createDummyData(hibernate);
-
     }
 
     public static void main(String[] args) {

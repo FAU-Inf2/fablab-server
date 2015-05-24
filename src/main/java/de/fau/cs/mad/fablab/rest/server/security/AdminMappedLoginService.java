@@ -15,9 +15,7 @@ public class AdminMappedLoginService extends MappedLoginService
 {
     public AdminMappedLoginService(final AdminConfiguration admin)
     {
-        if (admin == null ||
-                admin.getUsername() == null || admin.getUsername().isEmpty() ||
-                admin.getPassword() == null || admin.getPassword().isEmpty())
+        if (admin == null || !admin.validate())
         {
             System.err.println("Missing configuration vars for admin user/pass...");
             System.exit(1);

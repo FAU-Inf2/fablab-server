@@ -20,6 +20,15 @@ public class AdminConfiguration {
     @JsonProperty
     private String role;
 
+    public boolean validate()
+    {
+        if (username == null || username.isEmpty() ||
+                password == null || password.isEmpty())
+            return false;
+
+        return true;
+    }
+
     public String getPassword() {
         return password;
     }

@@ -15,11 +15,15 @@ To build and run the server, just type:
     export openerp_database="openerp database"
     export openerp_user="openerp user"
     export openerp_password="openerp user password"
+    
+    // private key password fopr ssl certificate
+    export FABLAB_KEYSTORE_PASSWORD="certificate password"
+    
     ./gradlew run
     
 <b>NOTE : if any environment variable is missing, the server will not start!</b>
 
-The server will listen on port 8080 for application requests and port 8081 for administrative requests. User credentials for the administrative interface, which is protected by a basic HTTP authentication challenge, have to be provided by the environment variables 'adminUsername' and 'adminPassword'.
+The server will listen on port 8080 for application requests and port 8081 for administrative requests. User credentials for the administrative interface, which is protected by a basic HTTP authentication challenge, have to be provided by the environment variables 'adminUsername' and 'adminPassword'. Passwords and configuration (i.e. for OpenErpClient) can also be supplied in directly config.yml.
 
 ## Libraries
 fablab-server uses the following libraries and software:

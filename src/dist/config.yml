@@ -4,6 +4,8 @@ defaultName: Fablab User
 spaceapi:
   endpoint: http://spaceapi.net
   space: FAU+FabLab
+  keyFile: src/dist/spaceapi.key
+  hashAlgorithm: HmacSHA256
 
 server:
   applicationConnectors:

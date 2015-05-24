@@ -16,6 +16,12 @@ public class SpaceApiConfiguration {
     @JsonProperty
     private String space;
 
+    @JsonProperty
+    private String keyFile;
+
+    @JsonProperty
+    private String hashAlgorithm;
+
     public String getEndpoint() {
         return endpoint;
     }
@@ -30,5 +36,21 @@ public class SpaceApiConfiguration {
 
     public void setSpace(String space) {
         this.space = space;
+    }
+
+    public String getKeyFile() {
+        return keyFile;
+    }
+
+    public void setKeyFile(String keyFile) {
+        this.keyFile = keyFile;
+    }
+
+    public String getHashAlgorithm() {
+        return hashAlgorithm;
+    }
+
+    public void setHashAlgorithm(String hashAlgorithm) {
+        this.hashAlgorithm = hashAlgorithm;
     }
 }

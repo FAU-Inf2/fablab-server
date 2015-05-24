@@ -66,8 +66,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         // create and register instance of SpaceApiResource
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                spaceApiConfiguration.getEndpoint(),
-                spaceApiConfiguration.getSpace()
+                configuration.getSpaceApiConfiguration()
         );
         environment.jersey().register(spaceAPIResource);
 

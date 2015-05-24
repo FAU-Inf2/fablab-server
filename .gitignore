@@ -37,6 +37,7 @@ $RECYCLE.BIN/
 
 ### Linux ###
 *~
+*.swp
 
 # KDE directory preferences
 .directory
@@ -144,6 +145,7 @@ buildNumber.properties
 
 #keystore file to prevent accidental check in
 *.keystore
+*.key
 
 #database files
 server-db.*.db

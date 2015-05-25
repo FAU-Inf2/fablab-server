@@ -21,12 +21,12 @@ ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 #ADD fablab.sql fablab.sql
 ADD fab.sql fab.sql
 
-# copy files
-RUN mkdir /var/www/sites/fablab.fau.de/
-RUN mkdir /var/www/sites/fablab.fau.de/files/
-RUN mkdir /var/www/sites/fablab.fau.de/files/images/
-ADD files/images/* /var/www/sites/fablab.fau.de/files/images/
-RUN chown -R www-data:www-data /var/www/sites/fablab.fau.de/files/
+# copy files -- uncomment it later..
+#RUN mkdir /var/www/sites/fablab.fau.de/
+#RUN mkdir /var/www/sites/fablab.fau.de/files/
+#RUN mkdir /var/www/sites/fablab.fau.de/files/images/
+#ADD files/images/* /var/www/sites/fablab.fau.de/files/images/
+#RUN chown -R www-data:www-data /var/www/sites/fablab.fau.de/files/
 
 EXPOSE 80
 

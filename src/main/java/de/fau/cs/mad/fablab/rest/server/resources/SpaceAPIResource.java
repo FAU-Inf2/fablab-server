@@ -45,8 +45,11 @@ public class SpaceAPIResource implements SpaceApi
         {
             String dataArray[] = input.split(":");
 
-            state = State.valueOf(dataArray[0]);
-            time = Integer.valueOf(dataArray[1]);
+            if (dataArray.length != 2)
+                throw new IllegalArgumentException("data musst be in format <timestamp>:<state>");
+
+            time = Integer.valueOf(dataArray[0]);
+            state = State.valueOf(dataArray[1]);
         }
 
         public int time;
@@ -74,14 +77,19 @@ public class SpaceAPIResource implements SpaceApi
 
         UpdateData d = parseData(data);
 
+        System.out.println("SpaceAPI: update state, fablab door is now: " + d.state);
+
         // now we have to fire push event
 
         return "{success:true}";
     }
 
+    // date should be in format <timestamp>:<state>
+    // where <timestamp> is a unix timestamp
+    // and <state> is either open or closed
     public static UpdateData parseData(String data)
     {
-        if (!data.matches("^(open|closed):\\d+$"))
+        if (!data.matches("^\\d+:(open|closed)$"))
             throw new BadRequestException("data is not in valid format");
 
         return new UpdateData(data);

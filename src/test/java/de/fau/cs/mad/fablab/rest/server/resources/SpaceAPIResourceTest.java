@@ -28,7 +28,7 @@ public class SpaceAPIResourceTest {
     @Test
     public void testParseDataOpen()
     {
-        SpaceAPIResource.UpdateData d = SpaceAPIResource.parseData("open:12345");
+        SpaceAPIResource.UpdateData d = SpaceAPIResource.parseData("12345:open");
         assertEquals(d.time, 12345);
         assertEquals(d.state, SpaceAPIResource.UpdateData.State.open);
     }
@@ -36,7 +36,7 @@ public class SpaceAPIResourceTest {
     @Test
     public void testParseDataClosed()
     {
-        SpaceAPIResource.UpdateData d = SpaceAPIResource.parseData("closed:456789");
+        SpaceAPIResource.UpdateData d = SpaceAPIResource.parseData("456789:closed");
         assertEquals(d.time, 456789);
         assertEquals(d.state, SpaceAPIResource.UpdateData.State.closed);
     }
@@ -59,6 +59,6 @@ public class SpaceAPIResourceTest {
     @Test(expected = BadRequestException.class)
     public void testParseDataOpenExpectedFailInvalid()
     {
-        SpaceAPIResource.UpdateData d = SpaceAPIResource.parseData("hangingdoor:12345");
+        SpaceAPIResource.UpdateData d = SpaceAPIResource.parseData("12345:hangingdoor");
     }
 }

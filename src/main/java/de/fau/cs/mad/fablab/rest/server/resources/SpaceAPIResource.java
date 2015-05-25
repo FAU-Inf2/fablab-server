@@ -64,7 +64,7 @@ public class SpaceAPIResource implements SpaceApi
     public String updateDoorState(String hash, String data) {
 
         if (hash == null || data == null || hash.isEmpty() || data.isEmpty())
-            throw new NotAuthorizedException("no credentials provided");
+            throw new BadRequestException("no credentials provided");
 
         if (config.getKeyFile() == null || config.getKeyFile().isEmpty() ||
                 config.getHashAlgorithm() == null || config.getHashAlgorithm().isEmpty())
@@ -76,8 +76,6 @@ public class SpaceAPIResource implements SpaceApi
             throw new NotAuthorizedException("Hash is incorrect");
 
         UpdateData d = parseData(data);
-
-        System.out.println("SpaceAPI: update state, fablab door is now: " + d.state);
 
         // now we have to fire push event
 

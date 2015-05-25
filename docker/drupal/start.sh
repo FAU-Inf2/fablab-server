@@ -15,6 +15,8 @@ then
 	#mysql -u${DB_ENV_MYSQL_USER} -p${DB_ENV_MYSQL_PASSWORD} -h${DB_PORT_3306_TCP_ADDR} drupal < /fablab.sql 
 	mysql -u${DB_ENV_MYSQL_USER} -p${DB_ENV_MYSQL_PASSWORD} -h${DB_PORT_3306_TCP_ADDR} drupal < /fab.sql 
 
+	sleep 5s
+
 	chown -R www-data:www-data /var/www/sites/default
 
 	# install rest_server

@@ -13,6 +13,8 @@ repositories {
 }
 
 dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
     compile project (':../fablab-common')
     compile fileTree(dir: '../fablab-common/build/libs', include: 'fablab-common-1.0.jar')
     compile 'io.dropwizard:dropwizard-core:' + dropwizardVersion

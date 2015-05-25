@@ -9,10 +9,7 @@ import net.spaceapi.HackerSpace;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.NotAllowedException;
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.ServiceUnavailableException;
+import javax.ws.rs.*;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 
@@ -36,6 +33,26 @@ public class SpaceAPIResource implements SpaceApi
 {
     private final SpaceApiConfiguration config;
 
+    public static class UpdateData
+    {
+        enum State
+        {
+            open,
+            closed;
+        }
+
+        UpdateData(String input)
+        {
+            String dataArray[] = input.split(":");
+
+            state = State.valueOf(dataArray[0]);
+            time = Integer.valueOf(dataArray[1]);
+        }
+
+        public int time;
+        public State state;
+    }
+
     public SpaceAPIResource(SpaceApiConfiguration config) {
         this.config = config;
     }
@@ -46,17 +63,28 @@ public class SpaceAPIResource implements SpaceApi
         if (hash == null || data == null || hash.isEmpty() || data.isEmpty())
             throw new NotAuthorizedException("no credentials provided");
 
-        if (config.getKeyFile() == null || config.getKeyFile().isEmpty())
-            throw new ServiceUnavailableException("keyfile is missing");
+        if (config.getKeyFile() == null || config.getKeyFile().isEmpty() ||
+                config.getHashAlgorithm() == null || config.getHashAlgorithm().isEmpty())
+            throw new ServiceUnavailableException("keyfile or hash algorithm is missing in configuration");
 
         String myHash = calculateHash(data);
 
         if (!hash.equals(myHash))
             throw new NotAuthorizedException("Hash is incorrect");
 
+        UpdateData d = parseData(data);
+
         // now we have to fire push event
 
         return "{success:true}";
+    }
+
+    public static UpdateData parseData(String data)
+    {
+        if (!data.matches("^(open|closed):\\d+$"))
+            throw new BadRequestException("data is not in valid format");
+
+        return new UpdateData(data);
     }
 
     private String calculateHash(String data)

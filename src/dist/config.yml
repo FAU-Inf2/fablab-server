@@ -4,7 +4,7 @@ defaultName: Fablab User
 spaceapi:
   endpoint: http://spaceapi.net
   space: FAU+FabLab
-  keyFile: src/dist/spaceapi.key
+  keyFile: src/dist/tuerstatus-appserver.key
   hashAlgorithm: HmacSHA256
 
 server:

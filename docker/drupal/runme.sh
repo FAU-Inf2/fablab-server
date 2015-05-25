@@ -12,3 +12,5 @@ docker run -e MYSQL_ROOT_PASSWORD=$adminPassword -e MYSQL_DATABASE=drupal -e MYS
 docker run -e adminDrupal=$drupalAdmin -e adminPassword=$drupalPassword -d  -p 50080:80 --link mysql-for-drupal:db -i -t --name fablab-drupal-v1 fablab-drupal:latest
 
 docker ps
+
+#docker attach fablab-drupal-v1 

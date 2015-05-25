@@ -14,6 +14,9 @@ RUN chown -R www-data:www-data /var/www/
 ADD start.sh start.sh
 RUN chmod +x start.sh
 
+ADD drupal-install-conf.sh drupal-install-conf.sh
+RUN chmod +x drupal-install-conf.sh
+
 RUN rm /etc/apache2/sites-available/000-default.conf
 ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 

@@ -10,10 +10,12 @@ RUN 	apt-get update && apt-get install -y --no-install-recommends \
 	openjdk-7-jdk
 
 COPY	fablab-rest-server.keystore fablab-rest-server.keystore
+COPY	tuerstatus-appserver.key tuerstatus-appserver.key
 
 #build and run the server
 CMD 	git clone https://github.com/FAU-Inf2/fablab-server.git && \
 	mv fablab-rest-server.keystore fablab-server/src/dist && \
+	mv tuerstatus-appserver.key fablab-server/src/dist && \
 	cd fablab-server && \
 	./gradlew run
 

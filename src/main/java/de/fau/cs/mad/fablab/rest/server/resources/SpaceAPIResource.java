@@ -156,6 +156,6 @@ public class SpaceAPIResource implements SpaceApi
         WebTarget target = ClientBuilder.newClient().register(JacksonJsonProvider.class).target(config.getEndpoint());
         SpaceAPIService api = WebResourceFactory.newResource(SpaceAPIService.class, target);
 
-        return api.space(name);
+        return api.space();
     }
 }

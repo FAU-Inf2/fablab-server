@@ -14,7 +14,11 @@ import javax.ws.rs.PathParam;
 @Path("/")
 public interface SpaceAPIService {
 
+   // should be used, when querying spaceapi.net directly
+   //@GET
+   //@Path("/cache/{space}")
+   //HackerSpace space(@PathParam("space") String space);
+
    @GET
-   @Path("/cache/{space}")
-   HackerSpace space(@PathParam("space") String space);
+   HackerSpace space();
 }

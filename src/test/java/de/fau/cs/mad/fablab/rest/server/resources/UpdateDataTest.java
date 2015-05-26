@@ -1,7 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
 import org.junit.Test;
-import org.junit.runners.model.InitializationError;
 
 import static org.junit.Assert.*;
 
@@ -30,5 +29,4 @@ public class UpdateDataTest {
     {
         SpaceAPIResource.UpdateData d = new SpaceAPIResource.UpdateData("open");
     }
-
 }

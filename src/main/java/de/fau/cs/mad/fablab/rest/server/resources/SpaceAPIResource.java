@@ -24,7 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-
 /***
  * Resource class for our /spaceapi uri
  * NOTE: This class is being used by multiple threads concurrently
@@ -35,6 +34,9 @@ public class SpaceAPIResource implements SpaceApi
 
     public static class UpdateData
     {
+        // data should be in format <timestamp>:<state>
+        // where <timestamp> is a unix timestamp
+        // and <state> is either open or closed
         enum State
         {
             open,
@@ -43,16 +45,19 @@ public class SpaceAPIResource implements SpaceApi
 
         UpdateData(String input)
         {
+            if (!input.matches("^\\d+:(open|closed)$"))
+                throw new IllegalArgumentException("Data must be in format <timestamp>:<state>");
+
             String dataArray[] = input.split(":");
 
             if (dataArray.length != 2)
-                throw new IllegalArgumentException("data musst be in format <timestamp>:<state>");
+                throw new IllegalArgumentException("Data must be in format <timestamp>:<state>");
 
             time = Integer.valueOf(dataArray[0]);
             state = State.valueOf(dataArray[1]);
         }
 
-        public int time;
+        public long time;
         public State state;
     }
 
@@ -75,22 +80,37 @@ public class SpaceAPIResource implements SpaceApi
         if (!hash.equals(myHash))
             throw new NotAuthorizedException("Hash is incorrect");
 
-        UpdateData d = parseData(data);
+        UpdateData newState = parseData(data);
+
+        if (!checkData(newState))
+            throw new BadRequestException("Data did not pass checks");
 
         // now we have to fire push event
 
         return "{success:true}";
     }
 
-    // date should be in format <timestamp>:<state>
-    // where <timestamp> is a unix timestamp
-    // and <state> is either open or closed
+    public boolean checkData(UpdateData data){
+
+        long currentTime = System.currentTimeMillis() / 1000L;
+
+        if (data.time > currentTime + config.getMaximumTimeOffset())
+            throw new BadRequestException("Time (" + data.time + ") is in future, current time is " + currentTime + ". Offset is " + (data.time - currentTime));
+
+        if (data.time < currentTime - config.getMaximumTimeOffset())
+            throw new BadRequestException("Time (" + data.time + ") is in past, current time is " + currentTime + ". Offset is " + (currentTime - data.time));
+
+        return true;
+    }
+
     public static UpdateData parseData(String data)
     {
-        if (!data.matches("^\\d+:(open|closed)$"))
+        try {
+            return new UpdateData(data);
+        }
+        catch (Exception e) {
             throw new BadRequestException("data is not in valid format");
-
-        return new UpdateData(data);
+        }
     }
 
     private String calculateHash(String data)

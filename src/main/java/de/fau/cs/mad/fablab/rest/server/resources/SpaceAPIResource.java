@@ -40,12 +40,12 @@ public class SpaceAPIResource implements SpaceApi
         enum State
         {
             open,
-            closed;
+            close;
         }
 
         UpdateData(String input)
         {
-            if (!input.matches("^\\d+:(open|closed)$"))
+            if (!input.matches("^\\d+:(open|close)$"))
                 throw new IllegalArgumentException("Data must be in format <timestamp>:<state>");
 
             String dataArray[] = input.split(":");

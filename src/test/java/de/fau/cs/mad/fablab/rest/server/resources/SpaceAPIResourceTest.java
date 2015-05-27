@@ -34,9 +34,9 @@ public class SpaceAPIResourceTest {
     @Test
     public void testParseDataClosed()
     {
-        SpaceAPIResource.UpdateData data = SpaceAPIResource.parseData("456789:closed");
+        SpaceAPIResource.UpdateData data = SpaceAPIResource.parseData("456789:close");
         assertEquals(data.time, 456789);
-        assertEquals(data.state, SpaceAPIResource.UpdateData.State.closed);
+        assertEquals(data.state, SpaceAPIResource.UpdateData.State.close);
     }
 
     // parsing data should fail, if format does not match the regex

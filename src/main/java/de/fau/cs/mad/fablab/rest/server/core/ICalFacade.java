@@ -2,6 +2,8 @@ package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.ICal;
 import de.fau.cs.mad.fablab.rest.core.News;
+import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
+import de.fau.cs.mad.fablab.rest.server.drupal.ICalInterface;
 
 import java.util.List;
 
@@ -11,9 +13,11 @@ import java.util.List;
 public class ICalFacade {
 
     private final ICalDAO dao;
+    //private final ICalInterface iCalInterface;
 
     public ICalFacade(ICalDAO dao) {
         this.dao = dao;
+        //this.iCalInterface = ICalClient.getInstance();
     }
 
     public ICal findById(Long id) {
@@ -22,6 +26,7 @@ public class ICalFacade {
 
     public List<ICal> findAll(){
         return this.dao.findAll();
+        //return iCalInterface.findAll();
     }
 
 

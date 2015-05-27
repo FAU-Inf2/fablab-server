@@ -2,7 +2,9 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.Product;
+import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
+import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.core.ICal;
@@ -15,11 +17,14 @@ import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.jersey.DropwizardResourceConfig;
+import io.dropwizard.jersey.setup.JerseyContainerHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import org.glassfish.jersey.servlet.ServletContainer;
 
 /**
  * The Core of our rest server
@@ -56,6 +61,9 @@ class ServerApplication extends Application<ServerConfiguration> {
         // configure OpenERP client
         OpenErpClient.setConfiguration(configuration.getOpenErpConfiguration());
 
+        // configure ICalClient
+        ICalClient.setConfiguration(configuration.getICalConfiguration());
+
         // create an instance of our HelloFablabResource
         final HelloFablabResource helloFablabResource = new HelloFablabResource(
                 configuration.getTemplate(),
@@ -81,6 +89,12 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         // create dummy data
         dummyData.createDummyData(hibernate);
+
+        //Log resource inside admin environment
+        final DropwizardResourceConfig dropwizardResourceConfig = new DropwizardResourceConfig(environment.metrics());
+        JerseyContainerHolder jerseyContainerHolder = new JerseyContainerHolder(new ServletContainer(dropwizardResourceConfig));
+        dropwizardResourceConfig.register(LogResource.class);
+        environment.admin().addServlet("log admin resource", jerseyContainerHolder.getContainer()).addMapping("/admin/*");
     }
 
     public static void main(String[] args) {

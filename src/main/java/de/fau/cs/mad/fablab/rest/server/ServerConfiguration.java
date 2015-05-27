@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fau.cs.mad.fablab.rest.server.configuration.AdminConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.ICalConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.OpenErpConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import io.dropwizard.Configuration;
@@ -72,4 +73,10 @@ class ServerConfiguration extends Configuration
     @JsonProperty
     private OpenErpConfiguration openerp = new OpenErpConfiguration();
     public OpenErpConfiguration getOpenErpConfiguration() { return openerp; }
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private ICalConfiguration ical = new ICalConfiguration();
+    public ICalConfiguration getICalConfiguration() { return ical; }
 }

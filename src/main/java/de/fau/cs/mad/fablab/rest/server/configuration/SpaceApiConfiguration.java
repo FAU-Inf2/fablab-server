@@ -22,6 +22,9 @@ public class SpaceApiConfiguration {
     @JsonProperty
     private String hashAlgorithm;
 
+    @JsonProperty
+    private int maximumTimeOffset = 30;
+
     public String getEndpoint() {
         return endpoint;
     }
@@ -52,5 +55,13 @@ public class SpaceApiConfiguration {
 
     public void setHashAlgorithm(String hashAlgorithm) {
         this.hashAlgorithm = hashAlgorithm;
+    }
+
+    public int getMaximumTimeOffset() {
+        return maximumTimeOffset;
+    }
+
+    public void setMaximumTimeOffset(int maximumTimeOffset) {
+        this.maximumTimeOffset = maximumTimeOffset;
     }
 }

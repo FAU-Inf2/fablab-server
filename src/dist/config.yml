@@ -2,7 +2,8 @@ template: Hello, %s!
 defaultName: Fablab User
 
 spaceapi:
-  endpoint: http://spaceapi.net
+  #endpoint: http://spaceapi.net
+  endpoint: https://fablab.fau.de/spaceapi.php?api=0.13
   space: FAU+FabLab
   keyFile: src/dist/tuerstatus-appserver.key
   hashAlgorithm: HmacSHA256

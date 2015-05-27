@@ -1,6 +1,16 @@
 template: Hello, %s!
 defaultName: Fablab User
 
+logging:
+  level: INFO
+  appenders:
+    - type: console
+    - type: file
+      archive: false
+      currentLogFilename: src/dist/log/server_info.log
+      threshold: ALL
+      timeZone: UTC
+
 spaceapi:
   #endpoint: http://spaceapi.net
   endpoint: https://fablab.fau.de/spaceapi.php?api=0.13
@@ -9,6 +19,17 @@ spaceapi:
   hashAlgorithm: HmacSHA256
 
 server:
+  requestLog:
+    timeZone: UTC
+    appenders:
+      - type: console
+      - type: file
+        currentLogFilename: src/dist/log/server_requests.log
+        threshold: ALL
+        archive: true
+        archivedLogFilenamePattern: src/dist/log/request.%d.log.gz
+        archivedFileCount: 5
+
   applicationConnectors:
     - type: http
       port: 8080
@@ -24,6 +45,7 @@ server:
       keyStorePath: src/dist/fablab-rest-server.keystore
       keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
       validateCerts: false
+
 
 
 # POSTGRES DB

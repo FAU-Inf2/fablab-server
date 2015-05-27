@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server;
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
+import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.core.ICal;
@@ -55,6 +56,9 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         // configure OpenERP client
         OpenErpClient.setConfiguration(configuration.getOpenErpConfiguration());
+
+        // configure ICalClient
+        ICalClient.setConfiguration(configuration.getICalConfiguration());
 
         // create an instance of our HelloFablabResource
         final HelloFablabResource helloFablabResource = new HelloFablabResource(

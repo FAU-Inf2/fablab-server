@@ -57,3 +57,7 @@ openerp:
     password: ${openerp_password}
     hostname: ${openerp_hostname}
     database: ${openerp_database}
+
+ical:
+    endpoint: http://fablab.fau.de
+    icalUrl: /termine/ical

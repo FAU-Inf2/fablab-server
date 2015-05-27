@@ -20,16 +20,7 @@ public class LogResource {
     public String getServerLog(@QueryParam("size") int size){
         try {
             List<String> requestLog = Files.readAllLines(Paths.get(INFO_LOG_PATH), Charset.defaultCharset());
-            String toReturn = "";
-
-            if(size > requestLog.size() || size <= 0)
-                size = requestLog.size();
-
-            for(int i = 0; i < size; i++){
-                toReturn += requestLog.get(requestLog.size() - size + i)+ "\n";
-            }
-
-            return toReturn;
+            return getMessagesAsString(requestLog, size);
         } catch (IOException e) {
             return e.getMessage();
         }
@@ -40,18 +31,28 @@ public class LogResource {
     public String getRequestLog(@QueryParam("size") int size){
         try {
             List<String> requestLog = Files.readAllLines(Paths.get(REQUEST_LOG_PATH), Charset.defaultCharset());
-            String toReturn = "";
-
-            if(size > requestLog.size() || size <= 0)
-                size = requestLog.size();
-
-            for(int i = 0; i < size; i++){
-                toReturn += requestLog.get(requestLog.size() - size + i)+ "\n";
-            }
-
-            return toReturn;
+            return getMessagesAsString(requestLog, size);
         } catch (IOException e) {
             return e.getMessage();
         }
+    }
+
+    /***
+     * Helper method which returns a String containing the last n strings of a given list of strings
+     * @param messageList the list of strings
+     * @param n the number of strings to get
+     * @return a String of n lines. if n <= 0 || n > messageList.size() the whole messageList is returned
+     */
+    private String getMessagesAsString(List<String> messageList, int n){
+        String toReturn = "";
+
+        if(n > messageList.size() || n <= 0)
+            n = messageList.size();
+
+        for(int i = 0; i < n; i++){
+            toReturn += messageList.get(messageList.size() - n + i)+ "\n";
+        }
+
+        return toReturn;
     }
 }

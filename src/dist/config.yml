@@ -82,5 +82,5 @@ openerp:
     database: ${openerp_database}
 
 ical:
-    endpoint: http://fablab.fau.de
+    endpoint: https://fablab.fau.de
     icalUrl: /termine/ical

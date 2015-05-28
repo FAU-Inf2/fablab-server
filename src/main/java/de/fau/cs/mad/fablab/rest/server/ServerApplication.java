@@ -1,14 +1,11 @@
 package de.fau.cs.mad.fablab.rest.server;
 
-import de.fau.cs.mad.fablab.rest.core.Cart;
-import de.fau.cs.mad.fablab.rest.core.Product;
+import de.fau.cs.mad.fablab.rest.core.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
-import de.fau.cs.mad.fablab.rest.core.ICal;
-import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
@@ -25,6 +22,8 @@ import io.dropwizard.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import org.glassfish.jersey.servlet.ServletContainer;
+
+import java.text.SimpleDateFormat;
 
 /**
  * The Core of our rest server
@@ -63,6 +62,11 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         // configure ICalClient
         ICalClient.setConfiguration(configuration.getICalConfiguration());
+
+        // configure date format for jackson
+        //environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        environment.getObjectMapper().setDateFormat(new SimpleDateFormat(Format.DATE_FORMAT));
+
 
         // create an instance of our HelloFablabResource
         final HelloFablabResource helloFablabResource = new HelloFablabResource(

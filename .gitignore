@@ -149,3 +149,6 @@ buildNumber.properties
 
 #database files
 server-db.*.db
+
+#log files
+*.log

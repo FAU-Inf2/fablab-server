@@ -13,21 +13,36 @@ import java.util.List;
 public class ICalFacade {
 
     private final ICalDAO dao;
-    //private final ICalInterface iCalInterface;
+    private final ICalInterface iCalInterface;
 
     public ICalFacade(ICalDAO dao) {
         this.dao = dao;
-        //this.iCalInterface = ICalClient.getInstance();
+        this.iCalInterface = ICalClient.getInstance();
+        //insertElements();
     }
 
     public ICal findById(Long id) {
-        return this.dao.findById(id);
+        //return this.dao.findById(id);
+        return iCalInterface.findById(id);
     }
 
-    public List<ICal> findAll(){
-        return this.dao.findAll();
-        //return iCalInterface.findAll();
+    public List<ICal> findAll() {
+        //return this.dao.findAll();
+        return iCalInterface.findAll();
     }
 
+    public void updateAll() {
+        List<ICal> events = iCalInterface.findAll();
+        for (ICal event : events) {
+            dao.update(event);
+        }
+    }
+
+    private void insertElements() {
+        List<ICal> events = iCalInterface.findAll();
+        for (ICal event : events) {
+            dao.create(event);
+        }
+    }
 
 }

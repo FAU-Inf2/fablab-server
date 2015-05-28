@@ -11,9 +11,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 
-/**
- * Created by EE on 11.05.15.
- */
 @Path("/ical")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -29,13 +26,21 @@ public class ICalResource implements ICalApi {
     @UnitOfWork
     @Override
     public ICal findById(long id) {
-        return  this.facade.findById(id);
+        ICal result = this.facade.findById(id);
+        if (result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
     }
 
     @UnitOfWork
     @Override
     public List<ICal> findAll() {
-        return this.facade.findAll();
+        List<ICal> result = this.facade.findAll();
+        if (result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
     }
 
 }

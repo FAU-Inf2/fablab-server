@@ -1,10 +1,11 @@
 package de.fau.cs.mad.fablab.rest.server.drupal;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -23,7 +24,13 @@ public class ICalClient implements ICalInterface {
     private static ICalConfiguration config = null;
 
     private URL iCalUrl;
-    private Calendar calendar;
+
+    private List<ICal> events;
+
+    private static final String BEGIN_CAL = "BEGIN:VCALENDAR";
+    private static final String END_CAL = "END:VCALENDAR";
+    private static final String BEGIN_EV = "BEGIN:VEVENT";
+    private static final String END_EV = "END:VEVENT";
 
     /***
      * Singleton getInstance()
@@ -31,80 +38,159 @@ public class ICalClient implements ICalInterface {
      */
     public static ICalInterface getInstance() {
         if (instance == null) {
-            try {
-                instance = new ICalClient();
-            } catch (IOException e) {
-                System.err.println("ERROR - IOException while initializing ICalClient. \n" +
-                        "The Reason is : "+e.getMessage()+"\n"+
-                        "ICalUrl is : " + config.getEndpoint() + config.getIcalUrl());
-                System.exit(1);
-            } catch (ParserException e) {
-                System.err.println("ERROR - ParserException while initializing ICalClient. \n" +
-                        "The Reason is : "+e.getMessage());
-                System.exit(1);
-            }
+            instance = new ICalClient();
         }
-
         return instance;
     }
 
-    public static void setConfiguration(ICalConfiguration config) {
-        config = config;
+    public static void setConfiguration(ICalConfiguration c) {
+        config = c;
     }
 
     /***
-     * asfjasfij
+     * Checks for valid configuration and processes the iCal-Feed for the first time
      * If any environment variable is missing, it will shutdown the whole application with exit code 1
      *
      * @throws IOException if the endpoint + iCalUrl is not a valid url
      */
-    private ICalClient() throws IOException, ParserException {
+    private ICalClient() {
         if (config == null || !config.validate()) {
             System.err.println("ERROR while initializing ICalClient. Configuration vars missing.\n" +
                     "The configuration (endpoint and iCalUrl) has to be set \n " +
                     "using the class ICalConfiguration.\n");
-            //System.exit(1); TODO
+            System.exit(1);
         }
 
-        //iCalUrl = new URL(config.getEndpoint() + config.getIcalUrl()); TODO
-        iCalUrl = new URL("https://fablab.fau.de/termine/ical");
-
-        Reader reader = new InputStreamReader(iCalUrl.openStream());
-
-        CalendarBuilder builder = new CalendarBuilder();
-
-        calendar = builder.build(reader);
+        updateEvents();
     }
 
     @Override
     public ICal findById(Long id) {
-        return new ICal();
+        return events.get(id.intValue());
     }
 
+    /***
+     * Reads the iCal-Feed and updates the Event-List
+     * Returns a list with all iCal-Events
+     *
+     * @return a List of {@link ICal}
+     */
     @Override
     public List<ICal> findAll() {
-        List<ICal> calendarEvents = new LinkedList<ICal>();
+        updateEvents();
+        return events;
+    }
 
-        //Iterator ic = calendar.getComponents().iterator();
-        Iterator ic = calendar.getComponents(Component.VEVENT).iterator();
-        while (ic.hasNext()) {
-            Component component = (Component) ic.next();
-            System.out.println("Component [" + component.getName() + "]");
-
-            ICal event = new ICal();
-            event.setUid(component.getProperty(Property.UID).getValue());
-            event.setSummery(component.getProperty(Property.SUMMARY).getValue());
-            event.setDtstamp(component.getProperty(Property.DTSTAMP).getValue());
-            event.setDtstart(component.getProperty(Property.DTSTART).getValue());
-            event.setDtend(component.getProperty(Property.DTEND).getValue());
-            event.setRrule(component.getProperty(Property.RRULE).getValue());
-            event.setExdate(component.getProperty(Property.EXDATE).getValue().split(","));
-            event.setUrl(component.getProperty(Property.URL).getValue());
-            event.setLocation(component.getProperty(Property.LOCATION).getValue());
-            event.setDescription(component.getProperty(Property.DESCRIPTION).getValue());
-
-            calendarEvents.add(event);
+    /***
+     * Retrieves the iCal-Feed from the given Endpoint + iCalUrl and updates the Event-List
+     *
+     */
+    private void updateEvents() {
+        try {
+            iCalUrl = new URL(config.getEndpoint() + config.getIcalUrl());
+        } catch (MalformedURLException e) {
+            System.err.println("ERROR - MalformedURLException while updating Events. \n" +
+                    "The Reason is : " + e.getMessage() + "\n" +
+                    "ICalUrl is : " + config.getEndpoint() + config.getIcalUrl());
         }
-        return calendarEvents;
+
+        BufferedReader reader;
+        List<ICal> events = null;
+        try {
+            reader = new BufferedReader(new InputStreamReader(iCalUrl.openStream()));
+            events = parseEvents(reader);
+        } catch (IOException e) {
+            System.err.println("ERROR - IOException while updating Events. \n" +
+                    "The Reason is : "+e.getMessage()+"\n"+
+                    "ICalUrl is : " + config.getEndpoint() + config.getIcalUrl());
+        } catch (ParserException e) {
+            System.err.println("ERROR - ParserException while updating Events. \n" +
+                    "The Reason is : "+e.getMessage());
+        }
+
+        if (events != null) this.events = events;
+    }
+
+    /***
+     * Parses events from the given reader into a list
+     * @param reader    the reader
+     * @return a List of {@link ICal}
+     */
+    private List<ICal> parseEvents(BufferedReader reader) throws IOException, ParserException {
+        List<ICal> res = new LinkedList<>();
+
+        CalendarBuilder builder = new CalendarBuilder();
+
+        Calendar calEvent;
+        String eventString;
+        while ((eventString = parseEventString(reader)) != null) {
+            StringReader sr = new StringReader(eventString);
+            calEvent = builder.build(sr);
+
+            res.add(getICalFromCalendar(calEvent));
+        }
+
+        return res;
+    }
+
+    /***
+     * Parses one event into a String (and corrects wrong Date-Formats)
+     * @param reader    the reader
+     * @return a String with all the event-data
+     */
+    private String parseEventString(BufferedReader reader) throws IOException {
+        StringBuilder event = new StringBuilder();
+        event.append(BEGIN_CAL);
+        event.append("\r\n");
+
+        String line;
+        // go to first event
+        while (!(line = reader.readLine()).equals(BEGIN_EV)) {
+            if (line.equals(END_CAL)) return null;
+        }
+
+        event.append(BEGIN_EV);
+        event.append("\r\n");
+        while ((line = reader.readLine()) != null) {
+            // check for wrong formatted ical and fix it
+            if (line.matches("(.*):\\d{8}Z{1}(.*)")) {
+                line = line.substring(0, line.lastIndexOf('Z'));
+                line += "T000000Z";
+            }
+
+            event.append(line);
+            event.append("\r\n");
+            if (line.equals(END_EV)) break;
+        }
+        event.append(END_CAL);
+        event.append("\r\n");
+
+        return event.toString();
+    }
+
+    private ICal getICalFromCalendar(Calendar calendar) {
+        Component component = calendar.getComponent(Component.VEVENT);
+
+        ICal event = new ICal();
+        event.setUid(component.getProperty(Property.UID).getValue());
+        event.setSummery(component.getProperty(Property.SUMMARY).getValue());
+        event.setDtstamp(component.getProperty(Property.DTSTAMP).getValue());
+        event.setDtstart(component.getProperty(Property.DTSTART).getValue());
+        event.setDtend(component.getProperty(Property.DTEND).getValue());
+
+        Property p;
+
+        p = component.getProperty(Property.RRULE);
+        if (p != null) event.setRrule(p.getValue());
+        p = component.getProperty(Property.EXDATE);
+        if (p != null) event.setExdate(p.getValue().split(","));
+        p = component.getProperty(Property.URL);
+        if (p != null) event.setUrl(p.getValue());
+        p = component.getProperty(Property.LOCATION);
+        if (p != null) event.setLocation(p.getValue());
+        p = component.getProperty(Property.DESCRIPTION);
+        if (p != null) event.setDescription(p.getValue());
+
+        return event;
     }
 }

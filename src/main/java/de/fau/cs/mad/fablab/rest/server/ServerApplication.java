@@ -1,26 +1,26 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import de.fau.cs.mad.fablab.rest.core.*;
-import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
-import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
-import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
-import de.fau.cs.mad.fablab.rest.server.resources.NewsResource;
 import de.fau.cs.mad.fablab.rest.server.core.*;
+import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorState;
+import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateDAO;
+import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
+import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
+import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import io.dropwizard.Application;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.setup.JerseyContainerHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
-import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.hibernate.HibernateBundle;
 import org.glassfish.jersey.servlet.ServletContainer;
 
 import java.text.SimpleDateFormat;
@@ -78,7 +78,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         // create and register instance of SpaceApiResource
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                configuration.getSpaceApiConfiguration()
+                configuration.getSpaceApiConfiguration(),
+                new DoorStateDAO(hibernate.getSessionFactory())
         );
         environment.jersey().register(spaceAPIResource);
 
@@ -109,7 +110,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         }
     }
 
-    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(News.class, ICal.class, Product.class, Cart.class) {
+    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(News.class, ICal.class, Product.class, Cart.class, DoorState.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
             return configuration.getDatabase();

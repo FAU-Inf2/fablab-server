@@ -143,6 +143,28 @@ public class DoorStateRequest {
     }
 
     /**
+     * Check if door state has been changed
+     *
+     * @param oldState old door state
+     * @return returns true if door state has been changed.
+     */
+    public boolean checkIfChanged(DoorState oldState) {
+        if (oldState == null)
+            return false;
+
+        if (doorstate == null)
+            return false;
+
+        if (oldState.state == DoorState.State.invalid)
+            return false;
+
+        if (doorstate.state == DoorState.State.invalid)
+            return false;
+
+        return oldState.state != doorstate.state;
+    }
+
+    /**
      * Returns the current DoorState for this request
      *
      * @return door state inside of a DoorState POJO

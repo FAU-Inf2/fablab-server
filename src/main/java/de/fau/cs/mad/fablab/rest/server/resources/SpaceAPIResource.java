@@ -4,8 +4,11 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.api.SpaceApi;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
+import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorState;
+import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateRequest;
 import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
+import io.dropwizard.hibernate.UnitOfWork;
 import net.spaceapi.HackerSpace;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 
@@ -22,12 +25,15 @@ import javax.ws.rs.client.WebTarget;
 public class SpaceAPIResource implements SpaceApi
 {
     private final SpaceApiConfiguration config;
+    private final DoorStateDAO dao;
 
-    public SpaceAPIResource(SpaceApiConfiguration config) {
+    public SpaceAPIResource(SpaceApiConfiguration config, DoorStateDAO dao) {
         this.config = config;
+        this.dao = dao;
     }
 
     @Override
+    @UnitOfWork
     public String updateDoorState(String hash, String data) {
 
         if (hash == null || data == null || hash.isEmpty() || data.isEmpty())
@@ -35,11 +41,21 @@ public class SpaceAPIResource implements SpaceApi
 
         if (config.getKeyFile() == null || config.getKeyFile().isEmpty() ||
                 config.getHashAlgorithm() == null || config.getHashAlgorithm().isEmpty())
-            throw new ServiceUnavailableException("keyfile or hash algorithm is missing in configuration");
+            throw new ServiceUnavailableException("key file or hash algorithm is missing in configuration");
 
         DoorStateRequest request = DoorStateRequest.fromData(config, hash, data);
+        DoorState oldState = dao.getLastState();
 
-        // now we have to fire push event
+        // if there is no oldState use current state
+        if (oldState == null)
+            dao.saveState(request.getDoorState());
+
+        if (request.checkIfChanged(oldState)) {
+            System.out.println("[INFO] DoorState changed, firing push event.");
+            dao.saveState(request.getDoorState());
+
+            // now we have to fire push event
+        }
 
         return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";
     }

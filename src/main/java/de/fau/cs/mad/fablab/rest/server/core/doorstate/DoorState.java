@@ -1,11 +1,18 @@
 package de.fau.cs.mad.fablab.rest.server.core.doorstate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * POJO to represent the door state
  * (inout)data should be in format <timestamp>:<state>
  * where <timestamp> is a unix timestamp
  * and <state> is either open or close
  */
+@Entity
+@Table(name="DoorState")
 public class DoorState
 {
     public final static String DATA_REGEX = "^\\d+:(open|close)$";
@@ -15,6 +22,15 @@ public class DoorState
         invalid,
         open,
         close
+    }
+
+    /**
+     * Default constructor which represents an invalid door state
+     */
+    DoorState ()
+    {
+        time = 0;
+        state = State.invalid;
     }
 
     /**
@@ -38,10 +54,13 @@ public class DoorState
     /**
      * Unix Timestamp of the request
      */
+    @Id
+    @Column(name = "time")
     public long time;
 
     /**
      * State which can be open or close
      */
+    @Column(name = "state")
     public State state = State.invalid;
 }

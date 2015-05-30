@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.resources;
+package de.fau.cs.mad.fablab.rest.server.core.doorstate;
 
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import org.junit.Test;
@@ -9,65 +9,68 @@ import javax.ws.rs.ServiceUnavailableException;
 import static org.junit.Assert.*;
 
 /**
- * Some tests for SpaceAPIResource
+ * Some tests for DoorStateRequest
  */
-public class SpaceAPIResourceTest {
+public class DoorStateRequestTest {
 
     // keyfile is not set in configuration, so the service should not be available
     @Test(expected = ServiceUnavailableException.class)
     public void testUpdateDoorStateUnconfigured() throws Exception {
 
-        SpaceAPIResource resource = new SpaceAPIResource(new SpaceApiConfiguration());
-
-        resource.updateDoorState("hash", "data");
+        DoorStateRequest request = DoorStateRequest.fromData(new SpaceApiConfiguration(), "hash", "data");
     }
 
     // parsing data should return valid values
     @Test
     public void testParseDataOpen()
     {
-        SpaceAPIResource.UpdateData data = SpaceAPIResource.parseData("12345:open");
+        DoorStateRequest request = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = request.parseData("12345:open");
         assertEquals(data.time, 12345);
-        assertEquals(data.state, SpaceAPIResource.UpdateData.State.open);
+        assertEquals(data.state, DoorState.State.open);
     }
 
     @Test
     public void testParseDataClosed()
     {
-        SpaceAPIResource.UpdateData data = SpaceAPIResource.parseData("456789:close");
+        DoorStateRequest request = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = request.parseData("456789:close");
         assertEquals(data.time, 456789);
-        assertEquals(data.state, SpaceAPIResource.UpdateData.State.close);
+        assertEquals(data.state, DoorState.State.close);
     }
 
     // parsing data should fail, if format does not match the regex
     @Test(expected = BadRequestException.class)
     public void testParseDataOpenExpectedFailLess()
     {
-        SpaceAPIResource.UpdateData data = SpaceAPIResource.parseData("open:");
+        DoorStateRequest request = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = request.parseData("open:");
     }
 
     // parsing data should fail, if format does not match the regex
     @Test(expected = BadRequestException.class)
     public void testParseDataOpenExpectedFailMore()
     {
-        SpaceAPIResource.UpdateData data = SpaceAPIResource.parseData("open:12345:fail");
+        DoorStateRequest request = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = request.parseData("open:12345:fail");
     }
 
     // parsing data should fail, if format does not match the regex
     @Test(expected = BadRequestException.class)
     public void testParseDataOpenExpectedFailInvalid()
     {
-        SpaceAPIResource.UpdateData data = SpaceAPIResource.parseData("12345:hangingdoor");
+        DoorStateRequest request = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = request.parseData("12345:hangingdoor");
     }
 
     @Test
     public void testCheckDataValid()
     {
         long currentTime = System.currentTimeMillis() / 1000L;
-        SpaceAPIResource resource = new SpaceAPIResource(new SpaceApiConfiguration());
-        SpaceAPIResource.UpdateData data = new SpaceAPIResource.UpdateData(String.valueOf(currentTime) + ":open");
+        DoorStateRequest request = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = new DoorState(String.valueOf(currentTime) + ":open");
 
-        boolean checkResult = resource.checkData(data);
+        boolean checkResult = request.checkData(data);
 
         assertTrue(checkResult);
     }
@@ -76,10 +79,10 @@ public class SpaceAPIResourceTest {
     public void testCheckDataInValidPast()
     {
         long currentTime = System.currentTimeMillis() / 1000L;
-        SpaceAPIResource resource = new SpaceAPIResource(new SpaceApiConfiguration());
-        SpaceAPIResource.UpdateData data = new SpaceAPIResource.UpdateData(String.valueOf(currentTime - 1000) + ":open");
+        DoorStateRequest request = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = new DoorState(String.valueOf(currentTime - 1000) + ":open");
 
-        boolean checkResult = resource.checkData(data);
+        boolean checkResult = request.checkData(data);
 
         assertFalse(checkResult);
     }
@@ -88,8 +91,8 @@ public class SpaceAPIResourceTest {
     public void testCheckDataInValidFuture()
     {
         long currentTime = System.currentTimeMillis() / 1000L;
-        SpaceAPIResource resource = new SpaceAPIResource(new SpaceApiConfiguration());
-        SpaceAPIResource.UpdateData data = new SpaceAPIResource.UpdateData(String.valueOf(currentTime + 1000) + ":open");
+        DoorStateRequest resource = new DoorStateRequest(new SpaceApiConfiguration());
+        DoorState data = new DoorState(String.valueOf(currentTime + 1000) + ":open");
 
         boolean checkResult = resource.checkData(data);
 

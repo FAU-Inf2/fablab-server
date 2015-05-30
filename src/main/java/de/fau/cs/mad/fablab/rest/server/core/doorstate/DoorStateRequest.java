@@ -8,6 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.ServiceUnavailableException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +35,7 @@ public class DoorStateRequest {
      *
      * @param config Configuration which holds information about keyfile and hashing algorithm.
      */
-    private DoorStateRequest(SpaceApiConfiguration config) {
+    public DoorStateRequest(SpaceApiConfiguration config) {
         this.config = config;
     }
 
@@ -110,6 +111,11 @@ public class DoorStateRequest {
      * @return hashed representation of data
      */
     private String calculateHash(String data) {
+
+        if (config == null ||
+                config.getKeyFile() == null || config.getKeyFile().isEmpty() ||
+                config.getHashAlgorithm() == null || config.getHashAlgorithm().isEmpty())
+            throw new ServiceUnavailableException("Config for key file and hashing algorithm is missing");
 
         Path keyFile = Paths.get(config.getKeyFile());
         try {

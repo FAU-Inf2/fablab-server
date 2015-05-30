@@ -152,3 +152,4 @@ server-db.*.db
 
 #log files
 *.log
+*.log.gz

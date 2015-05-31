@@ -9,6 +9,7 @@ import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
+import de.fau.cs.mad.fablab.rest.server.pushservice.PushResource;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
@@ -88,6 +89,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new ICalResource(new ICalFacade(new ICalDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ProductResource(new ProductFacade(new ProductDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new PushResource(new RegistrationIdFacade(new RegistrationIdDAO(hibernate.getSessionFactory()))));
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));

@@ -15,6 +15,7 @@ import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -24,8 +25,6 @@ import io.dropwizard.jersey.setup.JerseyContainerHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.servlet.ServletContainer;
-import io.dropwizard.assets.AssetsBundle;
-
 
 import java.text.SimpleDateFormat;
 
@@ -37,7 +36,7 @@ class ServerApplication extends Application<ServerConfiguration> {
     /**
      * used to configure aspects of the application required before the application is run
      *
-     * @param bootstrap
+     * @param bootstrap bootstrap server configuration
      */
     @Override
     public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
@@ -122,7 +121,14 @@ class ServerApplication extends Application<ServerConfiguration> {
         }
     }
 
-    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(News.class, ICal.class, Product.class, Cart.class, DoorState.class, RegistrationId.class) {
+    public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(
+            News.class,
+            ICal.class,
+            Product.class,
+            Cart.class,
+            CartEntry.class,
+            DoorState.class,
+            RegistrationId.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
             return configuration.getDatabase();

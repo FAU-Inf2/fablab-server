@@ -256,17 +256,23 @@ public class OpenErpClient implements OpenErpInterface {
     }
 
 
+    /***
+     *
+     * @param id a string containing 4 digits
+     * @return
+     * @throws OpenErpException
+     */
     @Override
-    public Product searchForProductsById(long id) throws OpenErpException {
+    public Product searchForProductsById(String id) throws OpenErpException {
         JSONRPC2Response jsonRPC2Response = null;
         try {
             mJsonSession.setURL(mSearchReadUrl);
 
             //the domain specific values to search
             JSONArray whereNameLike = new JSONArray();
-            whereNameLike.add(0, "id");
+            whereNameLike.add(0, "default_code");
             whereNameLike.add(1, "=");
-            whereNameLike.add(2, String.valueOf(id));
+            whereNameLike.add(2, id);
 
 
             JSONArray domain = new JSONArray();
@@ -360,9 +366,10 @@ public class OpenErpClient implements OpenErpInterface {
                           ? "unknown"
                           : (String) productJson.get("name");
 
-            Long id = (productJson.get("id") == null)
-                      ? -1
-                      : (Long) productJson.get("id");
+            //When there is no product_id available, the result is a bool value
+            String id = (productJson.get("code") instanceof Boolean)
+                      ? ""
+                      : (String) productJson.get("code");
 
             Double price = (productJson.get("list_price") == null)
                            ? -1

@@ -20,7 +20,7 @@ public class ProductResource implements ProductApi {
 
     @UnitOfWork
     @Override
-    public Product findById(long id) {
+    public Product findById(String id) {
         return this.facade.findById(id);
     }
 

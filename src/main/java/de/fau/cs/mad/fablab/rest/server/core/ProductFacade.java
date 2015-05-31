@@ -56,7 +56,7 @@ public class ProductFacade {
         }
     }
 
-    public Product findById(Long id) {
+    public Product findById(String id) {
         try {
             return mOpenErp.searchForProductsById(id);
         } catch (OpenErpException e) {

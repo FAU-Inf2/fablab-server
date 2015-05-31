@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * POJO to represent the door state
@@ -13,7 +14,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="DoorState")
-public class DoorState
+public class DoorState implements Serializable
 {
     public final static String DATA_REGEX = "^\\d+:(open|close)$";
     public final static String DELIMITER = ":";

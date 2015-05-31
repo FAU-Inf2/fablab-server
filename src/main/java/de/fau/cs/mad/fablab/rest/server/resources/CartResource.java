@@ -48,9 +48,9 @@ public class CartResource implements CartApi, Checkout {
         Cart cart = new Cart();
         cart.setId(235252342);
         cart.setStatus(CartStatusEnum.PENDING);
-        Product product1 = new Product("0", "Schraube 1", 3.14, 1, "Schrauben", "Stück");
-        Product product2 = new Product("1", "Schraube 2", 13.14, 1, "Schrauben", "Stück");
-        Product product3 = new Product("2", "Schraube 3", 73.14, 1, "Schrauben", "Stück");
+        Product product1 = new Product("0", "Schraube 1", 3.14, 1, "Schrauben", "Stück", "Lagerort");
+        Product product2 = new Product("1", "Schraube 2", 13.14, 1, "Schrauben", "Stück", "Lagerort");
+        Product product3 = new Product("2", "Schraube 3", 73.14, 1, "Schrauben", "Stück", "Lagerort");
         CartEntry cartEntry1 = new CartEntry(product1, 10);
         CartEntry cartEntry2 = new CartEntry(product2, 20);
         CartEntry cartEntry3 = new CartEntry(product3, 30);

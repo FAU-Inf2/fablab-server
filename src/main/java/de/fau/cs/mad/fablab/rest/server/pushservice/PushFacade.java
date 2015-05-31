@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.pushservice;
 
 import de.fau.cs.mad.fablab.rest.core.RegistrationId;
+import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdDAO;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdFacade;
 import io.dropwizard.db.DataSourceFactory;
@@ -15,8 +16,9 @@ import java.util.List;
 public class PushFacade {
 
     private SessionFactory mSessionFactory;
+    private PushServiceConfiguration mPushServiceConfiguration;
 
-    public PushFacade(SessionFactory aSessionFactory){
+    public PushFacade(PushServiceConfiguration aPushServiceConfiguration,SessionFactory aSessionFactory){
         mSessionFactory = aSessionFactory;
     }
 
@@ -29,7 +31,7 @@ public class PushFacade {
             content.addRegId(registrationId.getRegistrationid());
         }
         content.createData("Hinweis",aMessage);
-        AndroidPushService pushService = new AndroidPushService();
+        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
         try {
             pushService.pushJson("API_KEY", content);
         }catch (IOException io){

@@ -5,9 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by johannes on 26.05.15.
- */
+
 public class PushContent {
 
     private List<String> registration_ids;

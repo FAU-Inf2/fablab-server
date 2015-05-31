@@ -1,10 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import de.fau.cs.mad.fablab.rest.server.configuration.AdminConfiguration;
-import de.fau.cs.mad.fablab.rest.server.configuration.ICalConfiguration;
-import de.fau.cs.mad.fablab.rest.server.configuration.OpenErpConfiguration;
-import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.*;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -79,4 +76,10 @@ class ServerConfiguration extends Configuration
     @JsonProperty
     private ICalConfiguration ical = new ICalConfiguration();
     public ICalConfiguration getICalConfiguration() { return ical; }
+
+    //@Valid
+    //@NotNull
+    //@JsonProperty
+    //private PushServiceConfiguration pushConfig = new PushServiceConfiguration();
+    //public PushServiceConfiguration getPushServiceConfiguration() { return pushConfig; }
 }

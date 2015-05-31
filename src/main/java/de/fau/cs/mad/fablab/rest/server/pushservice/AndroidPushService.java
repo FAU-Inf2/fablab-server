@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server.pushservice;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.HostnameVerifier;
@@ -18,15 +19,19 @@ public class AndroidPushService {
     private static final String REGISTRATION_ID = "";
     private static final String API_KEY = "";
 
-    public static void main(String[] args) throws IOException{
-        System.out.println("Start Pushservice");
+    private PushServiceConfiguration mPushServiceConfiguration;
 
+    public static void main(String[] args) throws IOException{
         PushContent pushContent = new PushContent();
         pushContent.addRegId(REGISTRATION_ID);
         pushContent.createData("Test Title", "Test Message");
 
-        AndroidPushService androidPushService = new AndroidPushService();
+        AndroidPushService androidPushService = new AndroidPushService(new PushServiceConfiguration());
         androidPushService.pushJson(API_KEY,pushContent);
+    }
+
+    public AndroidPushService(PushServiceConfiguration aPushServiceConfiguration){
+        mPushServiceConfiguration = aPushServiceConfiguration;
     }
 
     public void pushJson(String apiKey, PushContent aPushContent) throws IOException{
@@ -60,8 +65,6 @@ public class AndroidPushService {
         System.out.println(response.toString());
 
     }
-
-
 
     private static class CustomizedHostnameVerifier implements HostnameVerifier {
         public boolean verify(String hostname, SSLSession session) {

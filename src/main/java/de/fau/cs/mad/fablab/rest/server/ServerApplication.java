@@ -1,5 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server;
 
+import com.google.common.cache.CacheBuilderSpec;
 import de.fau.cs.mad.fablab.rest.core.*;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
@@ -22,6 +23,8 @@ import io.dropwizard.jersey.setup.JerseyContainerHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.servlet.ServletContainer;
+import io.dropwizard.assets.AssetsBundle;
+
 
 import java.text.SimpleDateFormat;
 
@@ -44,14 +47,20 @@ class ServerApplication extends Application<ServerConfiguration> {
                 bootstrap.getConfigurationSourceProvider(),
                 new EnvironmentVariableSubstitutor()
         ));
+
+        bootstrap.addBundle(new AssetsBundle("/checkout", "/checkout", "index.html"));
+
     }
 
     @Override
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
-
         // Create our basic health check
         final HelloFablabHealthCheck helloFablabHealthCheck =
                 new HelloFablabHealthCheck(configuration.getTemplate());
+
+
+        CacheBuilderSpec.disableCaching();
+
 
         // add health check and resource to our jersey environment
         environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
@@ -100,6 +109,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         JerseyContainerHolder jerseyContainerHolder = new JerseyContainerHolder(new ServletContainer(dropwizardResourceConfig));
         dropwizardResourceConfig.register(LogResource.class);
         environment.admin().addServlet("log admin resource", jerseyContainerHolder.getContainer()).addMapping("/admin/*");
+
     }
 
     public static void main(String[] args) {

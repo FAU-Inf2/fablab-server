@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head lang="de">
+    <meta charset="UTF-8">
+    <script src="checkout/jquery.js"></script>
+    <title>Kasse</title>
+</head>
+<body>
+
+<h1> KASSE </h1>
+<h2>Warenkorb:</h2>
+<div style="margin: 0 auto; width: 500px;" id="cart"> </div>
+<a href="#">Warenkob wurde bezahlt</a>
+<br>
+<a href="#">Warenkob verwerfen</a>
+
+<script>
+    $.get( "carts/cart", function(cart) {
+        console.log(cart);
+        console.log(cart.products);
+
+        var table = "<table cellpadding='5px'>";
+        table += "<tr><th>Name</th> <th>Price</th> <th>Amount</th><th>Unit</th></tr>";
+        for(var i in cart.products){
+            var product = cart.products[i];
+            console.log(cart.products[i]);
+            table += "<tr><td>" + product.name + "</td><td>" + product.price + "</td><td>" + product.amount + "</td><td>" + product.unit + "</td></tr>"
+        }
+        table += "</table>";
+        $("#cart").html(table);
+    });
+</script>
+
+</body>
+</html>

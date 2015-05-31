@@ -366,7 +366,8 @@ public class OpenErpClient implements OpenErpInterface {
                           ? "unknown"
                           : (String) productJson.get("name");
 
-            String id = (productJson.get("code") == null)
+            //When there is no product_id available, the result is a bool value
+            String id = (productJson.get("code") instanceof Boolean)
                       ? ""
                       : (String) productJson.get("code");
 

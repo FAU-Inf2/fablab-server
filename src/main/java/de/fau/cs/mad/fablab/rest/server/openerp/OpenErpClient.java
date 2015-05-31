@@ -23,6 +23,7 @@ public class OpenErpClient implements OpenErpInterface {
     static final String METHOD = "call";
 
     private static JSONArray fields = new JSONArray();
+
     static {
         fields.add(0, "code");
         fields.add(1, "reception_count");
@@ -48,15 +49,16 @@ public class OpenErpClient implements OpenErpInterface {
 
     /***
      * Singleton getInstance()
+     *
      * @return
      */
-    public static OpenErpInterface getInstance(){
-        if(instance == null){
+    public static OpenErpInterface getInstance() {
+        if (instance == null) {
             try {
                 instance = new OpenErpClient();
             } catch (MalformedURLException e) {
                 System.err.println("ERROR - MalformedURLException while initializing OpenErpClient. \n" +
-                                           "The Reason is : "+e.getMessage()+"\n"+
+                                           "The Reason is : " + e.getMessage() + "\n" +
                                            "Your hostname is : " + config.getHostname());
                 System.exit(1);
             }
@@ -64,8 +66,7 @@ public class OpenErpClient implements OpenErpInterface {
         return instance;
     }
 
-    public static void setConfiguration(OpenErpConfiguration c)
-    {
+    public static void setConfiguration(OpenErpConfiguration c) {
         config = c;
     }
 
@@ -81,8 +82,8 @@ public class OpenErpClient implements OpenErpInterface {
         if (config == null || !config.validate()) {
 
             System.err.println("ERROR while initializing OpenErpClient. Configuration vars missing.\n" +
-                    "The configuration (username, password, hostname and database) has to be set \n " +
-                    "using the class OpenErpConfiguration.\n");
+                                       "The configuration (username, password, hostname and database) has to be set \n " +
+                                       "using the class OpenErpConfiguration.\n");
             System.exit(1);
         }
 
@@ -236,8 +237,8 @@ public class OpenErpClient implements OpenErpInterface {
             domain.add(0, whereNameLike);
 
             jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
-                    getProductParams(limit, offset, domain),
-                    generateRequestID()));
+                                                                     getProductParams(limit, offset, domain),
+                                                                     generateRequestID()));
 
             try {
                 assertSessionNotExpired(jsonRPC2Response);
@@ -245,8 +246,8 @@ public class OpenErpClient implements OpenErpInterface {
                 //do the request one more time.
                 mJsonSession.setURL(mSearchReadUrl);
                 jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
-                        getProductParams(limit, offset, domain),
-                        generateRequestID()));
+                                                                         getProductParams(limit, offset, domain),
+                                                                         generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
@@ -272,8 +273,8 @@ public class OpenErpClient implements OpenErpInterface {
             domain.add(0, whereNameLike);
 
             jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
-                    getProductParams(1, 0, domain),
-                    generateRequestID()));
+                                                                     getProductParams(1, 0, domain),
+                                                                     generateRequestID()));
 
             try {
                 assertSessionNotExpired(jsonRPC2Response);
@@ -281,8 +282,8 @@ public class OpenErpClient implements OpenErpInterface {
                 //do the request one more time.
                 mJsonSession.setURL(mSearchReadUrl);
                 jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
-                        getProductParams(1, 0, domain),
-                        generateRequestID()));
+                                                                         getProductParams(1, 0, domain),
+                                                                         generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
@@ -371,6 +372,15 @@ public class OpenErpClient implements OpenErpInterface {
                                       ? new JSONArray()
                                       : (JSONArray) productJson.get("categ_id");
 
+            JSONArray unitOfMeasureArray = (productJson.get("uom_id") == null)
+                                           ? new JSONArray()
+                                           : (JSONArray) productJson.get("uom_id");
+
+            String unit = "";
+            if (unitOfMeasureArray.size() == 2) {
+                unit = (String) unitOfMeasureArray.get(1);
+            }
+
             long categoryId = -1;
             String categoryString = "unknown category";
             //ensure our array contains the needed elements
@@ -379,8 +389,7 @@ public class OpenErpClient implements OpenErpInterface {
                 categoryString = (String) categoryArray.get(1);
             }
             //Create a product and put it in the result list
-            //TODO what is unit here? (last param in the Product Constructor not used right now)
-            Product product = new Product(id, name, price, categoryId, categoryString, "");
+            Product product = new Product(id, name, price, categoryId, categoryString, unit);
             productList.add(product);
         }
         return productList;

@@ -25,4 +25,8 @@ public class CartFacade{
     public void delete(long id) {
         this.dao.delete(id);
     }
+
+    public Cart getCurrentCart() {
+        return this.dao.getCurrentCart();
+    }
 }

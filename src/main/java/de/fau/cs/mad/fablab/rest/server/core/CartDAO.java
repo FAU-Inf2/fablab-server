@@ -7,10 +7,9 @@ import org.hibernate.SessionFactory;
 import de.fau.cs.mad.fablab.rest.core.Product;
 import java.util.List;
 
-/**
- * Created by EE on 11.05.15.
- */
 public class CartDAO extends AbstractDAO<Cart> {
+
+    public static long lastPushed = -1;
 
     public CartDAO(SessionFactory factory) {
         super(factory);
@@ -28,6 +27,7 @@ public class CartDAO extends AbstractDAO<Cart> {
 
     //Create
     public Cart create(Cart obj){
+        lastPushed = obj.getId();
         return persist(obj);
     }
 
@@ -38,16 +38,19 @@ public class CartDAO extends AbstractDAO<Cart> {
         stored.setProducts(modified.getProducts());
         stored.setStatus(stored.getStatus());
         this.persist(stored);
+        lastPushed = modified.getId();
         return stored;
     }
 
 
+    //Not used so far...
     public Cart addProduct(long id, Product product, double amount){
         Cart c = findById(id);
         c.addProduct(product, amount);
         return c;
     }
 
+    //Not used so far...
     public Cart changeProductAmount(long id, Product product, double newAmount){
         Cart c = findById(id);
         c.removeProduct(product);
@@ -62,7 +65,15 @@ public class CartDAO extends AbstractDAO<Cart> {
             return false;
 
         currentSession().delete(get(id));
+        if(id == lastPushed)
+            lastPushed = -1;
         return true;
+    }
+
+    public Cart getCurrentCart(){
+        if(lastPushed != -1)
+            return super.get(lastPushed);
+        return null;
     }
 
 }

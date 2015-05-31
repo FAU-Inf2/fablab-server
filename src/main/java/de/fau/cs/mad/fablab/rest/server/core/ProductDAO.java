@@ -20,7 +20,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     }
 
 
-    public Product findById(long id) {
+    public Product findById(String id) {
         return super.get(id);
     }
 

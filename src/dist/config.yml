@@ -84,3 +84,7 @@ openerp:
 ical:
     endpoint: https://fablab.fau.de
     icalUrl: /termine/ical
+
+pushConfig:
+    pushAPIRegistrationId: ${pushAPIkey}
+    googlePushServiceURL: ${pushServiceURL}

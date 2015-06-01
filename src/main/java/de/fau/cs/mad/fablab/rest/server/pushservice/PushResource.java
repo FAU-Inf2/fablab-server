@@ -24,9 +24,10 @@ public class PushResource implements PushApi{
 
     @UnitOfWork
     @Override
-    public WelcomeUser addRegistrationId(String regId) {
-        System.out.println("RegistrationID: " + regId);
-
+    public Response addRegistrationId(RegistrationId regId) {
+        if(regId == null) {
+            System.out.println("RegistrationID: " + regId.getRegistrationid());
+        }
         mRegistrationIdFacade.create(new RegistrationId("112341234"));
         List<RegistrationId> registrationIdList = mRegistrationIdFacade.findAll();
 
@@ -35,6 +36,10 @@ public class PushResource implements PushApi{
         }
 
         long l = 1;
-        return new WelcomeUser(l,"asdf",l);
+        if(regId == null){
+            return Response.serverError().build();
+        }
+
+        return Response.ok().build();
     }
 }

@@ -18,7 +18,7 @@ public class PushResource implements PushApi{
     private PushServiceConfiguration mPushServiceConfiguration;
 
     public PushResource(PushServiceConfiguration aPushServiceConfiguration,SessionFactory aSessionFactory){
-        mRegistrationIdFacade = new RegistrationIdFacade(new RegistrationIdDAO(mSessionFactory));
+        mRegistrationIdFacade = new RegistrationIdFacade(new RegistrationIdDAO(aSessionFactory));
         mPushServiceConfiguration = aPushServiceConfiguration;
         mSessionFactory = aSessionFactory;
     }

@@ -10,6 +10,5 @@ docker run -d \
     -e adminPassword=$adminPassword \
     -e FABLAB_KEYSTORE_PASSWORD="$FABLAB_KEYSTORE_PASSWORD" \
     -e pushAPIkey="$pushAPIkey" \
-    -e pushServiceURL="$pushServiceURL"
-
+    -e pushServiceURL="$pushServiceURL" \
     container-fablab-server

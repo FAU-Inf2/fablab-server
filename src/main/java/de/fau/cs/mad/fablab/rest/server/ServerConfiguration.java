@@ -77,4 +77,10 @@ class ServerConfiguration extends Configuration
     private ICalConfiguration ical = new ICalConfiguration();
     public ICalConfiguration getICalConfiguration() { return ical; }
 
+    @Valid
+    @NotNull
+    @JsonProperty
+    private PushServiceConfiguration pushConfig = new PushServiceConfiguration();
+    public PushServiceConfiguration getPushServiceConfiguration() { return pushConfig; }
+
 }

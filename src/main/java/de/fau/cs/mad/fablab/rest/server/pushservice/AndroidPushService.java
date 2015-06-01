@@ -35,7 +35,7 @@ public class AndroidPushService {
     }
 
     public void pushJson(String apiKey, PushContent aPushContent) throws IOException{
-        URL url = new URL("https://android.clients.google.com/gcm/send");
+        URL url = new URL("");
         HttpsURLConnection
                 .setDefaultHostnameVerifier(new CustomizedHostnameVerifier());
         HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();

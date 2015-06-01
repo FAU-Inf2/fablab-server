@@ -21,21 +21,12 @@ public class AndroidPushService {
 
     private PushServiceConfiguration mPushServiceConfiguration;
 
-    public static void main(String[] args) throws IOException{
-        PushContent pushContent = new PushContent();
-        pushContent.addRegId(REGISTRATION_ID);
-        pushContent.createData("Test Title", "Test Message");
-
-        AndroidPushService androidPushService = new AndroidPushService(new PushServiceConfiguration());
-        androidPushService.pushJson(API_KEY,pushContent);
-    }
-
     public AndroidPushService(PushServiceConfiguration aPushServiceConfiguration){
         mPushServiceConfiguration = aPushServiceConfiguration;
     }
 
-    public void pushJson(String apiKey, PushContent aPushContent) throws IOException{
-        URL url = new URL("");
+    public void pushJson(PushContent aPushContent) throws IOException{
+        URL url = new URL(mPushServiceConfiguration.getGooglePushServiceURL());
         HttpsURLConnection
                 .setDefaultHostnameVerifier(new CustomizedHostnameVerifier());
         HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
@@ -43,7 +34,7 @@ public class AndroidPushService {
         httpsURLConnection.setUseCaches(false);
         httpsURLConnection.setRequestMethod("POST");
         httpsURLConnection.setRequestProperty("Content-Type", "application/json");
-        httpsURLConnection.setRequestProperty("Authorization", "key=" + apiKey);
+        httpsURLConnection.setRequestProperty("Authorization", "key=" + mPushServiceConfiguration.getPushAPIRegistrationId());
 
         ObjectMapper mapper = new ObjectMapper();
         DataOutputStream wr = new DataOutputStream(httpsURLConnection.getOutputStream());

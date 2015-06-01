@@ -1,25 +1,26 @@
 package de.fau.cs.mad.fablab.rest.server.pushservice;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import de.fau.cs.mad.fablab.rest.api.PushApi;
 import de.fau.cs.mad.fablab.rest.core.RegistrationId;
-import de.fau.cs.mad.fablab.rest.entities.WelcomeUser;
+import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdDAO;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdFacade;
 import io.dropwizard.hibernate.UnitOfWork;
-import io.dropwizard.jersey.params.LongParam;
+import org.hibernate.SessionFactory;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import java.util.List;
 
 
 public class PushResource implements PushApi{
 
     private RegistrationIdFacade mRegistrationIdFacade;
+    private SessionFactory mSessionFactory;
+    private PushServiceConfiguration mPushServiceConfiguration;
 
-    public PushResource(RegistrationIdFacade aRegistrationIdFacade){
-        mRegistrationIdFacade = aRegistrationIdFacade;
+    public PushResource(PushServiceConfiguration aPushServiceConfiguration,SessionFactory aSessionFactory){
+        mRegistrationIdFacade = new RegistrationIdFacade(new RegistrationIdDAO(mSessionFactory));
+        mPushServiceConfiguration = aPushServiceConfiguration;
+        mSessionFactory = aSessionFactory;
     }
 
     @UnitOfWork
@@ -28,14 +29,12 @@ public class PushResource implements PushApi{
         if(regId == null) {
             System.out.println("RegistrationID: " + regId.getRegistrationid());
         }
-        mRegistrationIdFacade.create(new RegistrationId("112341234"));
-        List<RegistrationId> registrationIdList = mRegistrationIdFacade.findAll();
+        mRegistrationIdFacade.create(regId);
+        PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
+        pushFacade.pushToDevice(regId, "Eine neue Nachricht für: " + regId.getRegistrationid());
+        pushFacade.pushToAllDevices("Hat alles geklappt");
 
-        for(RegistrationId registrationId : registrationIdList){
-            System.out.println(registrationId.getRegistrationid_id());
-        }
 
-        long l = 1;
         if(regId == null){
             return Response.serverError().build();
         }

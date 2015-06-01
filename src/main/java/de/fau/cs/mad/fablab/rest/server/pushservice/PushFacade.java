@@ -20,10 +20,10 @@ public class PushFacade {
 
     public PushFacade(PushServiceConfiguration aPushServiceConfiguration,SessionFactory aSessionFactory){
         mSessionFactory = aSessionFactory;
+        mPushServiceConfiguration = aPushServiceConfiguration;
     }
 
-
-    public void push(String aMessage){
+    public void pushToAllDevices(String aMessage){
         PushContent content = new PushContent();
         RegistrationIdFacade registrationIdFacade = new RegistrationIdFacade(new RegistrationIdDAO(mSessionFactory));
         List<RegistrationId> registrationIds = registrationIdFacade.findAll();
@@ -32,10 +32,23 @@ public class PushFacade {
         }
         content.createData("Hinweis",aMessage);
         AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
-        try {
-            pushService.pushJson("API_KEY", content);
+        pushJson(pushService,content);
+    }
+
+    public void pushToDevice(RegistrationId aRegistrationId, String aMessage){
+        PushContent content = new PushContent();
+        content.addRegId(aRegistrationId.getRegistrationid());
+        content.createData("Hinweis",aMessage);
+        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
+        pushJson(pushService,content);
+    }
+
+    private void pushJson(AndroidPushService aAndroidPushService, PushContent aPushContent){
+        try{
+            aAndroidPushService.pushJson(aPushContent);
         }catch (IOException io){
             io.printStackTrace();
         }
+
     }
 }

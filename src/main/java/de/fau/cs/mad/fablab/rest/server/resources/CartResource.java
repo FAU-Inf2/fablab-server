@@ -31,17 +31,6 @@ public class CartResource implements CartApi, Checkout {
         return this.facade.create(obj);
     }
 
-    @UnitOfWork
-    @Override
-    public Cart update(Cart obj) {
-        return this.facade.update(obj);
-    }
-
-    @UnitOfWork
-    @Override
-    public void delete(long id) {
-        this.facade.delete(id);
-    }
 
     @Override
     public Cart getCurrentCart() {
@@ -63,4 +52,8 @@ public class CartResource implements CartApi, Checkout {
     }
 
 
+    @Override
+    public CartStatusEnum getStatus(long id) {
+        return null;
+    }
 }

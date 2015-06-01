@@ -80,6 +80,12 @@ class ServerConfiguration extends Configuration
     @Valid
     @NotNull
     @JsonProperty
+    private NewsConfiguration drupalNews = new NewsConfiguration();
+    public NewsConfiguration getNewsConfiguration() { return drupalNews; }
+
+    @Valid
+    @NotNull
+    @JsonProperty
     private PushServiceConfiguration pushConfig = new PushServiceConfiguration();
     public PushServiceConfiguration getPushServiceConfiguration() { return pushConfig; }
 

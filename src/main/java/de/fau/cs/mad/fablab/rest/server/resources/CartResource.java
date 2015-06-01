@@ -32,6 +32,6 @@ public class CartResource implements CartApi {
 
     @Override
     public CartStatusEnum getStatus(String id) {
-        return null;
+        return this.facade.getStatus(id);
     }
 }

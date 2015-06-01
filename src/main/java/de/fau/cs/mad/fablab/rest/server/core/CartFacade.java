@@ -18,15 +18,7 @@ public class CartFacade{
         return this.dao.create(obj);
     }
 
-    public Cart update(Cart obj) {
-        return this.dao.update(obj);
-    }
-
-    public void delete(long id) {
-        this.dao.delete(id);
-    }
-
-    public Cart getCurrentCart() {
-        return this.dao.getCurrentCart();
+    public Cart getStatus(String id) {
+        return this.dao.findById(id);
     }
 }

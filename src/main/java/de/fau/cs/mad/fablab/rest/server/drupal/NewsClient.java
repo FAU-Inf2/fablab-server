@@ -3,7 +3,6 @@ package de.fau.cs.mad.fablab.rest.server.drupal;
 import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
 
-import java.io.IOException;
 import java.util.List;
 
 public class NewsClient implements NewsInterface {
@@ -30,8 +29,6 @@ public class NewsClient implements NewsInterface {
     /***
      * Checks for valid configuration and sets necessary urls
      * If any environment variable is missing, it will shutdown the whole application with exit code 1
-     *
-     * @throws IOException if the url + port + endpoint is not a valid url
      */
     private NewsClient() {
         if (config == null || !config.validate()) {
@@ -52,6 +49,7 @@ public class NewsClient implements NewsInterface {
 
     @Override
     public News findById(long id) {
+        // newsIdUrl += id
         return null;
     }
 
@@ -62,6 +60,7 @@ public class NewsClient implements NewsInterface {
 
     @Override
     public List<News> findAll() {
+        // page 1 : String page1 = newsUrl + PAGE + "1"
         return null;
     }
 }

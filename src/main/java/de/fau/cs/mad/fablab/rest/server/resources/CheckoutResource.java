@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 import de.fau.cs.mad.fablab.rest.server.core.CartFacade;
+import io.dropwizard.hibernate.UnitOfWork;
 
 public class CheckoutResource implements Checkout {
 
@@ -12,16 +13,19 @@ public class CheckoutResource implements Checkout {
         this.facade = facade;
     }
 
+    @UnitOfWork
     @Override
     public Cart getCart(String id) {
         return facade.getCart(id);
     }
 
+    @UnitOfWork
     @Override
     public void markCartAsPaid(String id) {
         this.facade.updateCartStatus(id, CartStatusEnum.PAID);
     }
 
+    @UnitOfWork
     @Override
     public void markCartAsCancelled(String id) {
         this.facade.updateCartStatus(id, CartStatusEnum.CANCELLED);

@@ -1,10 +1,10 @@
 package de.fau.cs.mad.fablab.rest.server;
 
-import de.fau.cs.mad.fablab.rest.core.ICal;
-import de.fau.cs.mad.fablab.rest.core.News;
+import de.fau.cs.mad.fablab.rest.core.*;
 import io.dropwizard.hibernate.HibernateBundle;
 import org.hibernate.Session;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class dummyData {
@@ -16,9 +16,29 @@ public class dummyData {
             createNews();
         if(session.get(ICal.class, (long)0) == null)
             createICals();
+
+        createCart();
     }
 
 
+    private static void createCart(){
+        Cart cart = new Cart();
+        cart.setId("ASDF");
+        cart.setStatus(CartStatusEnum.PENDING);
+        Product product1 = new Product("0", "Schraube 1", 3.14, 1, "Schrauben", "Stück", "Lagerort");
+        Product product2 = new Product("1", "Schraube 2", 13.14, 1, "Schrauben", "Stück", "Lagerort");
+        Product product3 = new Product("2", "Schraube 3", 73.14, 1, "Schrauben", "Stück", "Lagerort");
+        CartEntry cartEntry1 = new CartEntry(product1, 10);
+        CartEntry cartEntry2 = new CartEntry(product2, 20);
+        CartEntry cartEntry3 = new CartEntry(product3, 30);
+        ArrayList<CartEntry> entries = new ArrayList<>();
+        entries.add(cartEntry1);
+        entries.add(cartEntry2);
+        entries.add(cartEntry3);
+        cart.setProducts(entries);
+        session.save(cart);
+        System.out.println("FOUND!!! " + session.get(Cart.class, "ASDF").getClass());
+    }
 
     private static void createNews(){
         System.out.println("Creating dummy News");

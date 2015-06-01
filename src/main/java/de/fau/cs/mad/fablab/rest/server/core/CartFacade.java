@@ -1,7 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
-import de.fau.cs.mad.fablab.rest.api.CartApi;
 import de.fau.cs.mad.fablab.rest.core.Cart;
+import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 
 /**
  * Created by EE on 14.05.15.
@@ -18,15 +18,15 @@ public class CartFacade{
         return this.dao.create(obj);
     }
 
-    public Cart update(Cart obj) {
-        return this.dao.update(obj);
+    public Cart getCart(String id){
+        return this.dao.findById(id);
     }
 
-    public void delete(long id) {
-        this.dao.delete(id);
+    public CartStatusEnum getStatus(String id) {
+        return this.dao.findById(id).getStatus();
     }
 
-    public Cart getCurrentCart() {
-        return this.dao.getCurrentCart();
+    public void updateCartStatus(String id, CartStatusEnum status){
+        this.dao.updateCartStatus(id, status);
     }
 }

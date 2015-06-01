@@ -98,6 +98,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new ProductResource(new ProductFacade(new ProductDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new PushResource(new RegistrationIdFacade(new RegistrationIdDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));

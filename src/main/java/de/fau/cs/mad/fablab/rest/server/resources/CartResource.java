@@ -30,6 +30,7 @@ public class CartResource implements CartApi {
          this.facade.create(obj);
     }
 
+    @UnitOfWork
     @Override
     public CartStatusEnum getStatus(String id) {
         return this.facade.getStatus(id);

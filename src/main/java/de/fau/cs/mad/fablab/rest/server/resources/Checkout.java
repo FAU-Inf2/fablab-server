@@ -11,13 +11,13 @@ public interface Checkout {
     @GET
     @Path("/checkout")
     @Produces(MediaType.APPLICATION_JSON)
-    Cart getCart(String id);
+    Cart getCart(@QueryParam("id") String id);
 
     @POST
     @Path("/checkout/paid")
-    void markCartAsPaid(String id);
+    void markCartAsPaid(@QueryParam("id") String id);
 
     @POST
     @Path("/checkout/cancelled")
-    void markCartAsCancelled(String id);
+    void markCartAsCancelled(@QueryParam("id") String id);
 }

@@ -23,7 +23,7 @@ public class dummyData {
 
     private static void createCart(){
         Cart cart = new Cart();
-        cart.setId("ASDF");
+        cart.setCartCode("ASDF");
         cart.setStatus(CartStatusEnum.PENDING);
         Product product1 = new Product("0", "Schraube 1", 3.14, 1, "Schrauben", "Stück", "Lagerort");
         Product product2 = new Product("1", "Schraube 2", 13.14, 1, "Schrauben", "Stück", "Lagerort");
@@ -37,7 +37,7 @@ public class dummyData {
         entries.add(cartEntry3);
         cart.setProducts(entries);
         session.save(cart);
-        System.out.println("FOUND!!! " + session.get(Cart.class, "ASDF").getClass());
+//        System.out.println("FOUND!!! " + session.get(Cart.class, "ASDF").getClass());
     }
 
     private static void createNews(){

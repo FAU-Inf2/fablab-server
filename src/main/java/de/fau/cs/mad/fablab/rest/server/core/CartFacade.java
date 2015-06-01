@@ -18,7 +18,15 @@ public class CartFacade{
         return this.dao.create(obj);
     }
 
+    public Cart getCart(String id){
+        return this.dao.findById(id);
+    }
+
     public CartStatusEnum getStatus(String id) {
         return this.dao.findById(id).getStatus();
+    }
+
+    public void updateCartStatus(String id, CartStatusEnum status){
+        this.dao.updateCartStatus(id, status);
     }
 }

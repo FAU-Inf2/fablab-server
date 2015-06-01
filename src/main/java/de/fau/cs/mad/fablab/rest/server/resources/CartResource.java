@@ -26,8 +26,8 @@ public class CartResource implements CartApi {
 
     @UnitOfWork
     @Override
-    public Cart create(Cart obj) {
-        return this.facade.create(obj);
+    public void create(Cart obj) {
+         this.facade.create(obj);
     }
 
     @Override

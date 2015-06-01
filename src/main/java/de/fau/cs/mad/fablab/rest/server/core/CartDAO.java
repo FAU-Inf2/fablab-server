@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.core;
 
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
+import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
@@ -29,4 +30,13 @@ public class CartDAO extends AbstractDAO<Cart> {
         return true;
     }
 
+    public void updateCartStatus(String id, CartStatusEnum status) {
+        Cart cart = super.get(id);
+        //ignore if there is no such cart
+        if (cart == null)
+            return;
+
+        cart.setStatus(status);
+        super.persist(cart);
+    }
 }

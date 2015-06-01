@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html>
-<head lang="de">
-    <meta charset="UTF-8">
-    <script src="checkout/jquery.js"></script>
-    <title>Kasse</title>
-</head>
-<body>
+    <head lang="de">
+        <meta charset="UTF-8">
+        <script src="checkout/jquery.js"></script>
+        <script src="checkout/script.js"></script>
+        <link rel="stylesheet" type="text/css" href="checkout/style.css">
+        <title>Kasse</title>
+    </head>
+    <body>
 
-<h1> KASSE </h1>
-<h2>Warenkorb:</h2>
-<div style="margin: 0 auto; width: 500px;" id="cart"> </div>
-<a href="#">Warenkob wurde bezahlt</a>
-<br>
-<a href="#">Warenkob verwerfen</a>
+        <h1>KASSE</h1>
 
-<script>
-    $.get( "carts/cart", function(cart) {
-        console.log(cart);
-        console.log(cart.products);
+        <div id="hasCart">
+            <h2>Warenkorb:</h2>
+            <label for="id">Super geheimer Code: </label><input type="text" id="id" name="id" value="" readonly>
+            <div id="cart"> </div>
 
-        var table = "<table cellpadding='5px'>";
-        table += "<tr><th>Name</th> <th>Price</th> <th>Amount</th><th>Unit</th></tr>";
-        for(var i in cart.products){
-            var product = cart.products[i];
-            console.log(cart.products[i]);
-            table += "<tr><td>" + product.name + "</td><td>" + product.price + "</td><td>" + product.amount + "</td><td>" + product.unit + "</td></tr>"
-        }
-        table += "</table>";
-        $("#cart").html(table);
-    });
-</script>
 
-</body>
+            <!-- Pay ../cart/checkout/paid -->
+            <p class="button green" onclick="paid()">Warenkorb wurde bezahlt</p>
+
+
+            <!-- Cancel ../cart/checkout/cancelled -->
+            <p class="button red" onclick="cancelled()">Warenkorb verwerfen / abbrechen</p>
+
+        </div>
+
+        <div id="info">
+            <p> KEIN WARENKORB VORHANDEN <br>--> "CODE SCANNEN ANSICHT" </p>
+        </div>
+
+
+
+    </body>
 </html>

@@ -1,0 +1,34 @@
+body
+{
+    width:500px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#cart {
+}
+
+#hasCart{
+    display: none;
+}
+
+#info{
+    display: block;
+}
+
+.button{
+    border: 5px groove black;
+    color: #999;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    width: 300px;
+}
+
+.green{
+    background-color: darkgreen;
+}
+
+.red{
+    background-color: darkred;
+}

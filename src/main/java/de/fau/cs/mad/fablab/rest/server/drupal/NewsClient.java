@@ -1,8 +1,13 @@
 package de.fau.cs.mad.fablab.rest.server.drupal;
 
+import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 public class NewsClient implements NewsInterface {
@@ -50,7 +55,18 @@ public class NewsClient implements NewsInterface {
     @Override
     public News findById(long id) {
         // newsIdUrl += id
-        return null;
+        String url = newsIdUrl+id;
+        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
+        Response jsonResponse = client.target(url).request(MediaType.APPLICATION_JSON).get();
+        //Response jsonResponse = client.target("http://52.28.16.59:50080/rest/node/"+id).request(MediaType.APPLICATION_XML).get();
+        if (jsonResponse.getStatus() != 200) {
+            throw new RuntimeException("Failed: HTTP Error: " + jsonResponse.getStatus());
+        }
+
+        DrupalNode[] node = jsonResponse.readEntity(DrupalNode[].class);
+        System.out.println("################################ NEWS #########################");
+        System.out.println(node[0].toString());
+        return new News();
     }
 
     @Override

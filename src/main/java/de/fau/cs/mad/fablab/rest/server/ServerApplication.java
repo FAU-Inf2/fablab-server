@@ -7,6 +7,7 @@ import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorState;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
+import de.fau.cs.mad.fablab.rest.server.drupal.NewsClient;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
@@ -71,6 +72,9 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         // configure ICalClient
         ICalClient.setConfiguration(configuration.getICalConfiguration());
+
+        // configure NewsClient
+        NewsClient.setConfiguration(configuration.getNewsConfiguration());
 
         // configure date format for jackson
         //environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

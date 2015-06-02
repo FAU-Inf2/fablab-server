@@ -10,6 +10,10 @@ public class NewsConfiguration {
 
     @NotEmpty
     @JsonProperty
+    private String faburl;
+
+    @NotEmpty
+    @JsonProperty
     private String url;
 
     @NotEmpty
@@ -21,7 +25,7 @@ public class NewsConfiguration {
     private String nodeEndpoint;
 
     public boolean validate() {
-        if (nodeEndpoint == null || nodeEndpoint.isEmpty() || port == null || port.isEmpty() || url == null || url.isEmpty()) return false;
+        if (nodeEndpoint == null || nodeEndpoint.isEmpty() || port == null || port.isEmpty() || url == null || url.isEmpty() || faburl == null || faburl.isEmpty()) return false;
         return true;
     }
 
@@ -47,5 +51,13 @@ public class NewsConfiguration {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getFaburl() {
+        return faburl;
+    }
+
+    public void setFaburl(String faburl) {
+        this.faburl = faburl;
     }
 }

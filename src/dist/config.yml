@@ -86,9 +86,10 @@ ical:
     icalUrl: /termine/ical
 
 drupalNews:
+    faburl: https://fablab.fau.de
     url: http://52.28.16.59
     port: 50080
-    nodeEndpoint: /rest/node.json
+    nodeEndpoint: /rest/node
 
 pushConfig:
     pushAPIRegistrationId: ${pushAPIkey}

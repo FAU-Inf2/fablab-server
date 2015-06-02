@@ -5,11 +5,6 @@ import de.fau.cs.mad.fablab.rest.server.drupal.NewsInterface;
 
 import java.util.List;
 
-/**
- * Created by EE on 14.05.15.
- */
-
-
 public class NewsFacade {
 
     private final NewsDAO dao;
@@ -21,16 +16,18 @@ public class NewsFacade {
     }
 
     public News findById(Long id) {
-        return this.dao.findById(id);
-        //return newsInterface.findById(id);
+        //return this.dao.findById(id);
+        return newsInterface.findById(id);
     }
 
     public List<News> findAll(){
-        return this.dao.findAll();
+        //return this.dao.findAll();
+        return newsInterface.findAll();
     }
 
     public List<News> find(int offset, int limit) {
-        return this.dao.find(offset, limit);
+        //return this.dao.find(offset, limit);
+        return newsInterface.find(offset, limit);
     }
 
     public News create(News obj) {

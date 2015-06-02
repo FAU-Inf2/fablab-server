@@ -23,22 +23,22 @@ public class PushFacade {
         mPushServiceConfiguration = aPushServiceConfiguration;
     }
 
-    public void pushToAllDevices(String aMessage){
+    public void pushToAllDevices(String aTitel,String aMessage){
         PushContent content = new PushContent();
         RegistrationIdFacade registrationIdFacade = new RegistrationIdFacade(new RegistrationIdDAO(mSessionFactory));
         List<RegistrationId> registrationIds = registrationIdFacade.findAll();
         for(RegistrationId registrationId : registrationIds){
             content.addRegId(registrationId.getRegistrationid());
         }
-        content.createData("Hinweis",aMessage);
+        content.createData(aTitel,aMessage);
         AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
         pushJson(pushService,content);
     }
 
-    public void pushToDevice(RegistrationId aRegistrationId, String aMessage){
+    public void pushToDevice(RegistrationId aRegistrationId, String aTitel,String aMessage){
         PushContent content = new PushContent();
         content.addRegId(aRegistrationId.getRegistrationid());
-        content.createData("Hinweis",aMessage);
+        content.createData(aTitel,aMessage);
         AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
         pushJson(pushService,content);
     }

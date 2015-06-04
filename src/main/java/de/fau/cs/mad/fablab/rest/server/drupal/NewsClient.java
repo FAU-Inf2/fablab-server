@@ -235,10 +235,10 @@ public class NewsClient implements NewsInterface {
      */
     private String fixLinks(String body) {
         String[] parts = body.split("<a href=.*?");
-        String result = fixLinksHelper(parts, "<a href=");
+        String result = fixLinksHelper(parts, "<a href=\"");
 
         parts = result.split("<img.*?src=.*?");
-        result = fixLinksHelper(parts, "<img alt=\"\" src=");
+        result = fixLinksHelper(parts, "<img alt=\"\" src=\"");
 
         return result;
     }
@@ -247,14 +247,16 @@ public class NewsClient implements NewsInterface {
      * Reinserts the removed html-Tag and inserts the 'fabUrl' if a 'parts'-element contains a relative link
      *
      * @param parts the splitted input body
-     * @param tag the tag to be reinserted (example: "<a href=" or "<img alt=\"\" src=")
+     * @param tag the tag to be reinserted (example: "<a href=\"" or "<img alt=\"\" src=\"")
      * @return the parsed body
      */
     private String fixLinksHelper(String[] parts, String tag) {
         String result = "";
 
         for (int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].replaceAll("internal:", fabUrl + "/");
             if (i > 0 && parts[i].charAt(0) == '"') {
+                parts[i] = parts[i].replaceAll("\"", "");
                 result += tag;
                 if (parts[i].charAt(1) == '/') result += fabUrl;
             }

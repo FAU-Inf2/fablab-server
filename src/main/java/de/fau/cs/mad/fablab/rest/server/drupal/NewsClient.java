@@ -254,11 +254,11 @@ public class NewsClient implements NewsInterface {
         String result = "";
 
         for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].replaceAll("internal:", fabUrl + "/");
+            parts[i] = parts[i].replaceFirst("internal:", fabUrl + "/");
             if (i > 0 && parts[i].charAt(0) == '"') {
-                parts[i] = parts[i].replaceAll("\"", "");
+                parts[i] = parts[i].replaceFirst("\"", "");
                 result += tag;
-                if (parts[i].charAt(1) == '/') result += fabUrl;
+                if (parts[i].charAt(0) == '/') result += fabUrl;
             }
             result += parts[i];
         }

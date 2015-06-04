@@ -166,21 +166,22 @@ public class NewsClient implements NewsInterface {
      */
     private News getNewsFromNode(DrupalNode node) {
         String body = node.getBody();
+        String imageLink = fabUrl + extractImageLink(body);
         News news = new News();
         news.setTitle(node.getTitle());
-        news.setDescription(body);
-        news.setDescriptionShort(node.getTeaser());
+        news.setDescription(parseBody(body));
+        news.setDescriptionShort(removeHTML(node.getTeaser()));
         news.setLink(fabUrl + "/" + node.getPath());
         news.setCreator(node.getName());
         news.setPubDate(new Date(node.getCreated() * 1000));
-        news.setLinkToPreviewImage(fabUrl + extractImageLink(body));
+        news.setLinkToPreviewImage(imageLink);
         return news;
     }
 
     /***
      * Extracts the first image of a given 'body'-String and returns it
      *
-     * @param body a {@link DrupalNode} to be parsed
+     * @param body
      * @return the link to the image, if no image is found return link to FabLab-Logo
      */
     private String extractImageLink(String body) {
@@ -202,5 +203,74 @@ public class NewsClient implements NewsInterface {
             i++;
         }
         return link;
+    }
+
+    /***
+     * Removes the first image and fixes relative links
+     *
+     * @param body the input body
+     * @return the parsed body
+     */
+    private String parseBody(String body) {
+        body = removeFirstImg(body);
+        body = fixLinks(body);
+        return body;
+    }
+
+    /***
+     * Removes the first image
+     *
+     * @param text the input text
+     * @return the parsed body
+     */
+    private String removeFirstImg(String text) {
+        return text.replaceFirst("<p><a.*?><img.*?></a></p>", "");
+    }
+
+    /***
+     * Splits the given body at img- or a href-tags and calls fixLinksHelper(String[] parts, String tag)
+     *
+     * @param body the input body
+     * @return the parsed body
+     */
+    private String fixLinks(String body) {
+        String[] parts = body.split("<a href=.*?");
+        String result = fixLinksHelper(parts, "<a href=");
+
+        parts = result.split("<img.*?src=.*?");
+        result = fixLinksHelper(parts, "<img alt=\"\" src=");
+
+        return result;
+    }
+
+    /***
+     * Reinserts the removed html-Tag and inserts the 'fabUrl' if a 'parts'-element contains a relative link
+     *
+     * @param parts the splitted input body
+     * @param tag the tag to be reinserted (example: "<a href=" or "<img alt=\"\" src=")
+     * @return the parsed body
+     */
+    private String fixLinksHelper(String[] parts, String tag) {
+        String result = "";
+
+        for (int i = 0; i < parts.length; i++) {
+            if (i > 0 && parts[i].charAt(0) == '"') {
+                result += tag;
+                if (parts[i].charAt(1) == '/') result += fabUrl;
+            }
+            result += parts[i];
+        }
+
+        return result;
+    }
+
+    /***
+     * Removes all HTML-Tags in the given text
+     *
+     * @param text the input text
+     * @return the parsed text
+     */
+    private String removeHTML(String text) {
+        return text.replaceAll("<.*?>", "");
     }
 }

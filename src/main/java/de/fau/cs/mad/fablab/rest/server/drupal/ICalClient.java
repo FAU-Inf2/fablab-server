@@ -15,9 +15,9 @@ import de.fau.cs.mad.fablab.rest.server.configuration.ICalConfiguration;
 
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
-import net.fortuna.ical4j.model.Calendar;
-import net.fortuna.ical4j.model.Component;
-import net.fortuna.ical4j.model.Property;
+import net.fortuna.ical4j.filter.Filter;
+import net.fortuna.ical4j.filter.PeriodRule;
+import net.fortuna.ical4j.model.*;
 
 public class ICalClient implements ICalInterface {
 
@@ -144,6 +144,8 @@ public class ICalClient implements ICalInterface {
     private List<ICal> parseEvents(BufferedReader reader) throws IOException, ParserException {
         List<ICal> res = new LinkedList<>();
 
+        Filter filter = getFilter();
+
         CalendarBuilder builder = new CalendarBuilder();
 
         Calendar calEvent;
@@ -153,14 +155,35 @@ public class ICalClient implements ICalInterface {
             StringReader sr = new StringReader(eventString);
             calEvent = builder.build(sr);
 
-            ICal event = getICalFromCalendar(calEvent);
-            event.setId(nextIndex);
-            res.add(nextIndex, event);
-
-            nextIndex++;
+            ICal event = filterEvent(calEvent, filter);
+            if (event != null) {
+                event.setId(nextIndex);
+                res.add(nextIndex, event);
+                nextIndex++;
+            }
         }
 
         return res;
+    }
+
+    private Filter getFilter() {
+        java.util.Calendar today = java.util.Calendar.getInstance();
+        today.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        today.clear(java.util.Calendar.MINUTE);
+        today.clear(java.util.Calendar.SECOND);
+
+        Period period = new Period(new DateTime(today.getTime()), new Dur(52)); // get events during the next 52 weeks
+        PeriodRule[] pr = {new PeriodRule(period)};
+        return new Filter(pr, Filter.MATCH_ALL);
+    }
+
+    private ICal filterEvent(Calendar calEvent, Filter filter) {
+        List<Component> upcomingEvents = (List) filter.filter(calEvent.getComponents(Component.VEVENT));
+        for (Component c : upcomingEvents) {
+            ICal event = getICalFromComponent(c);
+            if (event != null) return event;
+        }
+        return null;
     }
 
     /***
@@ -200,6 +223,32 @@ public class ICalClient implements ICalInterface {
 
     private ICal getICalFromCalendar(Calendar calendar) {
         Component component = calendar.getComponent(Component.VEVENT);
+
+        ICal event = new ICal();
+        event.setUid(component.getProperty(Property.UID).getValue());
+        event.setSummery(component.getProperty(Property.SUMMARY).getValue());
+        event.setDtstamp(component.getProperty(Property.DTSTAMP).getValue());
+        event.setDtstart(component.getProperty(Property.DTSTART).getValue());
+        event.setDtend(component.getProperty(Property.DTEND).getValue());
+
+        Property p;
+
+        p = component.getProperty(Property.RRULE);
+        if (p != null) event.setRrule(p.getValue());
+        p = component.getProperty(Property.EXDATE);
+        if (p != null) event.setExdate(p.getValue().split(","));
+        p = component.getProperty(Property.URL);
+        if (p != null) event.setUrl(p.getValue());
+        p = component.getProperty(Property.LOCATION);
+        if (p != null) event.setLocation(p.getValue());
+        p = component.getProperty(Property.DESCRIPTION);
+        if (p != null) event.setDescription(p.getValue());
+
+        return event;
+    }
+
+    private ICal getICalFromComponent(Component component) {
+        if (!component.getName().equals(Component.VEVENT)) return null;
 
         ICal event = new ICal();
         event.setUid(component.getProperty(Property.UID).getValue());

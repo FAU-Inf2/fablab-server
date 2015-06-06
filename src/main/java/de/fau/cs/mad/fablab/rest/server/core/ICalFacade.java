@@ -1,7 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.ICal;
-import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.drupal.ICalInterface;
 
@@ -29,6 +28,11 @@ public class ICalFacade {
     public List<ICal> findAll() {
         //return this.dao.findAll();
         return iCalInterface.findAll();
+    }
+
+    public List<ICal> find(int offset, int limit) {
+        //return this.dao.find(offset, limit);
+        return iCalInterface.find(offset, limit);
     }
 
     public void updateAll() {

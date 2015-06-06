@@ -11,9 +11,6 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 
-@Path("/ical")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class ICalResource implements ICalApi {
 
     private final ICalFacade facade;
@@ -37,6 +34,16 @@ public class ICalResource implements ICalApi {
     @Override
     public List<ICal> findAll() {
         List<ICal> result = this.facade.findAll();
+        if (result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
+    }
+
+    @UnitOfWork
+    @Override
+    public List<ICal> find(int offset, int limit) {
+        List<ICal> result = this.facade.find(offset, limit);
         if (result == null){
             throw new InternalServerErrorException("There is a problem getting the results");
         }

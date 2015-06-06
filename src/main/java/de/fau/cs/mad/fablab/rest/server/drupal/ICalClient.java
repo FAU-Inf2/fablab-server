@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import de.fau.cs.mad.fablab.rest.core.ICal;
 import de.fau.cs.mad.fablab.rest.server.configuration.ICalConfiguration;
@@ -78,6 +79,30 @@ public class ICalClient implements ICalInterface {
     @Override
     public List<ICal> findAll() {
         updateEvents();
+        return events;
+    }
+
+    /***
+     * Reads the iCal-Feed and updates the Event-List
+     * Returns a list with 'limit' iCal-Events starting at 'offset'
+     *
+     * @param offset
+     * @param limit The maximum number of ICals to return
+     * @return a List of {@link ICal}
+     */
+    public List<ICal> find(int offset, int limit) {
+        if (offset == 0 && limit == 0) return findAll();
+        updateEvents();
+
+        List<ICal> events = new LinkedList<>();
+        ListIterator<ICal> iterator = this.events.listIterator(offset);
+
+        int numElements = 0;
+        while (iterator.hasNext()) {
+            if (numElements == limit) break;
+            events.add(iterator.next());
+            numElements++;
+        }
         return events;
     }
 

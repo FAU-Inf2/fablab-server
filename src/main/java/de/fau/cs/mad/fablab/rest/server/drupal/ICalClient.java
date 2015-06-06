@@ -123,11 +123,16 @@ public class ICalClient implements ICalInterface {
 
         Calendar calEvent;
         String eventString;
+        int nextIndex = 0;
         while ((eventString = parseEventString(reader)) != null) {
             StringReader sr = new StringReader(eventString);
             calEvent = builder.build(sr);
 
-            res.add(getICalFromCalendar(calEvent));
+            ICal event = getICalFromCalendar(calEvent);
+            event.setId(nextIndex);
+            res.add(nextIndex, event);
+
+            nextIndex++;
         }
 
         return res;

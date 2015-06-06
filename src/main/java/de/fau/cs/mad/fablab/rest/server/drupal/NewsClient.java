@@ -168,6 +168,7 @@ public class NewsClient implements NewsInterface {
         String body = node.getBody();
         String imageLink = fabUrl + extractImageLink(body);
         News news = new News();
+        news.setId(node.getNid());
         news.setTitle(node.getTitle());
         news.setDescription(parseBody(body));
         news.setDescriptionShort(removeHTML(node.getTeaser()));

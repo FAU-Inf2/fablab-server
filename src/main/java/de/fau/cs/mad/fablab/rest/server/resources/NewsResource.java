@@ -5,6 +5,7 @@ import de.fau.cs.mad.fablab.rest.api.NewsApi;
 import de.fau.cs.mad.fablab.rest.server.core.NewsFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.ws.rs.InternalServerErrorException;
 import java.util.List;
 
 
@@ -25,18 +26,30 @@ public class NewsResource implements NewsApi {
     @UnitOfWork
     @Override
     public News findById(long id) {
-        return  this.facade.findById(id);
+        News result = this.facade.findById(id);
+        if (result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
     }
 
     @UnitOfWork
     @Override
     public List<News> findAll() {
-        return this.facade.findAll();
+        List<News> result = this.facade.findAll();
+        if (result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
     }
 
     @UnitOfWork
     @Override
     public List<News> find(int offset, int limit) {
-        return this.facade.find(offset, limit);
+        List<News> result = this.facade.find(offset, limit);
+        if (result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
     }
 }

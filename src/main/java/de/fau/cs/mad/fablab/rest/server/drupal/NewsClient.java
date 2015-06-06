@@ -81,7 +81,7 @@ public class NewsClient implements NewsInterface {
      * Gets news-nodes from the Drupal and parses them into a List of {@link News}
      *
      * @param offset the record offset
-     * @param limit  the maximum number of products to return
+     * @param limit  the maximum number of News to return
      * @return a List of {@link News}
      */
     @Override
@@ -90,7 +90,6 @@ public class NewsClient implements NewsInterface {
 
         // news per page = 20!
         int pageSize = 20;
-        int maxNews = limit - offset;
 
         Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
 
@@ -113,7 +112,7 @@ public class NewsClient implements NewsInterface {
             for (int i = start; i < nodes.length; i++) {
                 allNews.add(findById(nodes[i].getNid()));
 
-                if (allNews.size() == maxNews) return allNews;
+                if (allNews.size() == limit) return allNews;
             }
 
             start = 0;

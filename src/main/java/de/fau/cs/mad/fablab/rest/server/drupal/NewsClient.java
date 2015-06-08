@@ -8,9 +8,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class NewsClient implements NewsInterface {
 
@@ -86,7 +84,8 @@ public class NewsClient implements NewsInterface {
      */
     @Override
     public List<News> find(int offset, int limit) {
-        List<News> allNews = new LinkedList<>();
+        List<News> allNews;// = new LinkedList<>();
+        LinkedHashMap<Integer, News> news = new LinkedHashMap<>();
 
         // news per page = 20!
         int pageSize = 20;
@@ -97,6 +96,7 @@ public class NewsClient implements NewsInterface {
         Response jsonResponse = null;
         DrupalNodeShort[] nodes = null;
 
+        int size = 0;
         int page = (offset / pageSize);
         int start = offset % pageSize;
         do {
@@ -110,15 +110,22 @@ public class NewsClient implements NewsInterface {
             nodes = jsonResponse.readEntity(DrupalNodeShort[].class);
 
             for (int i = start; i < nodes.length; i++) {
-                allNews.add(findById(nodes[i].getNid()));
+                //allNews.add(findById(nodes[i].getNid()));
+                int nid = nodes[i].getNid();
+                if (!news.containsKey(nid)) {
+                    news.put(nid, findById(nid));
+                    size++;
+                }
 
-                if (allNews.size() == limit) return allNews;
+                if (size == limit) break;
             }
+            if (size == limit) break;
 
             start = 0;
             page++;
         } while (nodes.length > 0);
 
+        allNews = new LinkedList<>(news.values());
         return allNews;
     }
 
@@ -129,7 +136,8 @@ public class NewsClient implements NewsInterface {
      */
     @Override
     public List<News> findAll() {
-        List<News> allNews = new LinkedList<>();
+        List<News> allNews;// = new LinkedList<>();
+        LinkedHashMap<Integer, News> news = new LinkedHashMap<>();
 
         Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
 
@@ -148,12 +156,15 @@ public class NewsClient implements NewsInterface {
             nodes = jsonResponse.readEntity(DrupalNodeShort[].class);
 
             for (int i = 0; i < nodes.length; i++) {
-                allNews.add(findById(nodes[i].getNid()));
+                //allNews.add(findById(nodes[i].getNid()));
+                int nid = nodes[i].getNid();
+                if (!news.containsKey(nid)) news.put(nid, findById(nid));
             }
 
             page++;
         } while (nodes.length > 0);
 
+        allNews = new LinkedList<>(news.values());
         return allNews;
     }
 
@@ -192,8 +203,12 @@ public class NewsClient implements NewsInterface {
 
         int index = body.indexOf(beforeLink);
         if (index == -1) {
-            // no image-link found, return fablab-logo
-            return LOGO;
+            // no image-link found, try different version
+            beforeLink = "<img alt=\"\" src=\"";
+            index = body.indexOf(beforeLink);
+
+            // again not found, return fablab-logo
+            if (index == -1) return LOGO;
         }
 
         int i = index + beforeLink.length();

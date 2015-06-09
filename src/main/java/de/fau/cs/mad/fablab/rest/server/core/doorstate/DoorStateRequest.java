@@ -161,6 +161,9 @@ public class DoorStateRequest {
         if (doorstate.state == DoorState.State.invalid)
             return false;
 
+        if (doorstate.time < oldState.time + config.getMinimumDurationUntilChange())
+            return false;
+
         return oldState.state != doorstate.state;
     }
 

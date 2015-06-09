@@ -155,9 +155,8 @@ public class NewsClient implements NewsInterface {
 
             nodes = jsonResponse.readEntity(DrupalNodeShort[].class);
 
-            for (int i = 0; i < nodes.length; i++) {
-                //allNews.add(findById(nodes[i].getNid()));
-                int nid = nodes[i].getNid();
+            for (DrupalNodeShort node : nodes) {
+                int nid = node.getNid();
                 if (!news.containsKey(nid)) news.put(nid, findById(nid));
             }
 
@@ -176,13 +175,24 @@ public class NewsClient implements NewsInterface {
      */
     private News getNewsFromNode(DrupalNode node) {
         String body = node.getBody();
-        String imageLink = fabUrl + extractImageLink(body);
+        String imageLink = extractImageLink(body);
+
         News news = new News();
         news.setId(node.getNid());
         news.setTitle(node.getTitle());
         news.setDescription(parseBody(body));
         news.setDescriptionShort(removeHTML(node.getTeaser()));
-        news.setLink(fabUrl + "/" + node.getPath());
+
+        // check for missing permalink
+        String link = node.getPath();
+        if (link == null) {
+            news.setIsPermaLink(false);
+            link = "node/" + node.getNid();
+        } else {
+            news.setIsPermaLink(true);
+        }
+        news.setLink(fabUrl + "/" + link);
+
         news.setCreator(node.getName());
         news.setPubDate(new Date(node.getCreated() * 1000));
         news.setLinkToPreviewImage(imageLink);
@@ -192,31 +202,25 @@ public class NewsClient implements NewsInterface {
     /***
      * Extracts the first image of a given 'body'-String and returns it
      *
-     * @param body
+     * @param body the input body
      * @return the link to the image, if no image is found return link to FabLab-Logo
      */
     private String extractImageLink(String body) {
-        // not very effictive (?)..
-        String beforeLink = "<img alt=\"\" class=\"lightbox\" src=\"";
+        String[] parts = body.split("<img.*?src=.*?\"", 2);
+
+        // no image found, return FabLab-Logo
+        if (parts.length == 1) return fabUrl + LOGO;
 
         String link = "";
-
-        int index = body.indexOf(beforeLink);
-        if (index == -1) {
-            // no image-link found, try different version
-            beforeLink = "<img alt=\"\" src=\"";
-            index = body.indexOf(beforeLink);
-
-            // again not found, return fablab-logo
-            if (index == -1) return LOGO;
-        }
-
-        int i = index + beforeLink.length();
+        int i = 0;
         char c = '\0';
-        while ((c = body.charAt(i)) != '\"') {
+        while ((c = parts[1].charAt(i)) != '\"') {
+            // if relative link, insert fabUrl
+            if (i == 0 && c == '/') link += fabUrl;
             link += c;
             i++;
         }
+
         return link;
     }
 
@@ -235,11 +239,12 @@ public class NewsClient implements NewsInterface {
     /***
      * Removes the first image
      *
-     * @param text the input text
+     * @param body the input body
      * @return the parsed body
      */
-    private String removeFirstImg(String text) {
-        return text.replaceFirst("<p><a.*?><img.*?></a></p>", "");
+    private String removeFirstImg(String body) {
+        body = body.replaceFirst("<img.*?>", "");
+        return body.replaceFirst("<a.*?></a>", "");
     }
 
     /***

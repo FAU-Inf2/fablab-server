@@ -25,6 +25,7 @@ function usage
 	echo -e  \\t -c delete container files
 	echo -e  \\t -i delete images
 	echo -e  \\t -f force \(don\'t ask if it\'s ok to delete the files\)
+	echo -e  \\t -n <name> only delete containers with given name
 	echo 
 }
 
@@ -50,6 +51,9 @@ while [ "$1" != "" ]; do
 		-f )
 			FORCE='yes'
 		;;
+		-n )	shift
+			NAMEFILTER="-f name=$1"
+		;;
 		* )	
 			echo wrong parameter: $1
 			usage
@@ -64,7 +68,7 @@ echo
 if [ "$CLEAN_CONTAINER" == "yes" ]; then
 	
 	echo Cleaning docker contaier files:
-	docker ps -a 
+	docker ps -a $NAMEFILTER
 
 	# ask if FORCE is disabled
 	if [ "$FORCE" != "yes" ];then
@@ -78,7 +82,7 @@ if [ "$CLEAN_CONTAINER" == "yes" ]; then
 	fi
 	
 	# now delete the container files
-	TO_DELETE=$(docker ps -a -q)
+	TO_DELETE=$(docker ps -a -q $NAMEFILTER)
 
 	if [ -z "$TO_DELETE" ]; then
 		echo nothing to do...

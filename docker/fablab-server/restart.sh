@@ -1,4 +1,4 @@
 #!/bin/sh
 
-docker stop rest-server && docker rm rest-server
+docker kill $(docker ps -q -f name=rest-server)
 sh start.sh

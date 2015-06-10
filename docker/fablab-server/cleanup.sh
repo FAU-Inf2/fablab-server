@@ -30,7 +30,7 @@ function usage
 }
 
 # print usage text, if there aren't any parameters
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
 	usage
 	exit 1
 fi
@@ -52,6 +52,11 @@ while [ "$1" != "" ]; do
 			FORCE='yes'
 		;;
 		-n )	shift
+			if [ -z "$1" ]; then
+				echo missing value for parameter -n
+				usage
+				exit 1
+			fi
 			NAMEFILTER="-f name=$1"
 		;;
 		* )	
@@ -59,10 +64,8 @@ while [ "$1" != "" ]; do
 			usage
 			exit 1
 	esac
-
 	shift
 done
-
 echo 
 
 if [ "$CLEAN_CONTAINER" == "yes" ]; then

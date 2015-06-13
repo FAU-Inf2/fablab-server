@@ -68,53 +68,37 @@ public class dummyData {
     private static void createICals(){
         System.out.println("Creating dummy iCals");
 
-        String[] exdate1 = {"20140528T220000Z" ," 20140618T220000Z"};
         ICal c1 = new ICal("calendar.493.field_datetime.2.0",
                 "StudentLab",
-                "20150522T005944Z",
                 "20140522T080000Z",
                 "20140522T100000Z",
-                "FREQ=WEEKLY;INTERVAL=1;BYDAY=TH;UNTIL=20140710T215959Z",
-                exdate1,
                 "https://fablab.fau.de/termine/2014-05-08-studentlab",
                 "FabLab",
                 "Betreuer: Christopher S\\, Christopher R");
         session.save(c1);
 
-        String[] exdate2 = {"20140528T220000Z" ," 20140618T220000Z"};
         ICal c2 = new ICal("calendar.494.field_datetime.2.1",
                 "StudentLab",
-                "20150522T005944Z",
                 "20140522T100000Z",
                 "20140522T120000Z",
-                "FREQ=WEEKLY;INTERVAL=1;BYDAY=TH;UNTIL=20140710T215959Z;WKST=MO",
-                exdate2,
                 "https://fablab.fau.de/termine/2014-05-08-studentlab-0",
                 "FabLab",
                 "Betreuer: Lucas\\, Max B");
         session.save(c2);
 
-        String[] exdate3 = new String[0];
         ICal c3 = new ICal("calendar.472.field_datetime.0.2",
                 "OpenLab",
-                "20150522T005944Z",
                 "20140523T160000Z",
                 "20140523T200000Z",
-                "",
-                exdate3,
                 "https://fablab.fau.de/termine/2014-05-23-openlab",
                 "FabLab, siehe Seite Kontakt und Ort",
                 "Das FabLab ist geöffnet, du kannst einfach so vorbeikommen. Wenn es nicht nur um Kleinigkeiten geht, sollte man spätestens zwei Stunden vor Ende vorbeikommen.");
         session.save(c3);
 
-        String[] exdate4 = {"20140607T220000Z"};
         ICal c4 = new ICal("calendar.495.field_datetime.2.3",
                 "StudentLab + Fräsenberatung",
-                "20150522T005944Z",
                 "20140526T120000Z",
                 "20140526T140000Z",
-                "WEEKLY;INTERVAL=1;BYDAY=MO;UNTIL=20140707T215959Z;WKST=MO",
-                exdate4,
                 "https://fablab.fau.de/termine/2014-05-12-studentlab",
                 "FabLab",
                 "Betreuer: Lucas\\, Michael J\\, Sonja");

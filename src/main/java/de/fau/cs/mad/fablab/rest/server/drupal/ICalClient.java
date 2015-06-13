@@ -66,7 +66,10 @@ public class ICalClient implements ICalInterface {
 
     @Override
     public ICal findById(Long id) {
-        return events.get(id.intValue());
+        for (ICal event : events) {
+            if (event.getId() == id) return event;
+        }
+        return null;
     }
 
     /***

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -51,8 +52,6 @@ public class ICalClient implements ICalInterface {
     /***
      * Checks for valid configuration and processes the iCal-Feed for the first time
      * If any environment variable is missing, it will shutdown the whole application with exit code 1
-     *
-     * @throws IOException if the endpoint + iCalUrl is not a valid url
      */
     private ICalClient() {
         if (config == null || !config.validate()) {
@@ -86,8 +85,8 @@ public class ICalClient implements ICalInterface {
      * Reads the iCal-Feed and updates the Event-List
      * Returns a list with 'limit' iCal-Events starting at 'offset'
      *
-     * @param offset
-     * @param limit The maximum number of ICals to return
+     * @param offset the offset
+     * @param limit the maximum number of ICals to return
      * @return a List of {@link ICal}
      */
     public List<ICal> find(int offset, int limit) {
@@ -120,10 +119,10 @@ public class ICalClient implements ICalInterface {
         }
 
         BufferedReader reader;
-        List<ICal> events = null;
+        List<Component> components = null;
         try {
             reader = new BufferedReader(new InputStreamReader(iCalUrl.openStream()));
-            events = parseEvents(reader);
+            components = parseEventsToComponent(reader);
         } catch (IOException e) {
             System.err.println("ERROR - IOException while updating Events. \n" +
                     "The Reason is : "+e.getMessage()+"\n"+
@@ -133,55 +132,106 @@ public class ICalClient implements ICalInterface {
                     "The Reason is : "+e.getMessage());
         }
 
+        List<ICal> events = parseEvents(components);
+
+        Collections.sort(events, new ICalComparator());
+
         if (events != null) this.events = events;
     }
 
     /***
-     * Parses events from the given reader into a list
-     * @param reader    the reader
-     * @return a List of {@link ICal}
+     * Converts events from the List of {@link Component} into a List of {@link ICal}
+     * @param components    the list of components
+     * @return a List of {@link ICal}-Events
      */
-    private List<ICal> parseEvents(BufferedReader reader) throws IOException, ParserException {
+    private List<ICal> parseEvents(List<Component> components) {
         List<ICal> res = new LinkedList<>();
 
-        Filter filter = getFilter();
+        Period period = getPeriod(52);
 
-        CalendarBuilder builder = new CalendarBuilder();
-
-        Calendar calEvent;
-        String eventString;
         int nextIndex = 0;
-        while ((eventString = parseEventString(reader)) != null) {
-            StringReader sr = new StringReader(eventString);
-            calEvent = builder.build(sr);
+        for (Component component : components) {
+            PeriodList pl = component.calculateRecurrenceSet(period);
 
-            ICal event = filterEvent(calEvent, filter);
-            if (event != null) {
-                event.setId(nextIndex);
-                res.add(nextIndex, event);
-                nextIndex++;
+            for (Object po : pl) {
+                Period p = (Period) po;
+                String start = p.getStart().toString();
+                String end = p.getEnd().toString();
+
+                ICal event = getICalFromComponent(component, start, end);
+                event.setId(nextIndex++);
+                res.add(event);
             }
         }
 
         return res;
     }
 
+    /***
+     * Parses events from the given reader into a list of {@link Component}
+     * @param reader    the reader
+     * @return a List of {@link Component}
+     */
+    private List<Component> parseEventsToComponent(BufferedReader reader) throws IOException, ParserException {
+        List<Component> res = new LinkedList<>();
+        Filter filter = getFilter();
+
+        CalendarBuilder builder = new CalendarBuilder();
+
+        Calendar calEvent;
+        String eventString;
+        while ((eventString = parseEventString(reader)) != null) {
+            StringReader sr = new StringReader(eventString);
+            calEvent = builder.build(sr);
+
+            Component component = filterComponent(calEvent, filter);
+            if (component != null) {
+                res.add(component);
+            }
+        }
+
+        return res;
+    }
+
+    /***
+     * Creates and returns a new Filter (to get events during the next 52 weeks)
+     * @return the created {@link Filter}
+     */
     private Filter getFilter() {
         java.util.Calendar today = java.util.Calendar.getInstance();
         today.set(java.util.Calendar.HOUR_OF_DAY, 0);
         today.clear(java.util.Calendar.MINUTE);
         today.clear(java.util.Calendar.SECOND);
 
-        Period period = new Period(new DateTime(today.getTime()), new Dur(52)); // get events during the next 52 weeks
+        Period period = getPeriod(52); // get events during the next 52 weeks
         PeriodRule[] pr = {new PeriodRule(period)};
         return new Filter(pr, Filter.MATCH_ALL);
     }
 
-    private ICal filterEvent(Calendar calEvent, Filter filter) {
+    /***
+     * Creates and returns a new Period starting today, ending in 'weeks' weeks
+     * @param weeks the number of weeks
+     * @return the created {@link Period}
+     */
+    private Period getPeriod(int weeks) {
+        java.util.Calendar today = java.util.Calendar.getInstance();
+        today.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        today.clear(java.util.Calendar.MINUTE);
+        today.clear(java.util.Calendar.SECOND);
+
+        return new Period(new DateTime(today.getTime()), new Dur(weeks));
+    }
+
+    /***
+     * Applys the given Filter to the given Calendar-Event
+     * @param calEvent the {@link Calendar}-Event to be filtered
+     * @param filter the {@link Filter}
+     * @return the filtered {@link Component}
+     */
+    private Component filterComponent(Calendar calEvent, Filter filter) {
         List<Component> upcomingEvents = (List) filter.filter(calEvent.getComponents(Component.VEVENT));
         for (Component c : upcomingEvents) {
-            ICal event = getICalFromComponent(c);
-            if (event != null) return event;
+            if (c != null) return c;
         }
         return null;
     }
@@ -221,48 +271,23 @@ public class ICalClient implements ICalInterface {
         return event.toString();
     }
 
-    private ICal getICalFromCalendar(Calendar calendar) {
-        Component component = calendar.getComponent(Component.VEVENT);
-
-        ICal event = new ICal();
-        event.setUid(component.getProperty(Property.UID).getValue());
-        event.setSummery(component.getProperty(Property.SUMMARY).getValue());
-        event.setDtstamp(component.getProperty(Property.DTSTAMP).getValue());
-        event.setDtstart(component.getProperty(Property.DTSTART).getValue());
-        event.setDtend(component.getProperty(Property.DTEND).getValue());
-
-        Property p;
-
-        p = component.getProperty(Property.RRULE);
-        if (p != null) event.setRrule(p.getValue());
-        p = component.getProperty(Property.EXDATE);
-        if (p != null) event.setExdate(p.getValue().split(","));
-        p = component.getProperty(Property.URL);
-        if (p != null) event.setUrl(p.getValue());
-        p = component.getProperty(Property.LOCATION);
-        if (p != null) event.setLocation(p.getValue());
-        p = component.getProperty(Property.DESCRIPTION);
-        if (p != null) event.setDescription(p.getValue());
-
-        return event;
-    }
-
-    private ICal getICalFromComponent(Component component) {
+    /***
+     * Creates a new ICal-Object from the given Component and the given 'start'- and 'end'-dates
+     * @param component the {@link Component}
+     * @param start the start-string
+     * @param end the end-string
+     * @return a new ICal-Object
+     */
+    private ICal getICalFromComponent(Component component, String start, String end) {
         if (!component.getName().equals(Component.VEVENT)) return null;
 
         ICal event = new ICal();
         event.setUid(component.getProperty(Property.UID).getValue());
         event.setSummery(component.getProperty(Property.SUMMARY).getValue());
-        event.setDtstamp(component.getProperty(Property.DTSTAMP).getValue());
-        event.setDtstart(component.getProperty(Property.DTSTART).getValue());
-        event.setDtend(component.getProperty(Property.DTEND).getValue());
+        event.setStart(start);
+        event.setEnd(end);
 
         Property p;
-
-        p = component.getProperty(Property.RRULE);
-        if (p != null) event.setRrule(p.getValue());
-        p = component.getProperty(Property.EXDATE);
-        if (p != null) event.setExdate(p.getValue().split(","));
         p = component.getProperty(Property.URL);
         if (p != null) event.setUrl(p.getValue());
         p = component.getProperty(Property.LOCATION);

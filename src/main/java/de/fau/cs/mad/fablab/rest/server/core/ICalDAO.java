@@ -36,12 +36,9 @@ public class ICalDAO extends AbstractDAO<ICal> {
     public ICal update(ICal modified) {
         ICal stored = this.get(modified.getId());
         stored.setDescription(modified.getDescription());
-        stored.setDtend(modified.getDtend());
-        stored.setDtstamp(modified.getDtstamp());
-        stored.setDtstart(modified.getDtstart());
-        stored.setExdate(modified.getExdate());
+        stored.setStart(modified.getStart());
+        stored.setEnd(modified.getEnd());
         stored.setLocation(modified.getLocation());
-        stored.setRrule(modified.getRrule());
         stored.setUrl(modified.getUrl());
         this.persist(stored);
         return stored;

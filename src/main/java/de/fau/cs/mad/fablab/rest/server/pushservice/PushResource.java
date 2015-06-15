@@ -29,7 +29,9 @@ public class PushResource implements PushApi{
         if(regId == null) {
             System.out.println("RegistrationID: " + regId.getRegistrationid());
         }
-        mRegistrationIdFacade.create(regId);
+        if(!mRegistrationIdFacade.alreadyExists(regId)){
+            mRegistrationIdFacade.create(regId);
+        }
 
         for(RegistrationId registrationId : mRegistrationIdFacade.findAll()){
             System.out.println(registrationId.toString());

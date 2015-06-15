@@ -21,6 +21,10 @@ public class RegistrationIdFacade {
         return mRegistrationIdDAO.update(aModifiedRegistrationId);
     }
 
+    public boolean alreadyExists(RegistrationId aRegistrationId){
+        return mRegistrationIdDAO.alreadyExists(aRegistrationId);
+    }
+
     public List<RegistrationId> findAll(){
         return mRegistrationIdDAO.findAll();    }
 

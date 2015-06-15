@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.resources;
+package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
 

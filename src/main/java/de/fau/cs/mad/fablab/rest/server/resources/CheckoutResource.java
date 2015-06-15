@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 import de.fau.cs.mad.fablab.rest.server.core.CartFacade;
+import de.fau.cs.mad.fablab.rest.server.core.Checkout;
 import io.dropwizard.hibernate.UnitOfWork;
 
 public class CheckoutResource implements Checkout {

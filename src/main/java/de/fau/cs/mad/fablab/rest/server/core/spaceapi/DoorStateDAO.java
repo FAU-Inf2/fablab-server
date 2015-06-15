@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.core.doorstate;
+package de.fau.cs.mad.fablab.rest.server.core.spaceapi;
 
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;

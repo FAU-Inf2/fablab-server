@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.core.doorstate;
+package de.fau.cs.mad.fablab.rest.server.core.spaceapi;
 
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import org.apache.commons.codec.binary.Hex;

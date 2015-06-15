@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class DoorStateDAO extends AbstractDAO<DoorState> {
 
+    public static final String TABLE_NAME = "DoorState";
+
     public DoorStateDAO(SessionFactory factory) {
         super(factory);
     }
@@ -20,7 +22,7 @@ public class DoorStateDAO extends AbstractDAO<DoorState> {
     }
 
     public DoorState getLastState() {
-        Query q = super.currentSession().createQuery("FROM DoorState ORDER BY time DESC");
+        Query q = super.currentSession().createQuery("FROM " + TABLE_NAME + " ORDER BY time DESC");
         q.setFirstResult(0);
         q.setMaxResults(1);
 

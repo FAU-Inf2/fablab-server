@@ -10,6 +10,8 @@ import java.util.List;
 
 public class RegistrationIdDAO extends AbstractDAO<RegistrationId> {
 
+    public static final String TABLE_NAME = "RegistrationId";
+
     public RegistrationIdDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
@@ -26,7 +28,7 @@ public class RegistrationIdDAO extends AbstractDAO<RegistrationId> {
     }
 
     public boolean alreadyExists(RegistrationId aRegistrationId){
-        Query query = currentSession().createQuery("FROM RegistrationId reg WHERE reg.registrationid LIKE :regId");
+        Query query = currentSession().createQuery("FROM " + TABLE_NAME +" reg WHERE reg.registrationid LIKE :regId");
         query.setParameter("regId",aRegistrationId.getRegistrationid());
 
         if((query.list().size() == 0)){
@@ -36,7 +38,7 @@ public class RegistrationIdDAO extends AbstractDAO<RegistrationId> {
     }
 
     public List<RegistrationId> findAll(){
-        Query query = currentSession().createQuery("FROM RegistrationId");
+        Query query = currentSession().createQuery("FROM " + TABLE_NAME);
         return query.list();
     }
 
@@ -51,6 +53,6 @@ public class RegistrationIdDAO extends AbstractDAO<RegistrationId> {
 
     public void deleteAll(){
         System.out.println("DELETED: ALL!!! ");
-        currentSession().createQuery("delete FROM RegistrationId").executeUpdate();
+        currentSession().createQuery("DELETE FROM " + TABLE_NAME).executeUpdate();
     }
 }

@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server;
 
 import com.google.common.cache.CacheBuilderSpec;
 import de.fau.cs.mad.fablab.rest.core.*;
+import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorState;
@@ -89,9 +90,10 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(helloFablabResource);
 
         // create and register instance of SpaceApiResource
+        PushServiceConfiguration pushServiceConfiguration = configuration.getPushServiceConfiguration();
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                configuration.getSpaceApiConfiguration(),
+                pushServiceConfiguration, configuration.getSpaceApiConfiguration(),
                 new DoorStateDAO(hibernate.getSessionFactory())
         );
         environment.jersey().register(spaceAPIResource);
@@ -101,7 +103,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new ICalResource(new ICalFacade(new ICalDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ProductResource(new ProductFacade(new ProductDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
-        environment.jersey().register(new PushResource(configuration.getPushServiceConfiguration(), hibernate.getSessionFactory()));
+        environment.jersey().register(new PushResource(pushServiceConfiguration, hibernate.getSessionFactory()));
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
 
         //set the security handler for admin resources

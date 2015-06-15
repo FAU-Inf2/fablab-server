@@ -3,10 +3,12 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.api.SpaceApi;
+import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorState;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateRequest;
+import de.fau.cs.mad.fablab.rest.server.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
 import io.dropwizard.hibernate.UnitOfWork;
 import net.spaceapi.HackerSpace;
@@ -24,12 +26,14 @@ import javax.ws.rs.client.WebTarget;
  */
 public class SpaceAPIResource implements SpaceApi
 {
+    private final PushServiceConfiguration mPushServiceConfiguration;
     private final SpaceApiConfiguration config;
     private final DoorStateDAO dao;
 
-    public SpaceAPIResource(SpaceApiConfiguration config, DoorStateDAO dao) {
-        this.config = config;
-        this.dao = dao;
+    public SpaceAPIResource(PushServiceConfiguration aPushServiceConfiguration, SpaceApiConfiguration aConfig, DoorStateDAO aDAO) {
+        mPushServiceConfiguration = aPushServiceConfiguration;
+        config = aConfig;
+        dao = aDAO;
     }
 
     @Override
@@ -54,7 +58,6 @@ public class SpaceAPIResource implements SpaceApi
             System.out.println("[INFO] DoorState changed, firing push event.");
             dao.saveState(request.getDoorState());
 
-            // now we have to fire pushToAllDevices event
         }
 
         return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";

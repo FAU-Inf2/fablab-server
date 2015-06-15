@@ -26,7 +26,9 @@ public class RegistrationIdDAO extends AbstractDAO<RegistrationId> {
     }
 
     public boolean alreadyExists(RegistrationId aRegistrationId){
-        Query query = currentSession().createQuery("FROM RegistrationId reg WHERE reg.registrationid LIKE " + aRegistrationId.getRegistrationid());
+        Query query = currentSession().createQuery("FROM RegistrationId reg WHERE reg.registrationid LIKE :regId");
+        query.setParameter("regId",aRegistrationId.getRegistrationid());
+
         if((query.list().size() == 0)){
             return false;
         }

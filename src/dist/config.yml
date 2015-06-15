@@ -11,6 +11,9 @@ logging:
       threshold: ALL
       timeZone: UTC
 
+  loggers:
+    "de.fau.cs.mad.fablab.rest.server.resources.SpaceAPIResource": INFO
+
 spaceapi:
   #endpoint: http://spaceapi.net
   endpoint: https://fablab.fau.de/spaceapi.php?api=0.13

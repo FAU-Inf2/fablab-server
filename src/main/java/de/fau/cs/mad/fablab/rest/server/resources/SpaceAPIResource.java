@@ -14,6 +14,8 @@ import io.dropwizard.hibernate.UnitOfWork;
 import net.spaceapi.HackerSpace;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
@@ -31,12 +33,14 @@ public class SpaceAPIResource implements SpaceApi
     private final SessionFactory mSessionFactory;
     private final SpaceApiConfiguration mConfig;
     private final DoorStateDAO mDAO;
+    private final Logger mLogger;
 
     public SpaceAPIResource(PushServiceConfiguration aPushServiceConfiguration, SpaceApiConfiguration aConfig, SessionFactory aSessionFactory) {
         mPushServiceConfiguration = aPushServiceConfiguration;
         mSessionFactory = aSessionFactory;
         mConfig = aConfig;
         mDAO = new DoorStateDAO(aSessionFactory);
+        mLogger = LoggerFactory.getLogger(SpaceAPIResource.class);
     }
 
     @Override
@@ -58,13 +62,12 @@ public class SpaceAPIResource implements SpaceApi
             mDAO.saveState(request.getDoorState());
 
         if (request.checkIfChanged(oldState)) {
-            System.out.println("[INFO] DoorState changed, firing push event.");
-            mDAO.saveState(request.getDoorState());
+            mLogger.info("DoorState changed, firing push event. Now is " + request.getDoorState().toString());
 
+            mDAO.saveState(request.getDoorState());
 
             PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
             pushFacade.pushToAllDevices("DoreState",request.getDoorState().toString());
-
         }
 
         return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";

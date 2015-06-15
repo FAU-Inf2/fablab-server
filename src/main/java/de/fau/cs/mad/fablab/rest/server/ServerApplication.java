@@ -93,7 +93,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         PushServiceConfiguration pushServiceConfiguration = configuration.getPushServiceConfiguration();
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                pushServiceConfiguration, configuration.getSpaceApiConfiguration(),
+                pushServiceConfiguration,hibernate.getSessionFactory(), configuration.getSpaceApiConfiguration(),
                 new DoorStateDAO(hibernate.getSessionFactory())
         );
         environment.jersey().register(spaceAPIResource);

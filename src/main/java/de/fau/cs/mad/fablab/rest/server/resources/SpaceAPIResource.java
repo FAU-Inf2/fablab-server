@@ -13,6 +13,7 @@ import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
 import io.dropwizard.hibernate.UnitOfWork;
 import net.spaceapi.HackerSpace;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
+import org.hibernate.SessionFactory;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotAllowedException;
@@ -27,13 +28,15 @@ import javax.ws.rs.client.WebTarget;
 public class SpaceAPIResource implements SpaceApi
 {
     private final PushServiceConfiguration mPushServiceConfiguration;
-    private final SpaceApiConfiguration config;
-    private final DoorStateDAO dao;
+    private final SessionFactory mSessionFactory;
+    private final SpaceApiConfiguration mConfig;
+    private final DoorStateDAO mDAO;
 
-    public SpaceAPIResource(PushServiceConfiguration aPushServiceConfiguration, SpaceApiConfiguration aConfig, DoorStateDAO aDAO) {
+    public SpaceAPIResource(PushServiceConfiguration aPushServiceConfiguration,SessionFactory aSessionFactory, SpaceApiConfiguration aConfig, DoorStateDAO aDAO) {
         mPushServiceConfiguration = aPushServiceConfiguration;
-        config = aConfig;
-        dao = aDAO;
+        mSessionFactory = aSessionFactory;
+        mConfig = aConfig;
+        mDAO = aDAO;
     }
 
     @Override
@@ -43,21 +46,22 @@ public class SpaceAPIResource implements SpaceApi
         if (hash == null || data == null || hash.isEmpty() || data.isEmpty())
             throw new BadRequestException("no credentials provided");
 
-        if (config.getKeyFile() == null || config.getKeyFile().isEmpty() ||
-                config.getHashAlgorithm() == null || config.getHashAlgorithm().isEmpty())
+        if (mConfig.getKeyFile() == null || mConfig.getKeyFile().isEmpty() ||
+                mConfig.getHashAlgorithm() == null || mConfig.getHashAlgorithm().isEmpty())
             throw new ServiceUnavailableException("key file or hash algorithm is missing in configuration");
 
-        DoorStateRequest request = DoorStateRequest.fromData(config, hash, data);
-        DoorState oldState = dao.getLastState();
+        DoorStateRequest request = DoorStateRequest.fromData(mConfig, hash, data);
+        DoorState oldState = mDAO.getLastState();
 
         // if there is no oldState use current state
         if (oldState == null)
-            dao.saveState(request.getDoorState());
+            mDAO.saveState(request.getDoorState());
 
         if (request.checkIfChanged(oldState)) {
             System.out.println("[INFO] DoorState changed, firing push event.");
-            dao.saveState(request.getDoorState());
+            mDAO.saveState(request.getDoorState());
 
+            PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
         }
 
         return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";
@@ -66,10 +70,10 @@ public class SpaceAPIResource implements SpaceApi
     @Override
     public HackerSpace getSpace(String name) {
 
-        if (!name.equalsIgnoreCase(config.getSpace()))
+        if (!name.equalsIgnoreCase(mConfig.getSpace()))
             throw new NotAllowedException("This is not allowed");
 
-        WebTarget target = ClientBuilder.newClient().register(JacksonJsonProvider.class).target(config.getEndpoint());
+        WebTarget target = ClientBuilder.newClient().register(JacksonJsonProvider.class).target(mConfig.getEndpoint());
         SpaceAPIService api = WebResourceFactory.newResource(SpaceAPIService.class, target);
 
         return api.space();

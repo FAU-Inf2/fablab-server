@@ -34,7 +34,6 @@ public class PushResource implements PushApi{
         pushFacade.pushToDevice(regId,"Hinweis", "Eine neue Nachricht für: " + regId.getRegistrationid());
         pushFacade.pushToAllDevices("Hinweis", "Hat alles geklappt");
 
-
         if(regId == null){
             return Response.serverError().build();
         }

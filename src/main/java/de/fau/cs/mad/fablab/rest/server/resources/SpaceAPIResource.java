@@ -32,11 +32,11 @@ public class SpaceAPIResource implements SpaceApi
     private final SpaceApiConfiguration mConfig;
     private final DoorStateDAO mDAO;
 
-    public SpaceAPIResource(PushServiceConfiguration aPushServiceConfiguration,SessionFactory aSessionFactory, SpaceApiConfiguration aConfig, DoorStateDAO aDAO) {
+    public SpaceAPIResource(PushServiceConfiguration aPushServiceConfiguration, SpaceApiConfiguration aConfig, SessionFactory aSessionFactory) {
         mPushServiceConfiguration = aPushServiceConfiguration;
         mSessionFactory = aSessionFactory;
         mConfig = aConfig;
-        mDAO = aDAO;
+        mDAO = new DoorStateDAO(aSessionFactory);
     }
 
     @Override

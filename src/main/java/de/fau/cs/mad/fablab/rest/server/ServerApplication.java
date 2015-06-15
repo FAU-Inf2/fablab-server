@@ -6,7 +6,6 @@ import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorState;
-import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.drupal.NewsClient;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
@@ -93,8 +92,9 @@ class ServerApplication extends Application<ServerConfiguration> {
         PushServiceConfiguration pushServiceConfiguration = configuration.getPushServiceConfiguration();
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                pushServiceConfiguration,hibernate.getSessionFactory(), configuration.getSpaceApiConfiguration(),
-                new DoorStateDAO(hibernate.getSessionFactory())
+                pushServiceConfiguration,
+                spaceApiConfiguration,
+                hibernate.getSessionFactory()
         );
         environment.jersey().register(spaceAPIResource);
 

@@ -30,6 +30,12 @@ public class PushResource implements PushApi{
             System.out.println("RegistrationID: " + regId.getRegistrationid());
         }
         mRegistrationIdFacade.create(regId);
+
+        for(RegistrationId registrationId : mRegistrationIdFacade.findAll()){
+            System.out.println(registrationId.toString());
+        }
+
+        System.out.println("Push");
         PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
         pushFacade.pushToDevice(regId,"Hinweis", "Eine neue Nachricht für: " + regId.getRegistrationid());
         pushFacade.pushToAllDevices("Hinweis", "Hat alles geklappt");

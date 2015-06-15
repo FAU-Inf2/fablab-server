@@ -64,6 +64,7 @@ public class SpaceAPIResource implements SpaceApi
 
             PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
             pushFacade.pushToAllDevices("DoreState",request.getDoorState().toString());
+
         }
 
         return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";

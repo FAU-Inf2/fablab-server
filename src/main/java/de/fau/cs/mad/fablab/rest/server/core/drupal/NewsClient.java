@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.drupal;
+package de.fau.cs.mad.fablab.rest.server.core.drupal;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.core.News;

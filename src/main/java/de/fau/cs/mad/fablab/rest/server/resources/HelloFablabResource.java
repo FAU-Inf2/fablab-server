@@ -4,17 +4,14 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.common.base.Optional;
 import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.entities.WelcomeUser;
-import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
-import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpException;
-import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpInterface;
+import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
+import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpException;
+import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpInterface;
 import io.dropwizard.jersey.params.BooleanParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**

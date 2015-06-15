@@ -8,7 +8,7 @@ import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorState;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.core.doorstate.DoorStateRequest;
-import de.fau.cs.mad.fablab.rest.server.pushservice.PushFacade;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.remote.SpaceAPIService;
 import io.dropwizard.hibernate.UnitOfWork;
 import net.spaceapi.HackerSpace;

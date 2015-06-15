@@ -1,8 +1,8 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.ICal;
-import de.fau.cs.mad.fablab.rest.server.drupal.ICalClient;
-import de.fau.cs.mad.fablab.rest.server.drupal.ICalInterface;
+import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
+import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalInterface;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.openerp;
+package de.fau.cs.mad.fablab.rest.server.core.openerp;
 
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;

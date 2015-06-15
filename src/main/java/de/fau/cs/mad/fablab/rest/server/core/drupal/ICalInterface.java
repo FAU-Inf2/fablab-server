@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.drupal;
+package de.fau.cs.mad.fablab.rest.server.core.drupal;
 
 import java.util.List;
 

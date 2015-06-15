@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.pushservice;
+package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
 
 

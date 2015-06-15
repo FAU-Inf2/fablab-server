@@ -1,15 +1,12 @@
-package de.fau.cs.mad.fablab.rest.server.pushservice;
+package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
 import de.fau.cs.mad.fablab.rest.core.RegistrationId;
 import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdDAO;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdFacade;
-import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.jersey.sessions.Session;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 

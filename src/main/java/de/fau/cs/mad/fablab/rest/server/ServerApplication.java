@@ -11,7 +11,7 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsClient;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
-import de.fau.cs.mad.fablab.rest.server.resources.PushResource;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushResource;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;

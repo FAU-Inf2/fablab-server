@@ -1,11 +1,10 @@
-package de.fau.cs.mad.fablab.rest.server.resources;
+package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
 import de.fau.cs.mad.fablab.rest.api.PushApi;
 import de.fau.cs.mad.fablab.rest.core.RegistrationId;
 import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdDAO;
 import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdFacade;
-import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.hibernate.SessionFactory;
 

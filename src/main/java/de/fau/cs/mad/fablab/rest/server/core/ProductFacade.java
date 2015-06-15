@@ -1,9 +1,9 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.Product;
-import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpClient;
-import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpException;
-import de.fau.cs.mad.fablab.rest.server.openerp.OpenErpInterface;
+import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
+import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpException;
+import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpInterface;
 
 import java.util.ArrayList;
 import java.util.List;

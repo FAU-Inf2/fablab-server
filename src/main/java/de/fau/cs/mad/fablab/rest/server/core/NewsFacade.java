@@ -1,7 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 import de.fau.cs.mad.fablab.rest.core.News;
-import de.fau.cs.mad.fablab.rest.server.drupal.NewsClient;
-import de.fau.cs.mad.fablab.rest.server.drupal.NewsInterface;
+import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsClient;
+import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsInterface;
 
 import java.util.List;
 

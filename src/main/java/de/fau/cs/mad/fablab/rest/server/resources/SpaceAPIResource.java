@@ -61,7 +61,9 @@ public class SpaceAPIResource implements SpaceApi
             System.out.println("[INFO] DoorState changed, firing push event.");
             mDAO.saveState(request.getDoorState());
 
+
             PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
+            pushFacade.pushToAllDevices("DoreState",request.getDoorState().toString());
         }
 
         return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";

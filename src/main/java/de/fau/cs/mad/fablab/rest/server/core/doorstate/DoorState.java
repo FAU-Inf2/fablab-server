@@ -64,4 +64,9 @@ public class DoorState implements Serializable
      */
     @Column(name = "state")
     public State state = State.invalid;
+
+    @Override
+    public String toString() {
+        return state.toString() + " : " + String.valueOf(time);
+    }
 }

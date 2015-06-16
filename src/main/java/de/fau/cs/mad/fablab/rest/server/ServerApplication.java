@@ -7,6 +7,7 @@ import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsClient;
+import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushResource;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorState;
@@ -74,7 +75,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         ICalClient.setConfiguration(configuration.getICalConfiguration());
 
         // configure NewsClient
-        NewsClient.setConfiguration(configuration.getNewsConfiguration());
+        NewsFeedClient.setConfiguration(configuration.getNewsConfiguration());
 
         // configure date format for jackson
         //environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

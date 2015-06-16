@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsClient;
+import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsInterface;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class NewsFacade {
 
     public NewsFacade(NewsDAO dao) {
         this.dao = dao;
-        this.newsInterface = NewsClient.getInstance();
+        this.newsInterface = NewsFeedClient.getInstance();
     }
 
     public News findById(Long id) {

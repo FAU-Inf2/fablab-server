@@ -39,6 +39,7 @@ public class ICalResource implements ICalApi {
         if (result == null){
             throw new Http500Exception("An error occurred while updating the Event-list");
         }
+        if (result.size() == 0) throw new Http404Exception("Result is empty");
         return result;
     }
 
@@ -52,6 +53,7 @@ public class ICalResource implements ICalApi {
         if (result == null){
             throw new Http404Exception("offset " + offset + " is out of bounds!");
         }
+        if (result.size() == 0) throw new Http404Exception("Result is empty");
         return result;
     }
 

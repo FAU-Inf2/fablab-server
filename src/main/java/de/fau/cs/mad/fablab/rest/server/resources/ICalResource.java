@@ -7,7 +7,6 @@ import de.fau.cs.mad.fablab.rest.server.core.ICalFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 
@@ -25,7 +24,7 @@ public class ICalResource implements ICalApi {
     public ICal findById(long id) {
         ICal result = this.facade.findById(id);
         if (result == null){
-            throw new InternalServerErrorException("There is a problem getting the results");
+            throw new NotFoundException("There is no Event with id " + id);
         }
         return result;
     }
@@ -35,7 +34,7 @@ public class ICalResource implements ICalApi {
     public List<ICal> findAll() {
         List<ICal> result = this.facade.findAll();
         if (result == null){
-            throw new InternalServerErrorException("There is a problem getting the results");
+            throw new InternalServerErrorException("An error occurred while updating the Event-list");
         }
         return result;
     }
@@ -45,7 +44,7 @@ public class ICalResource implements ICalApi {
     public List<ICal> find(int offset, int limit) {
         List<ICal> result = this.facade.find(offset, limit);
         if (result == null){
-            throw new InternalServerErrorException("There is a problem getting the results");
+            throw new InternalServerErrorException("An error occurred while updating the Event-list");
         }
         return result;
     }

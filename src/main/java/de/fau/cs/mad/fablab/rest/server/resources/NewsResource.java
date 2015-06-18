@@ -6,14 +6,10 @@ import de.fau.cs.mad.fablab.rest.server.core.NewsFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.InternalServerErrorException;
+import javax.ws.rs.NotFoundException;
 import java.util.List;
 
 
-/**
- * Created by EE on 11.05.15.
- */
-
-//TODO: RESPONSES like  404 and so on...
 public class NewsResource implements NewsApi {
 
     private final NewsFacade facade;
@@ -27,8 +23,8 @@ public class NewsResource implements NewsApi {
     @Override
     public News findById(long id) {
         News result = this.facade.findById(id);
-        if (result == null){
-            throw new InternalServerErrorException("There is a problem getting the results");
+        if (result == null) {
+            throw new NotFoundException("There is no News article with id " + id);
         }
         return result;
     }
@@ -38,7 +34,7 @@ public class NewsResource implements NewsApi {
     public List<News> findAll() {
         List<News> result = this.facade.findAll();
         if (result == null){
-            throw new InternalServerErrorException("There is a problem getting the results");
+            throw new InternalServerErrorException("An error occurred while updating the News-list");
         }
         return result;
     }
@@ -48,7 +44,7 @@ public class NewsResource implements NewsApi {
     public List<News> find(int offset, int limit) {
         List<News> result = this.facade.find(offset, limit);
         if (result == null){
-            throw new InternalServerErrorException("There is a problem getting the results");
+            throw new InternalServerErrorException("An error occurred while updating the News-list");
         }
         return result;
     }

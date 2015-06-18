@@ -94,7 +94,6 @@ public class ICalClient implements ICalInterface {
      * @return a List of {@link ICal}
      */
     public List<ICal> find(int offset, int limit) {
-        if (offset == 0 && limit == 0) return findAll();
         updateEvents();
 
         List<ICal> events = new LinkedList<>();

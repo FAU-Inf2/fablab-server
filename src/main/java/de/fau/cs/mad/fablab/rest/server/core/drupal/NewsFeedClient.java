@@ -78,7 +78,6 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public List<News> find(int offset, int limit) {
-        if (offset == 0 && limit == 0) return findAll();
         updateNews();
 
         List<News> news = new LinkedList<>();

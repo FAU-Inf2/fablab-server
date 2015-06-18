@@ -81,7 +81,13 @@ public class NewsFeedClient implements NewsInterface {
         updateNews();
 
         List<News> news = new LinkedList<>();
-        ListIterator<News> iterator = this.allNews.listIterator(offset);
+
+        ListIterator<News> iterator = null;
+        try {
+            iterator = this.allNews.listIterator(offset);
+        } catch (IndexOutOfBoundsException e) {
+            return news;
+        }
 
         int numElements = 0;
         while (iterator.hasNext()) {

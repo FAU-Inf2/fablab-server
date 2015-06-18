@@ -66,6 +66,7 @@ public class ICalClient implements ICalInterface {
 
     @Override
     public ICal findById(Long id) {
+        if (events == null) updateEvents();
         for (ICal event : events) {
             if (event.getId() == id) return event;
         }
@@ -97,7 +98,13 @@ public class ICalClient implements ICalInterface {
         updateEvents();
 
         List<ICal> events = new LinkedList<>();
-        ListIterator<ICal> iterator = this.events.listIterator(offset);
+
+        ListIterator<ICal> iterator = null;
+        try {
+            iterator = this.events.listIterator(offset);
+        } catch (IndexOutOfBoundsException e) {
+            return events;
+        }
 
         int numElements = 0;
         while (iterator.hasNext()) {

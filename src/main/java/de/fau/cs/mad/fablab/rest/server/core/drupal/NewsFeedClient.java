@@ -62,6 +62,7 @@ public class NewsFeedClient implements NewsInterface {
 
     @Override
     public News findById(long id) {
+        if (allNews == null) updateNews();
         for (News news : allNews) {
             if (news.getId() == id) return news;
         }

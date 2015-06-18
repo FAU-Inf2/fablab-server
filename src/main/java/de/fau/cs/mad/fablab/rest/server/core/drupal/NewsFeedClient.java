@@ -86,7 +86,7 @@ public class NewsFeedClient implements NewsInterface {
         try {
             iterator = this.allNews.listIterator(offset);
         } catch (IndexOutOfBoundsException e) {
-            return news;
+            return null;
         }
 
         int numElements = 0;

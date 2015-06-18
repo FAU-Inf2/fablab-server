@@ -50,7 +50,7 @@ public class ICalResource implements ICalApi {
 
         List<ICal> result = this.facade.find(offset, limit);
         if (result == null){
-            throw new Http500Exception("An error occurred while updating the Event-list");
+            throw new Http404Exception("offset " + offset + " is out of bounds!");
         }
         return result;
     }

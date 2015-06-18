@@ -102,7 +102,7 @@ public class ICalClient implements ICalInterface {
         try {
             iterator = this.events.listIterator(offset);
         } catch (IndexOutOfBoundsException e) {
-            return events;
+            return null;
         }
 
         int numElements = 0;

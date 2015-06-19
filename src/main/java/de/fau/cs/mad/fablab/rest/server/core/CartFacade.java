@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
+import de.fau.cs.mad.fablab.rest.core.CartServer;
 import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 
 /**
@@ -14,11 +15,11 @@ public class CartFacade{
         this.dao = dao;
     }
 
-    public Cart create(Cart obj) {
+    public CartServer create(CartServer obj) {
         return this.dao.create(obj);
     }
 
-    public Cart getCart(String id){
+    public CartServer getCart(String id){
         return this.dao.findById(id);
     }
 

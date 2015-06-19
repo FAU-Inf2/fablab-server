@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
+import de.fau.cs.mad.fablab.rest.core.CartServer;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -11,7 +12,7 @@ public interface Checkout {
     @GET
     @Path("/checkout")
     @Produces(MediaType.APPLICATION_JSON)
-    Cart getCart(@QueryParam("id") String id);
+    CartServer getCart(@QueryParam("id") String id);
 
     @POST
     @Path("/checkout/paid")

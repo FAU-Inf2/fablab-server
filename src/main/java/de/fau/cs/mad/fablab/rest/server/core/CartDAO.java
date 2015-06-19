@@ -1,25 +1,22 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 
-import de.fau.cs.mad.fablab.rest.core.Cart;
-import de.fau.cs.mad.fablab.rest.core.CartEntry;
-import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
-import de.fau.cs.mad.fablab.rest.core.Product;
+import de.fau.cs.mad.fablab.rest.core.*;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-public class CartDAO extends AbstractDAO<Cart> {
+public class CartDAO extends AbstractDAO<CartServer> {
 
     public CartDAO(SessionFactory factory) {
         super(factory);
     }
 
     //GET
-    public Cart findById(String id) {
+    public CartServer findById(String id) {
         System.out.println("SEARCHING CART FOR CODE: " + id);
-        List<Cart> cartEntries = super.currentSession().createQuery("FROM Cart").list();
+        List<Cart> cartEntries = super.currentSession().createQuery("FROM CartServer").list();
 
         for(Cart cart : cartEntries) {
             System.out.println("GOT CART: " + cart.getCartCode());
@@ -30,7 +27,7 @@ public class CartDAO extends AbstractDAO<Cart> {
     }
 
     //Create
-    public Cart create(Cart obj){
+    public CartServer create(CartServer obj){
         return persist(obj);
     }
 
@@ -43,7 +40,7 @@ public class CartDAO extends AbstractDAO<Cart> {
     }
 
     public void updateCartStatus(String id, CartStatusEnum status) {
-        Cart cart = super.get(id);
+        CartServer cart = super.get(id);
         //ignore if there is no such cart
         if (cart == null)
             return;

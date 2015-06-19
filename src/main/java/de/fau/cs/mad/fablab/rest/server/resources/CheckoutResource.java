@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
 import de.fau.cs.mad.fablab.rest.core.Cart;
+import de.fau.cs.mad.fablab.rest.core.CartServer;
 import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 import de.fau.cs.mad.fablab.rest.server.core.CartFacade;
 import de.fau.cs.mad.fablab.rest.server.core.Checkout;
@@ -16,7 +17,7 @@ public class CheckoutResource implements Checkout {
 
     @UnitOfWork
     @Override
-    public Cart getCart(String id) {
+    public CartServer getCart(String id) {
         return facade.getCart(id);
     }
 

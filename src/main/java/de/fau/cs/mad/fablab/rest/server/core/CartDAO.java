@@ -16,12 +16,12 @@ public class CartDAO extends AbstractDAO<CartServer> {
     //GET
     public CartServer findById(String id) {
         System.out.println("SEARCHING CART FOR CODE: " + id);
-        List<Cart> cartEntries = super.currentSession().createQuery("FROM CartServer").list();
+        List<CartServer> cartEntries = super.currentSession().createQuery("FROM CartServer").list();
 
-        for(Cart cart : cartEntries) {
+        for(CartServer cart : cartEntries) {
             System.out.println("GOT CART: " + cart.getCartCode());
-            for(CartEntry cartEntry : cart.getProducts())
-                System.out.println("WITH PRODUCT: " + cartEntry.getProduct().getName());
+            for(CartEntryServer cartEntry : cart.getItems())
+                System.out.println("WITH PRODUCT: " + cartEntry.getId() + " WITH AMOUNT" + cartEntry.getAmount());
         }
         return super.get(id);
     }

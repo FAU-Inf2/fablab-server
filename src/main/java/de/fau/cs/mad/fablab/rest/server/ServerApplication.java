@@ -134,7 +134,9 @@ class ServerApplication extends Application<ServerConfiguration> {
             ICal.class,
             Product.class,
             Cart.class,
+            CartServer.class,
             CartEntry.class,
+            CartEntryServer.class,
             DoorState.class,
             RegistrationId.class) {
         @Override

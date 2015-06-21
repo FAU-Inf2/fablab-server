@@ -11,11 +11,11 @@ public class dummyData {
     private static Session session = null;
 
     public static void createDummyData(HibernateBundle<ServerConfiguration> hibernateBundle){
-        session = hibernateBundle.getSessionFactory().openSession();
-        if(session.get(News.class, (long)0) == null)
-            createNews();
-        if(session.get(ICal.class, (long)0) == null)
-            createICals();
+//        session = hibernateBundle.getSessionFactory().openSession();
+//        if(session.get(News.class, (long)0) == null)
+//            createNews();
+//        if(session.get(ICal.class, (long)0) == null)
+//            createICals();
 
     }
 

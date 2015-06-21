@@ -6,7 +6,6 @@ import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
-import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushResource;
@@ -50,7 +49,7 @@ class ServerApplication extends Application<ServerConfiguration> {
                 new EnvironmentVariableSubstitutor()
         ));
 
-        bootstrap.addBundle(new AssetsBundle("/checkout", "/checkout", "index.html"));
+        bootstrap.addBundle(new AssetsBundle("/checkoutDummy", "/checkoutDummy", "index.html"));
 
     }
 

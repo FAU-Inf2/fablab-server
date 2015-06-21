@@ -1,17 +1,30 @@
+//TODO ZYKLISCHES ABFRAGEN VON CART --> Problem Async muss aufrufen wenn ergebniss da ist --> ergeniss nicht getestet...
+
 
 // On load
+var id;
+var cart;
 $(document).ready(function() {
-    var id = getUrlParameter('id');
+    id = getUrlParameter('id');
+    if(id == undefined){
+        id = Math.floor((Math.random() * 1000000) + 1);
+        generateQRCode();
+    }
+    getCart();
     console.log("ID: " + id);
-    $("#id").val(id);
+});
 
-    $.get("cart/checkout?id=" + id , function(cart){
 
+
+function getCart(){
+    console.log("Trying to get Cart for id")
+    $.get("cart/checkout?id=" + id , function(obj){
+        cart = obj;
         console.log(cart);
         console.log(cart.products);
 
         $("#hasCart").show();
-        $("#info").hide();
+        $("#qrcode").hide();
 
         var table = "<table cellpadding='5px'>";
         table += "<tr><th>Name</th> <th>Price</th> <th>SUM</th><th>Unit</th></tr>";
@@ -22,9 +35,21 @@ $(document).ready(function() {
         }
         table += "</table>";
         $("#cart").html(table);
+    }).done(function() {
+        alert("DONE");
     });
-});
+}
 
+function generateQRCode(){
+    console.log("Generating QR")
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width : 300,
+        height : 300
+    });    
+
+qrcode.makeCode(3453425);
+    //qrcode.makeCode(id);
+}
 
 //Button
 

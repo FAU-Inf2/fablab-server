@@ -1,12 +1,8 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
-import de.fau.cs.mad.fablab.rest.core.Cart;
 import de.fau.cs.mad.fablab.rest.core.CartServer;
 import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 
-/**
- * Created by EE on 14.05.15.
- */
 public class CartFacade{
 
     private final CartDAO dao;

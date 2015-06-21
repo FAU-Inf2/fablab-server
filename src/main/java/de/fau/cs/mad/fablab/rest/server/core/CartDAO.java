@@ -5,7 +5,6 @@ import de.fau.cs.mad.fablab.rest.core.*;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
-import java.util.List;
 
 public class CartDAO extends AbstractDAO<CartServer> {
 
@@ -15,19 +14,14 @@ public class CartDAO extends AbstractDAO<CartServer> {
 
     //GET
     public CartServer findById(String id) {
-        System.out.println("SEARCHING CART FOR CODE: " + id);
-        List<CartServer> cartEntries = super.currentSession().createQuery("FROM CartServer").list();
-
-        for(CartServer cart : cartEntries) {
-            System.out.println("GOT CART: " + cart.getCartCode());
-            for(CartEntryServer cartEntry : cart.getItems())
-                System.out.println("WITH PRODUCT: " + cartEntry.getId() + " WITH AMOUNT" + cartEntry.getAmount());
-        }
-        return super.get(id);
+        CartServer cartServer = super.get(id);
+        return cartServer;
     }
 
     //Create
     public CartServer create(CartServer obj){
+        for(CartEntryServer item : obj.getItems())
+            item.setCart(obj);
         return persist(obj);
     }
 

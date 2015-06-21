@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by EE on 12.05.15.
- */
-
 public class ProductDAO extends AbstractDAO<Product> {
 
     public ProductDAO(SessionFactory factory) {

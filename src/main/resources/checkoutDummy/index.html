@@ -9,28 +9,42 @@
         <title>Kasse</title>
     </head>
     <body>
+        <header>
+            <h1>Kassensimulator</h1>
+            <p>URL += <code>?code=XXX</code> für bestimmten Warenkorb</p>
+        </header>
 
-        <h1>KASSE</h1>
+        <div id="hasCart" class="container" >
+            <h2 class="center">Warenkorb:</h2>
 
-        <div id="hasCart">
-            <h2>Warenkorb:</h2>
-            <label for="id">Super geheimer Code: </label><input type="text" id="id" name="id" value="" readonly>
             <div id="cart"> </div>
 
 
+
+            <table class="center box">
+                <tr><td>Code</td><td><input type="text" id="code" name="code" value="" readonly></td></tr>
+                <tr><td>Status</td><td></label><input type="text" id="status" name="status" value="" readonly></td></tr>
+            </table>
+
             <!-- Pay ../cart/checkout/paid -->
-            <p class="button green" onclick="paid()">Warenkorb wurde bezahlt</p>
+            <p class="button bgDarkGreen" onclick="paid()">Warenkorb wurde bezahlt</p>
 
 
             <!-- Cancel ../cart/checkout/cancelled -->
-            <p class="button red" onclick="cancelled()">Warenkorb verwerfen / abbrechen</p>
+            <p class="button bgDarkRed" onclick="cancelled()">Warenkorb verwerfen / abbrechen</p>
 
         </div>
 
-        <div id="qrcode" style="width:300px; height:300px; margin-top:15px;">
+        <div id="waiting" class="container" style="height:300px; padding-top:15px;">
+
+        </div>
+
+        <div id="qrcode" class="container" style="width:300px; height:300px; margin-top:15px;">
         </div>
 
 
-
+        <footer>
+            Warenkorb für Code: <input type="text" id="setCode" /> <input type="button" onclick="setCode()" value="Anzeigen" id="" />
+        </footer>
     </body>
 </html>

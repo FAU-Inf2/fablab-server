@@ -1,34 +1,119 @@
-body
-{
+html {
+    font-family: "Segoe UI",Verdana,sans-serif;
+    font-size: 15px;
+}
+
+body{
     width:500px;
     margin-left:auto;
     margin-right:auto;
+    margin-top:0px;
+}
+
+header, footer{
+    padding: 15px;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );
+    background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );
+    font-weight: bold;
+    color:#fff;
+    text-shadow: 3px 3px 3px #000;
+}
+
+
+header h1{
+    margin: 0;
+    padding-top: 0;
+}
+
+input{
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    padding: 10px;
+    text-align: center;
+}
+
+
+#code{
+    background-color: gray;
+    opacity: 0.7;
+}
+
+#status{
+    opacity: 0.7;
 }
 
 #cart {
+    margin: auto;
+    width: 250px;
+    padding-bottom: 15px;
 }
 
 #hasCart{
     display: none;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#waiting{
+    display: none;
+    margin-left:auto;
+    margin-right:auto;
+    width: 494px;
 }
 
 #qrcode{
     display: block;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 30px;
+    padding:0px;
 }
 
+.center{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.container{
+    border: 3px solid #000;
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #3399bb), color-stop(1, #3388a0) );
+    background:-moz-linear-gradient( center top, #3399bb 5%, #3388a0 100% );
+    padding-bottom: 20px;
+}
+.box{
+
+}
+
+#productTable{
+    width:230px;
+    text-align: center;
+    margin:auto;
+    border: 1px solid black;
+}
+
+th {
+    background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );
+    background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );
+    font-weight: bold;
+    padding:5px;
+}
 .button{
-    border: 5px groove black;
-    color: #999;
+    border: 2px outset black;
+    color: #eee;
     font-weight: bold;
     padding: 10px;
     text-align: center;
     width: 300px;
+    margin: 15px auto;
+    text-shadow: 3px 3px 3px #333;
 }
 
-.green{
+.bgDarkGreen{
     background-color: darkgreen;
 }
 
-.red{
+.bgDarkRed{
     background-color: darkred;
 }
+

@@ -1,44 +1,67 @@
-//TODO ZYKLISCHES ABFRAGEN VON CART --> Problem Async muss aufrufen wenn ergebniss da ist --> ergeniss nicht getestet...
 
+/*
+  On load / init simulator
+ */
 
-// On load
-var id;
-var cart;
+var url = "../../checkout/", code, cart;
 $(document).ready(function() {
-    id = getUrlParameter('id');
-    if(id == undefined){
-        id = Math.floor((Math.random() * 1000000) + 1);
+    //Dummy can be used to display Carts, just use the url ?code=XXX for displaying
+    code = getUrlParameter('code');
+    if(code == undefined){
+        code = Math.floor((Math.random() * 1000000) + 1);
         generateQRCode();
+    }else{
+        $("#hasCart").hide();
+        $("#qrcode").hide();
+        $("#waiting").show();
+        $("#waiting").html("<h1> Warenkorb [mit Code:"+ code+"] (noch) nicht vorhanden</h1>")
     }
     getCart();
-    console.log("ID: " + id);
+    console.log("code: " + code);
 });
 
 
-
+/*
+     Request cart from server
+ */
 function getCart(){
-    console.log("Trying to get Cart for id")
-    $.get("cart/checkout?id=" + id , function(obj){
-        cart = obj;
-        console.log(cart);
-        console.log(cart.products);
+    $.get(url + code , function(obj) {
+        if (obj == undefined) {
+            console.log("Warenkorb (noch) nicht vorhanden")
+            setTimeout(getCart, 500)
+        }else {
+            cart = obj;
+            console.log(cart);
 
-        $("#hasCart").show();
-        $("#qrcode").hide();
+            $("#hasCart").show();
+            $("#qrcode").hide();
+            $("#waiting").hide();
 
-        var table = "<table cellpadding='5px'>";
-        table += "<tr><th>Name</th> <th>Price</th> <th>SUM</th><th>Unit</th></tr>";
-        for(var i in cart.products){
-            var product = cart.products[i];
-            console.log(cart.products[i]);
-            table += "<tr><td>" + product.product.name + "</td><td>" + product.product.price + "</td><td>" + product.amount + "</td><td>" + product.product.unit + "</td></tr>"
+            $("#code").val(code);
+            $("#status").val(cart.status);
+            switch (cart.status){
+                case "PENDING": $("#status").css("background-color", "orange");  break;
+                case "PAID": $("#status").css("background-color", "green"); break;
+                case "CANCELLED": $("#status").css("background-color", "red"); break;
+                default: $("#status").css("background-color", "gray"); break;
+            }
+
+
+            var table = "<table border='0' cellpadding='5' cellspacing='0' id='productTable'>";
+            table += "<tr><th></th> <th>OpenERP</th> <th>Amount</th></tr>";
+            for (var i in cart.items) {
+                var item = cart.items[i];
+                table += "<tr><td>" + item.id + "</td><td>" + item.productId + "</td><td>" + item.amount + "</td></tr>"
+            }
+            table += "</table>";
+            $("#cart").html(table);
         }
-        table += "</table>";
-        $("#cart").html(table);
-    }).done(function() {
-        alert("DONE");
     });
 }
+
+/*
+        if no ID is set -> generate QR
+ */
 
 function generateQRCode(){
     console.log("Generating QR")
@@ -47,49 +70,62 @@ function generateQRCode(){
         height : 300
     });    
 
-qrcode.makeCode(3453425);
-    //qrcode.makeCode(id);
+    qrcode.makeCode(code);
 }
 
-//Button
+
+/*
+       functions of the buttons
+ */
 
 function paid(){
-    console.log("called paid!")
-
-    $.post( "../cart/paid", { id: $("#id").val() } , function(data){
-        console.log(data);
-        $("#hasCart").hide();
-        $("#info").show();
-        $("#info").html("Warenkorb wurde bezahlt")
+    $.post( url + "paid/" + code, function(statusChanged) {
+        if(statusChanged == "true") {
+            alert("Warenkorb wurde bezahlt");
+            getCart();
+        }else
+            alert("Kann nicht mehr durchgeführt werden")
     }).fail(function() {
         alert("WARENKORB NICHT BEKANNT!");
+        getCart();
     });
 }
 
 function cancelled(){
     console.log("cancelled!")
-    $.post( "../cart/cancelled", { id: $("#id").val() } , function(data){
-        console.log(data);
-        $("#hasCart").hide();
-        $("#info").show();
-        $("#info").html("Warenkorb wurde verworfen")
+    $.post( url + "cancelled/" + code, function(statusChanged){
+        if(statusChanged == "true") {
+            alert("Warenkorb wurde verworfen");
+            getCart();
+        }else
+            alert("Kann nicht mehr durchgeführt werden")
+
     }).fail(function() {
         alert("WARENKORB NICHT BEKANNT!");
     });
 }
 
-//HELPER
+function setCode(){
+    code = $("#setCode").val();
+    $("#hasCart").hide();
+    $("#qrcode").hide();
+    $("#waiting").show();
+    $("#waiting").html("<h1> Warenkorb [mit Code:"+ code +"] (noch) nicht vorhanden</h1>")
+    getCart();
+}
 
-function getUrlParameter(sParam)
-{
+
+/*
+        Helper functions
+ */
+
+function getUrlParameter(sParam){
     var sPageURL = window.location.search.substring(1);
     var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++)
-    {
+    for (var i = 0; i < sURLVariables.length; i++){
         var sParameterName = sURLVariables[i].split('=');
         if (sParameterName[0] == sParam)
-        {
             return sParameterName[1];
-        }
     }
 }
+

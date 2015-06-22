@@ -5,6 +5,8 @@ import de.fau.cs.mad.fablab.rest.core.*;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
+import java.util.List;
+
 
 public class CartDAO extends AbstractDAO<CartServer> {
 
@@ -13,10 +15,16 @@ public class CartDAO extends AbstractDAO<CartServer> {
     }
 
     //GET
-    public CartServer findById(String id) {
-        CartServer cartServer = super.get(id);
+    public CartServer findById(String code) {
+        CartServer cartServer = super.get(code);
         return cartServer;
     }
+
+    @SuppressWarnings("unchecked")
+    public List<CartServer> findAll() {
+        return super.currentSession().createQuery("FROM CartServer").list();
+    }
+
 
     //Create
     public CartServer create(CartServer obj){
@@ -26,15 +34,15 @@ public class CartDAO extends AbstractDAO<CartServer> {
     }
 
     //Delete
-    public boolean delete(long id) {
-        if (get(id) == null)
+    public boolean delete(String code) {
+        if (get(code) == null)
             return false;
-        currentSession().delete(get(id));
+        currentSession().delete(get(code));
         return true;
     }
 
-    public boolean updateCartStatus(String id, CartStatusEnum status) {
-        CartServer cart = super.get(id);
+    public boolean updateCartStatus(String code, CartStatusEnum status) {
+        CartServer cart = super.get(code);
         //ignore if there is no such cart
         if (cart == null)
             return false;
@@ -47,4 +55,5 @@ public class CartDAO extends AbstractDAO<CartServer> {
         }
         return false;
     }
+
 }

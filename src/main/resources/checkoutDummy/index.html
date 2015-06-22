@@ -27,16 +27,22 @@
             </table>
 
             <!-- Pay ../cart/checkout/paid -->
-            <p class="button bgDarkGreen" onclick="paid()">Warenkorb wurde bezahlt</p>
+            <p class="button bgDarkGreen" onclick="paidButtonTouched()">Warenkorb wurde bezahlt</p>
 
 
             <!-- Cancel ../cart/checkout/cancelled -->
-            <p class="button bgDarkRed" onclick="cancelled()">Warenkorb verwerfen / abbrechen</p>
+            <p class="button bgDarkRed" onclick="cancelledButtonTouched()">Warenkorb verwerfen / abbrechen</p>
 
         </div>
 
         <div id="waiting" class="container" style="height:300px;">
-
+            <h1 id="waitingCode">Warenkorb nicht vorhanden</h1>
+            <p> Gründe dafür</p>
+            <ul>
+                <li>Falscher Code</li>
+                <li>Noch nicht am Server</li>
+                <li>Bereits wieder löscht (senden an Server länger her als 30min?)</li>
+            </ul>
         </div>
 
         <div id="qrcode" class="container" style="width:300px; height:300px; margin-top:15px;">
@@ -46,7 +52,7 @@
         <footer>
             <small>
             Warenkorb für Code: <input type="text" id="setCode" />
-                <input type="button" onclick="setCode()" value="Anzeigen" id="" />
+                <input type="button" onclick="showCartForCodeButtonTouched()" value="Anzeigen" id="" />
                 <input type="button" onclick="newQRCode()" value="neuen QR Erzeugen" id="" />
             </small>
         </footer>

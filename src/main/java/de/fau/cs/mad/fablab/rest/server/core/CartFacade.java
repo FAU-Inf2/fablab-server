@@ -6,12 +6,15 @@ import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
 public class CartFacade{
 
     private final CartDAO dao;
+    private OldCartRemover remover;
 
     public CartFacade(CartDAO dao) {
         this.dao = dao;
+        this.remover = new OldCartRemover(dao, 30); // Removes old carts after 30 min!
     }
 
     public CartServer create(CartServer obj) {
+        obj.setSentToServer(); //time needs to be set for OldCartRemover
         return this.dao.create(obj);
     }
 
@@ -24,6 +27,9 @@ public class CartFacade{
     }
 
     public boolean updateCartStatus(String id, CartStatusEnum status){
+        remover.removeAllOldCarts();
         return this.dao.updateCartStatus(id, status);
     }
+
+
 }

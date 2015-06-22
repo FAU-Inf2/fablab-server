@@ -3,7 +3,7 @@
   On load / init simulator
  */
 
-var url = "../../checkout/", code, cart;
+var url = "../../checkout/", code, cart, requestRepeater;
 $(document).ready(function() {
     //Dummy can be used to display Carts, just use the url ?code=XXX for displaying
     code = getUrlParameter('code');
@@ -14,7 +14,7 @@ $(document).ready(function() {
         $("#hasCart").hide();
         $("#qrcode").hide();
         $("#waiting").show();
-        $("#waiting").html("<h1> Warenkorb [mit Code:"+ code+"] (noch) nicht vorhanden</h1>")
+        $("#waitingCode").val("Warenkorb [mit Code:"+ code +"]  nicht vorhanden")
     }
     getCart();
     console.log("code: " + code);
@@ -25,9 +25,10 @@ $(document).ready(function() {
      Request cart from server
  */
 function getCart(){
+    clearTimeout(requestRepeater);
     $.get(url + code , function(obj) {
         if (obj == undefined) {
-            setTimeout(getCart, 500)
+            requestRepeater = setTimeout(getCart, 500)
         }else {
             cart = obj;
             //console.log(cart);
@@ -58,6 +59,38 @@ function getCart(){
     });
 }
 
+function updateCartInformation() {
+
+    console.log("updateCartInformation")
+    $.get(url + code, function (obj) {
+        console.log("OBJ:")
+        console.log(obj)
+        if (obj == undefined) {
+            $("#hasCart").hide();
+            $("#qrcode").hide();
+            $("#waiting").show();
+            $("#waitingCode").val("Warenkorb [mit Code:"+ code +"]  nicht vorhanden")
+        } else {
+            $("#status").val(cart.status);
+            switch (cart.status) {
+                case "PENDING":
+                    $("#status").css("background-color", "orange");
+                    break;
+                case "PAID":
+                    $("#status").css("background-color", "green");
+                    break;
+                case "CANCELLED":
+                    $("#status").css("background-color", "red");
+                    break;
+                default:
+                    $("#status").css("background-color", "gray");
+                    break;
+            }
+        }
+    });
+}
+
+
 /*
         if no ID is set -> generate QR
  */
@@ -76,40 +109,41 @@ function generateQRCode(){
        functions of the buttons
  */
 
-function paid(){
+function paidButtonTouched(){
     $.post( url + "paid/" + code, function(statusChanged) {
-        if(statusChanged == "true") {
+        if(statusChanged == "true")
             alert("Warenkorb wurde bezahlt");
-            getCart();
-        }else
+        else
             alert("Kann nicht mehr durchgeführt werden")
+        updateCartInformation();
     }).fail(function() {
         alert("WARENKORB NICHT BEKANNT!");
-        getCart();
+        updateCartInformation();
     });
 }
 
-function cancelled(){
+function cancelledButtonTouched(){
     $.post( url + "cancelled/" + code, function(statusChanged){
-        if(statusChanged == "true") {
+        if(statusChanged == "true")
             alert("Warenkorb wurde verworfen");
-            getCart();
-        }else
+        else
             alert("Kann nicht mehr durchgeführt werden")
-
+        updateCartInformation();
     }).fail(function() {
         alert("WARENKORB NICHT BEKANNT!");
+        updateCartInformation();
     });
 }
 
-function setCode(){
+function showCartForCodeButtonTouched(){
     code = $("#setCode").val();
     $("#hasCart").hide();
     $("#qrcode").hide();
     $("#waiting").show();
-    $("#waiting").html("<h1> Warenkorb [mit Code:"+ code +"] (noch) nicht vorhanden</h1>")
+    $("#waitingCode").val("Warenkorb [mit Code:"+ code +"]  nicht vorhanden")
     getCart();
 }
+
 
 
 function newQRCode(){

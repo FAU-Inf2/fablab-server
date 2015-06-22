@@ -27,11 +27,10 @@ $(document).ready(function() {
 function getCart(){
     $.get(url + code , function(obj) {
         if (obj == undefined) {
-            console.log("Warenkorb (noch) nicht vorhanden")
             setTimeout(getCart, 500)
         }else {
             cart = obj;
-            console.log(cart);
+            //console.log(cart);
 
             $("#hasCart").show();
             $("#qrcode").hide();
@@ -64,13 +63,12 @@ function getCart(){
  */
 
 function generateQRCode(){
-    console.log("Generating QR")
+    $("#qrcode").empty();
     var qrcode = new QRCode(document.getElementById("qrcode"), {
         width : 300,
-        height : 300
-    });    
-
-    qrcode.makeCode(code);
+        height : 300,
+        text: "" + code, //QRCode generator needs a string, so give him one
+    });
 }
 
 
@@ -92,7 +90,6 @@ function paid(){
 }
 
 function cancelled(){
-    console.log("cancelled!")
     $.post( url + "cancelled/" + code, function(statusChanged){
         if(statusChanged == "true") {
             alert("Warenkorb wurde verworfen");
@@ -114,6 +111,16 @@ function setCode(){
     getCart();
 }
 
+
+function newQRCode(){
+    code = Math.floor((Math.random() * 1000000) + 1);
+    $("#hasCart").hide();
+    $("#qrcode").show();
+    $("#waiting").hide();
+    getCart();
+    generateQRCode();
+    console.log("code: " + code);
+}
 
 /*
         Helper functions

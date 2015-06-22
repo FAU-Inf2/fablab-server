@@ -23,14 +23,14 @@ public class CheckoutResource implements Checkout {
 
     @UnitOfWork
     @Override
-    public void markCartAsPaid(String id) {
-        this.facade.updateCartStatus(id, CartStatusEnum.PAID);
+    public boolean markCartAsPaid(String id) {
+        return this.facade.updateCartStatus(id, CartStatusEnum.PAID);
     }
 
     @UnitOfWork
     @Override
-    public void markCartAsCancelled(String id) {
-        this.facade.updateCartStatus(id, CartStatusEnum.CANCELLED);
+    public boolean markCartAsCancelled(String id) {
+        return this.facade.updateCartStatus(id, CartStatusEnum.CANCELLED);
 
     }
 }

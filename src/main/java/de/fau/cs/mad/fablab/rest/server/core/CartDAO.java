@@ -33,13 +33,18 @@ public class CartDAO extends AbstractDAO<CartServer> {
         return true;
     }
 
-    public void updateCartStatus(String id, CartStatusEnum status) {
+    public boolean updateCartStatus(String id, CartStatusEnum status) {
         CartServer cart = super.get(id);
         //ignore if there is no such cart
         if (cart == null)
-            return;
+            return false;
 
-        cart.setStatus(status);
-        super.persist(cart);
+        //Just to get sure, that status cannot be changed again after paid/cancelled
+        if(cart.getStatus() == CartStatusEnum.PENDING) {
+            cart.setStatus(status);
+            super.persist(cart);
+            return true;
+        }
+        return false;
     }
 }

@@ -15,9 +15,9 @@ public interface Checkout {
 
     @POST
     @Path("/paid/{id}")
-    void markCartAsPaid(@PathParam("id") String id);
+    boolean markCartAsPaid(@PathParam("id") String id);
 
     @POST
     @Path("/cancelled/{id}")
-    void markCartAsCancelled(@PathParam("id") String id);
+    boolean markCartAsCancelled(@PathParam("id") String id);
 }

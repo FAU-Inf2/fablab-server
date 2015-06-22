@@ -23,7 +23,7 @@ public class CartFacade{
         return this.dao.findById(id).getStatus();
     }
 
-    public void updateCartStatus(String id, CartStatusEnum status){
-        this.dao.updateCartStatus(id, status);
+    public boolean updateCartStatus(String id, CartStatusEnum status){
+        return this.dao.updateCartStatus(id, status);
     }
 }

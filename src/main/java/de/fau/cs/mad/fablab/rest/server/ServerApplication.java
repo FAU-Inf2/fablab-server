@@ -9,7 +9,7 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushResource;
-import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorState;
+import de.fau.cs.mad.fablab.rest.core.DoorState;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;

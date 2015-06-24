@@ -6,7 +6,7 @@ import de.fau.cs.mad.fablab.rest.api.SpaceApi;
 import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
-import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorState;
+import de.fau.cs.mad.fablab.rest.core.DoorState;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateRequest;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.remote.SpaceAPIService;

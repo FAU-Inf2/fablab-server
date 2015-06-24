@@ -29,10 +29,7 @@ public class OldCartRemover{
             if (cart.getSentToServer() < maxTime)
                 codesOfCartsToRemove.add(cart.getCartCode());
 
-
         for(String code : codesOfCartsToRemove)
             dao.delete(code);
     }
-
-
 }

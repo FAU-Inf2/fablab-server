@@ -26,11 +26,11 @@ $(document).ready(function() {
  */
 function getCart(){
     clearTimeout(requestRepeater);
-    $.get(url + code , function(obj) {
-        if (obj == undefined) {
+    $.get(url + code , function(response) {
+        if (response == undefined) {
             requestRepeater = setTimeout(getCart, 500)
         }else {
-            cart = obj;
+            cart = response;
             //console.log(cart);
 
             $("#hasCart").show();
@@ -62,29 +62,20 @@ function getCart(){
 function updateCartInformation() {
 
     console.log("updateCartInformation")
-    $.get(url + code, function (obj) {
-        console.log("OBJ:")
-        console.log(obj)
-        if (obj == undefined) {
+    $.get(url + code, function (response) {
+        console.log(response)
+        if (response == undefined) {
             $("#hasCart").hide();
             $("#qrcode").hide();
             $("#waiting").show();
             $("#waitingCode").val("Warenkorb [mit Code:"+ code +"]  nicht vorhanden")
         } else {
-            $("#status").val(cart.status);
-            switch (cart.status) {
-                case "PENDING":
-                    $("#status").css("background-color", "orange");
-                    break;
-                case "PAID":
-                    $("#status").css("background-color", "green");
-                    break;
-                case "CANCELLED":
-                    $("#status").css("background-color", "red");
-                    break;
-                default:
-                    $("#status").css("background-color", "gray");
-                    break;
+            $("#status").val(response.status);
+            switch (response.status){
+                case "PENDING": $("#status").css("background-color", "orange");  break;
+                case "PAID": $("#status").css("background-color", "green"); break;
+                case "CANCELLED": $("#status").css("background-color", "red"); break;
+                default: $("#status").css("background-color", "gray"); break;
             }
         }
     });

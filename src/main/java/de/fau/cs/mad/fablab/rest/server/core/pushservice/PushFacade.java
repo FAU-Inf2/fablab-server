@@ -20,14 +20,14 @@ public class PushFacade {
         mPushServiceConfiguration = aPushServiceConfiguration;
     }
 
-    public void pushToAllDevices(String aTitel,String aMessage){
+    public void pushToAllDevices(String aTitel,Object aMessage){
         PushContent content = new PushContent();
         RegistrationIdFacade registrationIdFacade = new RegistrationIdFacade(new RegistrationIdDAO(mSessionFactory));
         List<RegistrationId> registrationIds = registrationIdFacade.findAll();
         for(RegistrationId registrationId : registrationIds){
             content.addRegId(registrationId.getRegistrationid());
         }
-        content.createData(aTitel,aMessage);
+        content.addData(aTitel, aMessage);
         AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
         pushJson(pushService,content);
     }
@@ -35,7 +35,7 @@ public class PushFacade {
     public void pushToDevice(RegistrationId aRegistrationId, String aTitel,String aMessage){
         PushContent content = new PushContent();
         content.addRegId(aRegistrationId.getRegistrationid());
-        content.createData(aTitel,aMessage);
+        content.addData(aTitel,aMessage);
         AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
         pushJson(pushService,content);
     }

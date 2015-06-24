@@ -67,7 +67,7 @@ public class SpaceAPIResource implements SpaceApi
             mDAO.saveState(request.getDoorState());
 
             PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
-            pushFacade.pushToAllDevices("DoreState",request.getDoorState().toString());
+            pushFacade.pushToAllDevices("DoreState",request.getDoorState());
         }
 
         return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";

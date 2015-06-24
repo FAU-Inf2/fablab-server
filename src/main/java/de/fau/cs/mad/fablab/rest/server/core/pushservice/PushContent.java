@@ -9,19 +9,22 @@ import java.util.Map;
 public class PushContent {
 
     private List<String> registration_ids;
-    private Map<String, String> data;
+    private Map<String, Object> data;
+
+    public PushContent()
+    {
+        data = new HashMap<String, Object>();
+    }
 
     public void addRegId(String regId) {
         if (registration_ids == null)
             registration_ids = new LinkedList<String>();
+
         registration_ids.add(regId);
     }
 
-    public void createData(String title, String message) {
-        if (data == null)
-            data = new HashMap<String, String>();
-        data.put("title", title);
-        data.put("message", message);
+    public void addData(String title, Object message) {
+        data.put(title, message);
     }
 
     public List<String> getRegistration_ids() {
@@ -32,11 +35,11 @@ public class PushContent {
         this.registration_ids = registration_ids;
     }
 
-    public Map<String, String> getData() {
+    public Map<String, Object> getData() {
         return data;
     }
 
-    public void setData(Map<String, String> data) {
+    public void setData(Map<String, Object> data) {
         this.data = data;
     }
 

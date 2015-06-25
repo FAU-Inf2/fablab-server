@@ -3,10 +3,10 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.api.SpaceApi;
+import de.fau.cs.mad.fablab.rest.core.DoorState;
 import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
-import de.fau.cs.mad.fablab.rest.core.DoorState;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateRequest;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.remote.SpaceAPIService;
@@ -56,21 +56,21 @@ public class SpaceAPIResource implements SpaceApi
 
         DoorStateRequest request = DoorStateRequest.fromData(mConfig, hash, data);
         DoorState oldState = mDAO.getLastState();
+        DoorState newState = request.getDoorState();
 
         // if there is no oldState use current state
         if (oldState == null)
-            mDAO.saveState(request.getDoorState());
+            mDAO.saveState(newState);
 
         if (request.checkIfChanged(oldState)) {
-            mLogger.info("DoorState changed, firing push event. Now is " + request.getDoorState().toString());
+            mLogger.info("DoorState changed, firing push event. Current state is " + newState);
+            mDAO.saveState(newState);
 
-            mDAO.saveState(request.getDoorState());
-
-            PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
-            pushFacade.pushToAllDevices("DoreState",request.getDoorState());
+            PushFacade pushFacade = new PushFacade(mPushServiceConfiguration, mSessionFactory);
+            pushFacade.pushToAllDevices("DoorState", newState);
         }
 
-        return "{\"success\":\"true\", \"state\":\"" + request.getDoorState().state + "\"}";
+        return "{\"success\":\"true\", \"state\":\"" + newState.state + "\"}";
     }
 
     @Override

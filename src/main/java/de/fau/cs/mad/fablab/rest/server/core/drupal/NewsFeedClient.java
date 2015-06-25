@@ -193,8 +193,8 @@ public class NewsFeedClient implements NewsInterface {
     private String extractImageLink(String body) {
         String[] parts = body.split("<img.*?src=.*?\"", 2);
 
-        // no image found, return FabLab-Logo
-        if (parts.length == 1) return fabUrl + LOGO;
+        // no image found, return null
+        if (parts.length == 1) return null;//return fabUrl + LOGO;
 
         String link = "";
         int i = 0;

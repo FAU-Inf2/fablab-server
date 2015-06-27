@@ -214,7 +214,7 @@ public class NewsFeedClient implements NewsInterface {
     }
 
     /***
-     * Removes the first image and fixed relative links
+     * Removes the first image, fixes relative links and replaces <li> and </li>-tags
      *
      * @param body the input body
      * @return the parsed body
@@ -222,6 +222,7 @@ public class NewsFeedClient implements NewsInterface {
     private String parseBody(String body) {
         body = removeFirstImg(body);
         body = fixLinks(body);
+        body = fixListElements(body);
         return body;
     }
 
@@ -250,6 +251,17 @@ public class NewsFeedClient implements NewsInterface {
         result = fixLinksHelper(parts, "<img alt=\"\" src=\"");
 
         return result;
+    }
+
+    /***
+     * Replaces <li>-tags with "- " and </li>-tags with newline
+     *
+     * @param body the input body
+     * @return the parsed body
+     */
+    private String fixListElements(String body) {
+        body = body.replaceAll("<li>", "- ");
+        return body.replaceFirst("</li>", '\n'+"");
     }
 
     /***

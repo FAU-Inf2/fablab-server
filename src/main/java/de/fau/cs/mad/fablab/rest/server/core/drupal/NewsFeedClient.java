@@ -10,10 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class NewsFeedClient implements NewsInterface {
 
@@ -28,7 +25,7 @@ public class NewsFeedClient implements NewsInterface {
     private static final String LOGO = "/sites/fablab.fau.de/files/fablab_logo.png";
 
     //Tue, 12 May 2015 11:29:28 +0000
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 
     /***
      * Singleton getInstance()
@@ -177,8 +174,8 @@ public class NewsFeedClient implements NewsInterface {
         news.setIsPermaLink(false);
         news.setLink(item.getLink());
         news.setCreator(item.getCreator());
-        //news.setPubDate(dateFormat.parse(item.getPubDate()));
-        news.setPubDate(new Date(item.getPubDate())); // TODO
+        news.setPubDate(dateFormat.parse(item.getPubDate()));
+        //news.setPubDate(new Date(item.getPubDate()));
         news.setLinkToPreviewImage(imageLink);
         news.setCategory(item.getCategory());
         return news;

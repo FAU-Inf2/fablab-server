@@ -261,7 +261,7 @@ public class NewsFeedClient implements NewsInterface {
      */
     private String fixListElements(String body) {
         body = body.replaceAll("<li>", "- ");
-        return body.replaceFirst("</li>", '\n'+"");
+        return body.replaceAll("</li>", '\n'+"");
     }
 
     /***

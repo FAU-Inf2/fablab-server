@@ -207,11 +207,6 @@ public class ICalClient implements ICalInterface {
      * @return the created {@link Filter}
      */
     private Filter getFilter() {
-        java.util.Calendar today = java.util.Calendar.getInstance();
-        today.set(java.util.Calendar.HOUR_OF_DAY, 0);
-        today.clear(java.util.Calendar.MINUTE);
-        today.clear(java.util.Calendar.SECOND);
-
         Period period = getPeriod(52); // get events during the next 52 weeks
         PeriodRule[] pr = {new PeriodRule(period)};
         return new Filter(pr, Filter.MATCH_ALL);

@@ -10,10 +10,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class NewsFeedClient implements NewsInterface {
 
@@ -28,7 +25,7 @@ public class NewsFeedClient implements NewsInterface {
     private static final String LOGO = "/sites/fablab.fau.de/files/fablab_logo.png";
 
     //Tue, 12 May 2015 11:29:28 +0000
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
 
     /***
      * Singleton getInstance()
@@ -177,8 +174,8 @@ public class NewsFeedClient implements NewsInterface {
         news.setIsPermaLink(false);
         news.setLink(item.getLink());
         news.setCreator(item.getCreator());
-        //news.setPubDate(dateFormat.parse(item.getPubDate()));
-        news.setPubDate(new Date(item.getPubDate())); // TODO
+        news.setPubDate(dateFormat.parse(item.getPubDate()));
+        //news.setPubDate(new Date(item.getPubDate()));
         news.setLinkToPreviewImage(imageLink);
         news.setCategory(item.getCategory());
         return news;
@@ -193,8 +190,8 @@ public class NewsFeedClient implements NewsInterface {
     private String extractImageLink(String body) {
         String[] parts = body.split("<img.*?src=.*?\"", 2);
 
-        // no image found, return FabLab-Logo
-        if (parts.length == 1) return fabUrl + LOGO;
+        // no image found, return null
+        if (parts.length == 1) return null;//return fabUrl + LOGO;
 
         String link = "";
         int i = 0;
@@ -214,7 +211,7 @@ public class NewsFeedClient implements NewsInterface {
     }
 
     /***
-     * Removes the first image and fixed relative links
+     * Removes the first image, fixes relative links and replaces <li> and </li>-tags
      *
      * @param body the input body
      * @return the parsed body
@@ -222,6 +219,7 @@ public class NewsFeedClient implements NewsInterface {
     private String parseBody(String body) {
         body = removeFirstImg(body);
         body = fixLinks(body);
+        body = fixListElements(body);
         return body;
     }
 
@@ -250,6 +248,17 @@ public class NewsFeedClient implements NewsInterface {
         result = fixLinksHelper(parts, "<img alt=\"\" src=\"");
 
         return result;
+    }
+
+    /***
+     * Replaces <li>-tags with "- " and </li>-tags with newline
+     *
+     * @param body the input body
+     * @return the parsed body
+     */
+    private String fixListElements(String body) {
+        body = body.replaceAll("<li>", "- ");
+        return body.replaceAll("</li>", "<br />");
     }
 
     /***

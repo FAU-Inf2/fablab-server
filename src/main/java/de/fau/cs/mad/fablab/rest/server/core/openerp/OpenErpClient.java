@@ -348,6 +348,21 @@ public class OpenErpClient implements OpenErpInterface {
      */
     private Map<String, Object> getProductParams(int limit, int offset, JSONArray domain) {
 
+        //we only want products marked as sale_ok and a price >= 0
+        JSONArray filterSaleOk = new JSONArray();
+        filterSaleOk.add(0, "sale_ok");
+        filterSaleOk.add(1, "=");
+        filterSaleOk.add(2, "true");
+
+        JSONArray filterPrice = new JSONArray();
+        filterPrice.add(0, "list_price");
+        filterPrice.add(1, ">=");
+        filterPrice.add(2, "0");
+
+        //add the filters to our given domain
+        domain.add(domain.size(), filterSaleOk);
+        domain.add(domain.size(), filterPrice);
+
         Map<String, Object> productParams = new HashMap<>();
         productParams.put("session_id", mSessionId);
         productParams.put("context", mUserContext);

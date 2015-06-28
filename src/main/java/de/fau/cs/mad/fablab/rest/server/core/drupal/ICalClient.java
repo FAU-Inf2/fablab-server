@@ -291,6 +291,8 @@ public class ICalClient implements ICalInterface {
         event.setStart(start);
         event.setEnd(end);
 
+        event.setAllday(isAlldayEvent(start, end));
+
         Property p;
         p = component.getProperty(Property.URL);
         if (p != null) event.setUrl(p.getValue());
@@ -300,5 +302,20 @@ public class ICalClient implements ICalInterface {
         if (p != null) event.setDescription(p.getValue());
 
         return event;
+    }
+
+    /***
+     * Checks if the given event is an all-day event
+     * @param start the start-string
+     * @param end the end-string
+     * @return true or false
+     */
+    private boolean isAlldayEvent(String start, String end) {
+        String s = start.substring(9, 15);
+        String e = end.substring(9, 15);
+        String target = "000000";
+
+        if (s.equals(target) && e.equals(target)) return true;
+        return false;
     }
 }

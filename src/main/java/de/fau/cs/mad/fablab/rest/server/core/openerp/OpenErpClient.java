@@ -547,54 +547,11 @@ public class OpenErpClient implements OpenErpInterface {
         return newString;
     }
 
-    private List<Location> getLocations(){
-        List<Location> locations = new ArrayList<>();
-
-        JSONRPC2Response jsonRPC2Response = null;
-        try {
-            mJsonSession.setURL(mSearchReadUrl);
-
-            JSONArray domain = new JSONArray();
-            JSONArray categoryFields = new JSONArray();
-
-            categoryFields.add(0, "id");
-            categoryFields.add(1, "name");
-            categoryFields.add(2, "code");
-
-            Map<String, Object> categoryParams = new HashMap<>();
-            categoryParams.put("session_id", mSessionId);
-            categoryParams.put("context", mUserContext);
-            categoryParams.put("domain", domain);
-            categoryParams.put("model", "stock.location");
-            categoryParams.put("sort", "");
-            categoryParams.put("fields", categoryFields);
-
-            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD, categoryParams, generateRequestID()));
-            JSONObject result = (JSONObject) jsonRPC2Response.getResult();
-            JSONArray records = (JSONArray) result.get("records");
-            for(Object categoryObject : records) {
-                JSONObject productJson = (JSONObject) categoryObject;
-                Location newLocation = new Location();
-
-                long id = ((Long) productJson.get("id"));
-                String locName = (String) productJson.get("name");
-                String locCode = "unknown code";
-                if(!(productJson.get("code") instanceof Boolean)) {
-                    locCode = (String) productJson.get("code");
-                }
-                newLocation.setId(id);
-                newLocation.setName(locName);
-                newLocation.setCode(locCode);
-                System.out.println("Build location with : " + newLocation.getId() + " " + newLocation.getCode());
-                locations.add(newLocation);
-            }
 
 
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
-        }
-
-        return locations;
+    public List<Location> getLocations(){
+        LocationClient locationClient = new LocationClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        return locationClient.getLocations();
     }
 
     public Location getLocationById(final List<Location> aLocations,final long aLocationId){

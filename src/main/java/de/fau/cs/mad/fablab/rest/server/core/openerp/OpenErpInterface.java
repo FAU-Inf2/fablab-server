@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface OpenErpInterface {
 
+    List<Location> getLocations();
     Location getLocationById(final List<Location> aLocations,long aLocationId);
+
     List<Category> getCategories() throws OpenErpException;
+
     List<Product> getProducts(int limit, int offset) throws OpenErpException;
     Product searchForProductsById(String id) throws OpenErpException;
     List<Product> searchForProductsByName(String searchString, int limit, int offset) throws OpenErpException;

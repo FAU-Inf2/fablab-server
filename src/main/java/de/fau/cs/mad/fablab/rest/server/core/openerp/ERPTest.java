@@ -27,14 +27,16 @@ public class ERPTest {
         List<Product> searchedProductsCategory = new ArrayList<>();
         Product searchedProductId = null;
 
+
         List<Location> locations = new ArrayList<>();
 
         try{
-            products = openErp.getProducts(5,0);
+            products = openErp.getProducts(50,0);
             //searchedProducts = openErp.searchForProductsByName("Holz", 0, 0);
             //searchedProductsCategory = openErp.searchForProductsByCategory("1", 5, 0);
             //searchedProductId = openErp.searchForProductsById("0008");
-            locations = openErp.getLocations();
+            //categories = openErp.getCategories();
+            //locations = openErp.getLocations();
 
         }catch (OpenErpException erp){
             //TODO
@@ -44,7 +46,7 @@ public class ERPTest {
         int index = 0;
         for(Product pro : products){
             index++;
-            System.out.println(index + ": " + pro.getProductId() + " " + pro.getName() + " " + pro.getLocation() + " : "+ pro.getCategoryId());
+            System.out.println(index + ": " + pro.getProductId() + " " + pro.getName() + " : " + pro.getLocationObject().getName() + " : "+ pro.getCategory().getName());
         }
 
         System.out.println("####### Gefundene Objekte: (Produktnamen)" + searchedProducts.size());
@@ -63,15 +65,21 @@ public class ERPTest {
 
         System.out.println("####### Gefundenes Objekt (ID)");
         if(!(searchedProductId == null)){
-            System.out.println(searchedProductId.getName());
+            System.out.println(searchedProductId.getName()  + " " + searchedProductId.getLocation_id());
         }
 
         System.out.println("####### Gefundene Objekte (All Locations): " + searchedProductsCategory.size());
         index = 0;
         for(Location loc : locations){
             index++;
-            System.out.println(index + " " + loc.getName() + " " + loc.getCode());
+            System.out.println(index + " " + loc.getId() + " " + loc.getName() + " " + loc.getCode());
         }
 
+        System.out.println("####### Gefundene Objekte (Alle Kategorien): " + searchedProductsCategory.size());
+        index = 0;
+        for(Category loc : categories){
+            index++;
+            System.out.println(index + " " + loc.getName() + " " + loc.getLocation_id());
+        }
     }
 }

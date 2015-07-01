@@ -77,9 +77,6 @@ public class OpenErpClient implements OpenErpInterface {
         return instance;
     }
 
-
-
-
     public static void setConfiguration(OpenErpConfiguration c) {
         config = c;
     }
@@ -148,7 +145,6 @@ public class OpenErpClient implements OpenErpInterface {
         return "rid" + new Random().nextInt(Integer.MAX_VALUE);
     }
 
-
     /***
      * Requests a lists of all Categories as a tree
      *
@@ -157,35 +153,8 @@ public class OpenErpClient implements OpenErpInterface {
      */
     @Override
     public List<Category> getCategories() throws OpenErpException{
-        List<Category> categories = new ArrayList<Category>();
-
-        JSONRPC2Response jsonRPC2Response = null;
-        try {
-            mJsonSession.setURL(mSearchReadUrl);
-
-            JSONArray domain = new JSONArray();
-            JSONArray categoryFields = new JSONArray();
-            categoryFields.add(0, "name");
-            categoryFields.add(1, "id");
-            categoryFields.add(2,"property_stock_location");
-            categoryFields.add(3,"code");
-
-
-            Map<String, Object> categoryParams = new HashMap<>();
-            categoryParams.put("session_id", mSessionId);
-            categoryParams.put("context", mUserContext);
-            categoryParams.put("domain", domain);
-            categoryParams.put("model", "product.category");
-            categoryParams.put("sort", "");
-            categoryParams.put("fields", categoryFields);
-
-            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD, categoryParams, generateRequestID()));
-            categories = generateCategoryListFromJson(jsonRPC2Response);
-
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
-        }
-        return categories;
+        CategoryClient categoryClient = new CategoryClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        return categoryClient.getCategories();
     }
 
     /***
@@ -197,34 +166,21 @@ public class OpenErpClient implements OpenErpInterface {
      */
     @Override
     public List<Product> getProducts(int limit, int offset) throws OpenErpException {
+        CategoryClient categoryClient = new CategoryClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        LocationClient locationClient = new LocationClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        List<Category> categories = categoryClient.getCategories();
+        List<Location> locations = locationClient.getLocations();
+
+
         ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
         List<Product> products = productClient.getProducts(limit,offset);
-        return products;
-        /*
-        JSONRPC2Response jsonRPC2Response = null;
-        try {
-            mJsonSession.setURL(mSearchReadUrl);
 
-            JSONArray domain = new JSONArray();
-
-            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID()));
-
-            try {
-                assertSessionNotExpired(jsonRPC2Response);
-            } catch (OpenErpSessionExpiredException e) {
-                //do the request one more time.
-                mJsonSession.setURL(mSearchReadUrl);
-                jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
-                                                                         getProductParams(limit, offset, domain),
-                                                                         generateRequestID()));
-            }
-
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
+        for(Product product : products){
+            product.setCategory(getCategoryObjectById(categories, product.getCategoryId()));
+            product.setLocationObject(getLocationById(locations, product.getLocation_id()));
         }
-        return generateProductListFromJson(jsonRPC2Response);
 
-        */
+        return products;
     }
 
     /***
@@ -239,44 +195,6 @@ public class OpenErpClient implements OpenErpInterface {
     public List<Product> searchForProductsByName(String searchString, int limit, int offset) throws OpenErpException {
         ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
         return productClient.searchForProductsByName(searchString, limit, offset);
-
-        /*JSONRPC2Response jsonRPC2Response = null;
-        try {
-            mJsonSession.setURL(mSearchReadUrl);
-
-            //the domain specific values to search
-            JSONArray whereNameLike = new JSONArray();
-            whereNameLike.add(0, "name");
-            whereNameLike.add(1, "ilike");
-            whereNameLike.add(2, searchString);
-
-            JSONArray whereDefaultCodeLike = new JSONArray();
-            whereDefaultCodeLike.add(0, "default_code");
-            whereDefaultCodeLike.add(1, "ilike");
-            whereDefaultCodeLike.add(2, searchString);
-
-            JSONArray domain = new JSONArray();
-            domain.add(0, "|");
-            domain.add(1, whereNameLike);
-            domain.add(2, whereDefaultCodeLike);
-
-            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID()));
-
-            try {
-                assertSessionNotExpired(jsonRPC2Response);
-            } catch (OpenErpSessionExpiredException e) {
-                //do the request one more time.
-                mJsonSession.setURL(mSearchReadUrl);
-                jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
-                                                                         getProductParams(limit, offset, domain),
-                                                                         generateRequestID()));
-            }
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
-        }
-        return generateProductListFromJson(jsonRPC2Response);
-        */
-
     }
 
 
@@ -284,40 +202,7 @@ public class OpenErpClient implements OpenErpInterface {
     public List<Product> searchForProductsByCategory(String searchString, int limit, int offset) throws OpenErpException {
         ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
         return productClient.searchForProductsByCategory(searchString, limit, offset);
-
-        /*
-        JSONRPC2Response jsonRPC2Response = null;
-        try {
-            mJsonSession.setURL(mSearchReadUrl);
-
-            //the domain specific values to search
-            JSONArray whereNameLike = new JSONArray();
-            whereNameLike.add(0, "category_string");
-            whereNameLike.add(1, "ilike");
-            whereNameLike.add(2, searchString);
-
-
-            JSONArray domain = new JSONArray();
-            domain.add(0, whereNameLike);
-
-            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID()));
-
-            try {
-                assertSessionNotExpired(jsonRPC2Response);
-            } catch (OpenErpSessionExpiredException e) {
-                //do the request one more time.
-                mJsonSession.setURL(mSearchReadUrl);
-                jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD,
-                                                                         getProductParams(limit, offset, domain),
-                                                                         generateRequestID()));
-            }
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
-        }
-        return generateProductListFromJson(jsonRPC2Response);
-    */
     }
-
 
     /***
      * @param id a string containing 4 digits
@@ -327,77 +212,18 @@ public class OpenErpClient implements OpenErpInterface {
     @Override
     public Product searchForProductsById(String id) throws OpenErpException {
         ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
-        return productClient.searchForProductsById(id);
-        /*
-        JSONRPC2Response jsonRPC2Response = null;
+        Product product = productClient.searchForProductsById(id);
 
-        try {
-            mJsonSession.setURL(mSearchReadUrl);
+        CategoryClient categoryClient = new CategoryClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        LocationClient locationClient = new LocationClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        List<Category> categories = categoryClient.getCategories();
+        List<Location> locations = locationClient.getLocations();
 
-            //the domain specific values to search
-            JSONArray whereNameLike = new JSONArray();
-            whereNameLike.add(0, "default_code");
-            whereNameLike.add(1, "=");
-            whereNameLike.add(2, id);
-
-
-            JSONArray domain = new JSONArray();
-            domain.add(0, whereNameLike);
-
-            jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD, getProductParams(1, 0, domain), generateRequestID()));
-
-            try {
-                assertSessionNotExpired(jsonRPC2Response);
-            } catch (OpenErpSessionExpiredException e) {
-                //do the request one more time.
-                mJsonSession.setURL(mSearchReadUrl);
-                jsonRPC2Response = mJsonSession.send(new JSONRPC2Request(METHOD, getProductParams(1, 0, domain), generateRequestID()));
-            }
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
-        }
-        return generateProductListFromJson(jsonRPC2Response).get(0);
-        */
+        product.setCategory(getCategoryObjectById(categories, product.getCategoryId()));
+        product.setLocationObject(getLocationById(locations, product.getLocation_id()));
+        return product;
     }
 
-
-    /***
-     * Builds a HashMap containing parameters used for a product.product search-read
-     *
-     * @param limit  the max count of records which should be returned
-     * @param offset the offset to start the records
-     * @param domain additional, domain specific parameters, given as {@link JSONArray}
-     * @return
-     */
-    private Map<String, Object> getProductParams(int limit, int offset, JSONArray domain) {
-
-        //we only want products marked as sale_ok and a price >= 0
-        JSONArray filterSaleOk = new JSONArray();
-        filterSaleOk.add(0, "sale_ok");
-        filterSaleOk.add(1, "=");
-        filterSaleOk.add(2, "true");
-
-        JSONArray filterPrice = new JSONArray();
-        filterPrice.add(0, "list_price");
-        filterPrice.add(1, ">=");
-        filterPrice.add(2, "0");
-
-        //add the filters to our given domain
-        domain.add(domain.size(), filterSaleOk);
-        domain.add(domain.size(), filterPrice);
-
-        Map<String, Object> productParams = new HashMap<>();
-        productParams.put("session_id", mSessionId);
-        productParams.put("context", mUserContext);
-        productParams.put("domain", domain);
-        productParams.put("model", "product.product");
-        productParams.put("limit", limit);
-        productParams.put("sort", "");
-        productParams.put("offset", offset);
-        productParams.put("fields", fields);
-
-        return productParams;
-    }
 
     /***
      * Checks if a given {@link JSONRPC2Response} contains an error code 300
@@ -419,142 +245,12 @@ public class OpenErpClient implements OpenErpInterface {
         }
     }
 
-    /**
-     * Parses a {@link JSONRPC2Response} object and creates a {@link Product} element for each
-     * entry
-     *
-     * @param jsonResponse the {@link JSONRPC2Response} object to parse
-     * @return a List containing {@link Product} elements
-     * @throws OpenErpException if jsonResponse contains no result
-     */
-    protected List<Product> generateProductListFromJson(JSONRPC2Response jsonResponse) throws OpenErpException {
-        List<Product> productList = new LinkedList<>();
-        JSONObject result = (JSONObject) jsonResponse.getResult();
-        if (result == null) {
-            //something went wrong;
-            throw new OpenErpException("JsonResponse contains no result", jsonResponse.getError().getMessage());
-        }
-        JSONArray records = (JSONArray) result.get("records");
-
-        List<Category> categories = getCategories();
-        List<Location> locations = getLocations();
-        for (Object productObject : records) {
-
-            JSONObject productJson = (JSONObject) productObject;
-
-            String name = (productJson.get(FIELD_NAME) == null)
-                          ? "unknown"
-                          : (String) productJson.get(FIELD_NAME);
-
-            //When there is no product_id available, the result is a bool value
-            String id = (productJson.get(FIELD_CODE) instanceof Boolean)
-                        ? ""
-                        : (String) productJson.get(FIELD_CODE);
-
-            Double price = (productJson.get(FIELD_LIST_PRICE) == null)
-                           ? -1
-                           : (Double) productJson.get(FIELD_LIST_PRICE);
-
-            JSONArray categoryArray = (productJson.get(FIELD_CATEGORY) == null)
-                                      ? new JSONArray()
-                                      : (JSONArray) productJson.get(FIELD_CATEGORY);
-
-            JSONArray unitOfMeasureArray = (productJson.get(FIELD_UNIT_OF_MEASURE) == null)
-                                           ? new JSONArray()
-                                           : (JSONArray) productJson.get(FIELD_UNIT_OF_MEASURE);
-
-            String location = (productJson.get(FIELD_LOCATION) instanceof Boolean)
-                              ? "unknown location"
-                              : (String) ((JSONArray) productJson.get(FIELD_LOCATION)).get(1);
-
-            String unit = "";
-            if (unitOfMeasureArray.size() == 2) {
-                unit = (String) unitOfMeasureArray.get(1);
-            }
-
-            long categoryId = -1;
-            String categoryString = "unknown category";
-            //ensure our array contains the needed elements
-            if (categoryArray.size() == 2) {
-                categoryId = (Long) categoryArray.get(0);
-                categoryString = (String) categoryArray.get(1);
-            }
-            //Create a product and put it in the result list
-            Product product = new Product(id, name, price, categoryId, categoryString, unit, location);
-            product.setCategory(getCategoryObjectById(categories, categoryId));
-            System.out.println("Id of location : " + product.getCategory().getLocation_id());
-            String newLocation = product.getCategory().getLocation() + " ("+ getLocationById(locations,product.getCategory().getLocation_id()).getCode() + ")";
-            product.setLocation(newLocation);
-            productList.add(product);
-
-        }
-        return productList;
-    }
-
-    /**
-     *
-     * @param jsonResponse
-     * @return A list contains {@link Category} elements
-     * @throws OpenErpException
-     */
-    protected List<Category> generateCategoryListFromJson(JSONRPC2Response jsonResponse) throws OpenErpException{
-        List<Category> categories = new ArrayList<>();
-        List<Location> locations = new ArrayList<>();
-        JSONObject result = (JSONObject) jsonResponse.getResult();
-        if (result == null) {
-            throw new OpenErpException("JsonResponse contains no result", jsonResponse.getError().getMessage());
-        }
-        JSONArray records = (JSONArray) result.get("records");
-        for(Object categoryObject : records) {
-            JSONObject productJson = (JSONObject) categoryObject;
-            Category anotherCategory = new Category();
-            anotherCategory.setCategoryId((long) productJson.get("id"));
-            anotherCategory.setName((String) productJson.get("name"));
-
-            anotherCategory.setLocation_code((String) productJson.get("code"));
-            if((productJson.get("property_stock_location") instanceof Boolean)){
-                anotherCategory.setLocation("unknown location");
-            }
-            else{
-                long location_id = (Long) ((JSONArray) productJson.get("property_stock_location")).get(0);
-                System.out.println(location_id);
-                anotherCategory.setLocation_id(location_id);
-
-                String locationString = parseLocationString((String) ((JSONArray) productJson.get("property_stock_location")).get(1));
-                anotherCategory.setLocation(locationString);
-            }
-            categories.add(anotherCategory);
-        }
-        return categories;
-    }
-
-    protected Category getCategoryObjectById(List<Category> categories, long id){
-        Category category = new Category();
-        for(Category categ : categories){
-            if(categ.getCategoryId() == id){
-                category.setCategoryId(categ.getCategoryId());
-                category.setName(categ.getName());
-                category.setLocation(categ.getLocation());
-                category.setLocation_id(categ.getLocation_id());
-                category.setLocation_code(categ.getLocation_code());
-            }
-        }
-        return category;
-    }
-
-    private String parseLocationString(String aLocationString){
-        String newString =  aLocationString.replaceAll("tatsächliche Lagerorte  / ", "");
-        return newString;
-    }
-
-
-
     public List<Location> getLocations(){
         LocationClient locationClient = new LocationClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
         return locationClient.getLocations();
     }
 
-    public Location getLocationById(final List<Location> aLocations,final long aLocationId){
+    private Location getLocationById(final List<Location> aLocations,final long aLocationId){
         Location newLocation = new Location();
         for(Location location : aLocations){
             if(location.getId() == aLocationId){
@@ -566,5 +262,18 @@ public class OpenErpClient implements OpenErpInterface {
             }
         }
         return newLocation;
+    }
+
+    private Category getCategoryObjectById(List<Category> categories, long id) {
+        Category category = new Category();
+        for (Category categ : categories) {
+            if (categ.getCategoryId() == id) {
+                category.setCategoryId(categ.getCategoryId());
+                category.setName(categ.getName());
+                category.setLocation_id(categ.getLocation_id());
+            }
+        }
+        return category;
+
     }
 }

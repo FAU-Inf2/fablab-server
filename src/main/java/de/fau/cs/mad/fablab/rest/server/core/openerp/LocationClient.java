@@ -90,4 +90,6 @@ public class LocationClient {
     private String generateRequestID() {
         return "rid" + new Random().nextInt(Integer.MAX_VALUE);
     }
+
+
 }

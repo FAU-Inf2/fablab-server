@@ -98,8 +98,9 @@ public class ProductClient {
         JSONArray records = (JSONArray) result.get("records");
 
         for (Object productObject : records) {
-            JSONObject productJson = (JSONObject) productObject;
 
+            JSONObject productJson = (JSONObject) productObject;
+            System.out.println(productJson.toString());
             String name = (productJson.get(FIELD_NAME) == null)
                     ? "unknown"
                     : (String) productJson.get(FIELD_NAME);
@@ -125,6 +126,10 @@ public class ProductClient {
                     ? "unknown location"
                     : (String) ((JSONArray) productJson.get(FIELD_LOCATION)).get(1);
 
+            long location_id = (productJson.get(FIELD_LOCATION) instanceof Boolean)
+                    ? 0
+                    : (Long) ((JSONArray) productJson.get(FIELD_LOCATION)).get(0);
+
             String unit = "";
             if (unitOfMeasureArray.size() == 2) {
                 unit = (String) unitOfMeasureArray.get(1);
@@ -139,6 +144,7 @@ public class ProductClient {
             }
             //Create a product and put it in the result list
             Product product = new Product(id, name, price, categoryId, categoryString, unit, location);
+            product.setLocation_id(location_id);
             productList.add(product);
 
         }
@@ -240,10 +246,7 @@ public class ProductClient {
 
             JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID());
             jsonRPC2Response = mJSONRPC2Session.send(jsonrpc2Request);
-            //jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID()));
-            System.out.println("JSON für SearchByCategory");
-            System.out.println(jsonrpc2Request.toString());
-            System.out.println(jsonRPC2Response.toString());
+
             try {
                 assertSessionNotExpired(jsonRPC2Response);
             } catch (OpenErpSessionExpiredException e) {

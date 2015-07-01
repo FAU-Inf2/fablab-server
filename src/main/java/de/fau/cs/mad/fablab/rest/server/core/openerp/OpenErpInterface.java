@@ -9,7 +9,6 @@ import java.util.List;
 public interface OpenErpInterface {
 
     List<Location> getLocations();
-    Location getLocationById(final List<Location> aLocations,long aLocationId);
 
     List<Category> getCategories() throws OpenErpException;
 

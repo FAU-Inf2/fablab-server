@@ -170,7 +170,7 @@ public class NewsFeedClient implements NewsInterface {
         news.setId(Long.parseLong(extractId(item.getGuid())));
         news.setTitle(item.getTitle());
         news.setDescription(parseBody(body));
-        news.setDescriptionShort(removeHTML(body));
+        news.setDescriptionShort(removeNewlines(removeHTML(body)));
         news.setIsPermaLink(false);
         news.setLink(item.getLink());
         news.setCreator(item.getCreator());
@@ -292,5 +292,16 @@ public class NewsFeedClient implements NewsInterface {
      */
     private String removeHTML(String text) {
         return text.replaceAll("<.*?>", "");
+    }
+
+    /***
+     * Removes all \n and nbsp; from the given text
+     *
+     * @param text the input text
+     * @return the parsed text
+     */
+    private String removeNewlines(String text) {
+        text = text.replaceAll("&nbsp;", "");
+        return text.replaceAll("\n", "");
     }
 }

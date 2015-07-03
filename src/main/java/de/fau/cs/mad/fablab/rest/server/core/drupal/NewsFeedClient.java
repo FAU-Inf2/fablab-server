@@ -22,6 +22,11 @@ public class NewsFeedClient implements NewsInterface {
 
     private List<News> allNews;
 
+    private Date lastUpdate;
+    private final long TIMESPAN = 3600000L;
+
+    private static final Object LOCK = new Object();
+
     private static final String LOGO = "/sites/fablab.fau.de/files/fablab_logo.png";
 
     //Tue, 12 May 2015 11:29:28 +0000
@@ -59,7 +64,7 @@ public class NewsFeedClient implements NewsInterface {
 
     @Override
     public News findById(long id) {
-        if (allNews == null) updateNews();
+        if (allNews == null || updateNeeded()) updateNews();
         for (News news : allNews) {
             if (news.getId() == id) return news;
         }
@@ -75,7 +80,7 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public List<News> find(int offset, int limit) {
-        updateNews();
+        if (allNews == null || updateNeeded()) updateNews();
 
         List<News> news = new LinkedList<>();
 
@@ -102,8 +107,30 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public List<News> findAll() {
-        updateNews();
+        if (allNews == null || updateNeeded()) updateNews();
         return allNews;
+    }
+
+    /***
+     *
+     * @return timestamp of the last update
+     */
+    @Override
+    public long lastUpdate() {
+        return lastUpdate.getTime();
+    }
+
+    /***
+     * Checks if a update is needed (if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) )
+     *
+     * @return true, if update needed; otherwise false
+     */
+    private boolean updateNeeded() {
+        Date now = new Date();
+        if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) {
+            return true;
+        }
+        return false;
     }
 
     /***
@@ -145,7 +172,12 @@ public class NewsFeedClient implements NewsInterface {
                     "The Reason is : " + e.getMessage());
         }
 
-        if (allNews != null) this.allNews = allNews;
+        synchronized(LOCK) {
+            if (allNews != null) {
+                this.allNews = allNews;
+                this.lastUpdate = new Date();
+            }
+        }
     }
 
     private List<News> parseNews(List<RSSFeedItem> items) throws ParseException {

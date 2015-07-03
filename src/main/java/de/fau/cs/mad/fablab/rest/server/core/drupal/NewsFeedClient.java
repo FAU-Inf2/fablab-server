@@ -23,7 +23,8 @@ public class NewsFeedClient implements NewsInterface {
     private List<News> allNews;
 
     private Date lastUpdate;
-    private final long TIMESPAN = 3600000L;
+    //private final long TIMESPAN = 3600000L; // 1h
+    private final long TIMESPAN = 600000L; // 10 min
 
     private static final Object LOCK = new Object();
 
@@ -64,7 +65,7 @@ public class NewsFeedClient implements NewsInterface {
 
     @Override
     public News findById(long id) {
-        if (allNews == null || updateNeeded()) updateNews();
+        if (updateNeeded()) updateNews();
         for (News news : allNews) {
             if (news.getId() == id) return news;
         }
@@ -80,7 +81,7 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public List<News> find(int offset, int limit) {
-        if (allNews == null || updateNeeded()) updateNews();
+        if (updateNeeded()) updateNews();
 
         List<News> news = new LinkedList<>();
 
@@ -107,7 +108,7 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public List<News> findAll() {
-        if (allNews == null || updateNeeded()) updateNews();
+        if (updateNeeded()) updateNews();
         return allNews;
     }
 
@@ -126,10 +127,10 @@ public class NewsFeedClient implements NewsInterface {
      * @return true, if update needed; otherwise false
      */
     private boolean updateNeeded() {
+        if (allNews == null) return true;
+
         Date now = new Date();
-        if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) {
-            return true;
-        }
+        if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) return true;
         return false;
     }
 

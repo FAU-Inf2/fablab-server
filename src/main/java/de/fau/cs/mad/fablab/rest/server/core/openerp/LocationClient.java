@@ -55,7 +55,7 @@ public class LocationClient {
             categoryParams.put("sort", "");
             categoryParams.put("fields", fields);
 
-            jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, generateRequestID()));
+            jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, OpenERPUtil.generateRequestID()));
             JSONObject result = (JSONObject) jsonRPC2Response.getResult();
             JSONArray records = (JSONArray) result.get("records");
 
@@ -80,15 +80,6 @@ public class LocationClient {
         }
 
         return locations;
-    }
-
-    /**
-     * Generate a random request id
-     *
-     * @return
-     */
-    private String generateRequestID() {
-        return "rid" + new Random().nextInt(Integer.MAX_VALUE);
     }
 
 

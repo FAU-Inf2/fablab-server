@@ -31,7 +31,7 @@ public class ERPTest {
         List<Location> locations = new ArrayList<>();
 
         try{
-            products = openErp.getProducts(50,0);
+            products = openErp.getProducts(0,0);
             //searchedProducts = openErp.searchForProductsByName("Holz", 0, 0);
             //searchedProductsCategory = openErp.searchForProductsByCategory("1", 5, 0);
             //searchedProductId = openErp.searchForProductsById("0008");

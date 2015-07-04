@@ -59,8 +59,8 @@ public class CategoryClient {
 
             JSONArray domain = new JSONArray();
             JSONArray categoryFields = new JSONArray();
-            categoryFields.add(0, "name");
-            categoryFields.add(1, "id");
+            categoryFields.add(0,"name");
+            categoryFields.add(1,"id");
             categoryFields.add(2,"property_stock_location");
 
 
@@ -72,7 +72,7 @@ public class CategoryClient {
             categoryParams.put("sort", "");
             categoryParams.put("fields", categoryFields);
 
-            jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, generateRequestID()));
+            jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, OpenERPUtil.generateRequestID()));
             categories = generateCategoryListFromJson(jsonRPC2Response);
 
         } catch (JSONRPC2SessionException e) {
@@ -112,12 +112,4 @@ public class CategoryClient {
         return newString;
     }
 
-    /**
-     * Generate a random request id
-     *
-     * @return
-     */
-    private String generateRequestID() {
-        return "rid" + new Random().nextInt(Integer.MAX_VALUE);
-    }
 }

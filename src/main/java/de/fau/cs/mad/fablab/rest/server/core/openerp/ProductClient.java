@@ -60,7 +60,7 @@ public class ProductClient {
 
         JSONArray domain = new JSONArray();
 
-        jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID()));
+        jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), OpenERPUtil.generateRequestID()));
 
         try {
             assertSessionNotExpired(jsonRPC2Response);
@@ -69,11 +69,9 @@ public class ProductClient {
             mJSONRPC2Session.setURL(mSearchReadUrl);
             jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD,
                     getProductParams(limit, offset, domain),
-                    generateRequestID()));
+                    OpenERPUtil.generateRequestID()));
 
         }
-
-    System.out.println(jsonRPC2Response.toString());
     } catch (JSONRPC2SessionException e) {
         e.printStackTrace();
     }
@@ -100,7 +98,6 @@ public class ProductClient {
         for (Object productObject : records) {
 
             JSONObject productJson = (JSONObject) productObject;
-            System.out.println(productJson.toString());
             String name = (productJson.get(FIELD_NAME) == null)
                     ? "unknown"
                     : (String) productJson.get(FIELD_NAME);
@@ -195,11 +192,8 @@ public class ProductClient {
             domain.add(domain.size(), filterSaleOk);
             domain.add(domain.size(), filterPrice);
 
-            JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID());
+            JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), OpenERPUtil.generateRequestID());
             jsonRPC2Response = mJSONRPC2Session.send(jsonrpc2Request);
-            System.out.println("JSON für SearchByName");
-            System.out.println(jsonrpc2Request.toString());
-            System.out.println(jsonRPC2Response.toString());
             try {
                 assertSessionNotExpired(jsonRPC2Response);
             } catch (OpenErpSessionExpiredException e) {
@@ -207,7 +201,7 @@ public class ProductClient {
                 mJSONRPC2Session.setURL(mSearchReadUrl);
                 jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD,
                         getProductParams(limit, offset, domain),
-                        generateRequestID()));
+                        OpenERPUtil.generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
@@ -244,7 +238,7 @@ public class ProductClient {
             domain.add(2, filterPrice);
             domain.add(3, whereCategoryId);
 
-            JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), generateRequestID());
+            JSONRPC2Request jsonrpc2Request = new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), OpenERPUtil.generateRequestID());
             jsonRPC2Response = mJSONRPC2Session.send(jsonrpc2Request);
 
             try {
@@ -254,7 +248,7 @@ public class ProductClient {
                 mJSONRPC2Session.setURL(mSearchReadUrl);
                 jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD,
                         getProductParams(limit, offset, domain),
-                        generateRequestID()));
+                        OpenERPUtil.generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
@@ -282,28 +276,19 @@ public class ProductClient {
             JSONArray domain = new JSONArray();
             domain.add(0, whereNameLike);
 
-            jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(1, 0, domain), generateRequestID()));
+            jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(1, 0, domain), OpenERPUtil.generateRequestID()));
 
             try {
                 assertSessionNotExpired(jsonRPC2Response);
             } catch (OpenErpSessionExpiredException e) {
                 //do the request one more time.
                 mJSONRPC2Session.setURL(mSearchReadUrl);
-                jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(1, 0, domain), generateRequestID()));
+                jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(1, 0, domain), OpenERPUtil.generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
         return generateProductListFromJson(jsonRPC2Response).get(0);
-    }
-
-    /**
-     * Generate a random request id
-     *
-     * @return
-     */
-    private String generateRequestID() {
-        return "rid" + new Random().nextInt(Integer.MAX_VALUE);
     }
 
     /***

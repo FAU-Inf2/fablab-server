@@ -26,30 +26,6 @@ public class OpenErpClient implements OpenErpInterface {
 
     static final String METHOD = "call";
 
-    static final String FIELD_CODE = "code";
-    static final String FIELD_NAME = "name";
-    static final String FIELD_RECEPTION_COUNT = "reception_count";
-    static final String FIELD_VIRT_AVAILABLE = "virtual_available";
-    static final String FIELD_LIST_PRICE = "lst_price";
-    static final String FIELD_QTY_AVAILABLE = "qty_available";
-    static final String FIELD_UNIT_OF_MEASURE = "uom_id";
-    static final String FIELD_CATEGORY = "categ_id";
-    static final String FIELD_LOCATION = "property_stock_location";
-
-
-    private static JSONArray fields = new JSONArray();
-
-    static {
-        fields.add(0, FIELD_CODE);
-        fields.add(1, FIELD_RECEPTION_COUNT);
-        fields.add(2, FIELD_NAME);
-        fields.add(3, FIELD_VIRT_AVAILABLE);
-        fields.add(4, FIELD_LIST_PRICE);
-        fields.add(5, FIELD_QTY_AVAILABLE);
-        fields.add(6, FIELD_UNIT_OF_MEASURE);
-        fields.add(7, FIELD_CATEGORY);
-        fields.add(8, FIELD_LOCATION);
-    }
 
     private URL mAuthenticateUrl;
     private URL mSearchReadUrl;
@@ -117,7 +93,7 @@ public class OpenErpClient implements OpenErpInterface {
         authParams.put("login", config.getUsername());
         authParams.put("password", config.getPassword());
 
-        JSONRPC2Request authRequest = new JSONRPC2Request(METHOD, authParams, generateRequestID());
+        JSONRPC2Request authRequest = new JSONRPC2Request(METHOD, authParams, OpenERPUtil.generateRequestID());
         JSONRPC2Response jsonRPC2Response;
 
         try {
@@ -136,14 +112,6 @@ public class OpenErpClient implements OpenErpInterface {
         }
     }
 
-    /**
-     * Generate a random request id
-     *
-     * @return
-     */
-    private String generateRequestID() {
-        return "rid" + new Random().nextInt(Integer.MAX_VALUE);
-    }
 
     /***
      * Requests a lists of all Categories as a tree
@@ -254,7 +222,6 @@ public class OpenErpClient implements OpenErpInterface {
         Location newLocation = new Location();
         for(Location location : aLocations){
             if(location.getId() == aLocationId){
-                System.out.println("found location with id: " + aLocationId);
                 newLocation.setId(location.getId());
                 newLocation.setName(location.getName());
                 newLocation.setCode(location.getCode());

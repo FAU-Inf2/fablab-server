@@ -29,8 +29,8 @@ public class ICalClient implements ICalInterface {
     private List<ICal> events;
 
     private java.util.Date lastUpdate;
-    //private final long TIMESPAN = 43200000L; // 12h
-    private final long TIMESPAN = 600000L; // 10 min
+    private final long TIMESPAN = 43200000L; // 12h
+    //private final long TIMESPAN = 600000L; // 10 min
     private static final Object LOCK = new Object();
 
     private static final String BEGIN_CAL = "BEGIN:VCALENDAR";

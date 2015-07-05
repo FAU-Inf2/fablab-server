@@ -8,4 +8,5 @@ public interface ICalInterface {
     public ICal findById(Long id);
     public List<ICal> findAll();
     public List<ICal> find(int offset, int limit);
+    public long lastUpdate();
 }

@@ -6,10 +6,8 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
+import java.util.Date;
 
 import de.fau.cs.mad.fablab.rest.core.ICal;
 import de.fau.cs.mad.fablab.rest.server.configuration.ICalConfiguration;
@@ -19,6 +17,7 @@ import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.filter.Filter;
 import net.fortuna.ical4j.filter.PeriodRule;
 import net.fortuna.ical4j.model.*;
+import net.fortuna.ical4j.model.Calendar;
 
 public class ICalClient implements ICalInterface {
 
@@ -28,6 +27,11 @@ public class ICalClient implements ICalInterface {
     private URL iCalUrl;
 
     private List<ICal> events;
+
+    private java.util.Date lastUpdate;
+    //private final long TIMESPAN = 43200000L; // 12h
+    private final long TIMESPAN = 600000L; // 10 min
+    private static final Object LOCK = new Object();
 
     private static final String BEGIN_CAL = "BEGIN:VCALENDAR";
     private static final String END_CAL = "END:VCALENDAR";
@@ -66,7 +70,7 @@ public class ICalClient implements ICalInterface {
 
     @Override
     public ICal findById(Long id) {
-        if (events == null) updateEvents();
+        if (updateNeeded()) updateEvents();
         for (ICal event : events) {
             if (event.getId() == id) return event;
         }
@@ -81,7 +85,7 @@ public class ICalClient implements ICalInterface {
      */
     @Override
     public List<ICal> findAll() {
-        updateEvents();
+        if (updateNeeded()) updateEvents();
         return events;
     }
 
@@ -94,7 +98,7 @@ public class ICalClient implements ICalInterface {
      * @return a List of {@link ICal}
      */
     public List<ICal> find(int offset, int limit) {
-        updateEvents();
+        if (updateNeeded()) updateEvents();
 
         List<ICal> events = new LinkedList<>();
 
@@ -112,6 +116,28 @@ public class ICalClient implements ICalInterface {
             numElements++;
         }
         return events;
+    }
+
+    /***
+     *
+     * @return timestamp of the last update
+     */
+    @Override
+    public long lastUpdate() {
+        return lastUpdate.getTime();
+    }
+
+    /***
+     * Checks if a update is needed (if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) )
+     *
+     * @return true, if update needed; otherwise false
+     */
+    private boolean updateNeeded() {
+        if (events == null) return true;
+
+        Date now = new Date();
+        if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) return true;
+        return false;
     }
 
     /***
@@ -145,7 +171,12 @@ public class ICalClient implements ICalInterface {
 
         Collections.sort(events, new ICalComparator());
 
-        if (events != null) this.events = events;
+        synchronized (LOCK) {
+            if (events != null) {
+                this.events = events;
+                this.lastUpdate = new Date();
+            }
+        }
     }
 
     /***

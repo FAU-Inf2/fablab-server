@@ -57,4 +57,10 @@ public class ICalResource implements ICalApi {
         return result;
     }
 
+    @UnitOfWork
+    @Override
+    public long lastUpdate() {
+        return this.facade.lastUpdate();
+    }
+
 }

@@ -124,7 +124,8 @@ public class ICalClient implements ICalInterface {
      */
     @Override
     public long lastUpdate() {
-        return lastUpdate.getTime();
+        if (lastUpdate != null) return lastUpdate.getTime();
+        else return 0;
     }
 
     /***

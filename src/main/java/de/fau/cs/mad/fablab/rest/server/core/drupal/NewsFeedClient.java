@@ -118,7 +118,8 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public long lastUpdate() {
-        return lastUpdate.getTime();
+        if (lastUpdate != null) return lastUpdate.getTime();
+        else return 0;
     }
 
     /***

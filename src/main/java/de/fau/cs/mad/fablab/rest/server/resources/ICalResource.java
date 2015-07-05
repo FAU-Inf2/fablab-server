@@ -59,7 +59,7 @@ public class ICalResource implements ICalApi {
 
     @UnitOfWork
     @Override
-    public long lastUpdate() {
+    public Long lastUpdate() {
         return this.facade.lastUpdate();
     }
 

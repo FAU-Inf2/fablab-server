@@ -44,7 +44,7 @@ public class NewsResource implements NewsApi {
 
     @UnitOfWork
     @Override
-    public long lastUpdate() {
+    public Long lastUpdate() {
         return this.facade.lastUpdate();
     }
 

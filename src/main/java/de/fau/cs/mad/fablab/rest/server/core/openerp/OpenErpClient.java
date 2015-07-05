@@ -1,16 +1,9 @@
 package de.fau.cs.mad.fablab.rest.server.core.openerp;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
-import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import de.fau.cs.mad.fablab.rest.core.Category;
 import de.fau.cs.mad.fablab.rest.core.Location;
 import de.fau.cs.mad.fablab.rest.core.Product;
 import de.fau.cs.mad.fablab.rest.server.configuration.OpenErpConfiguration;
-import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,18 +14,8 @@ public class OpenErpClient implements OpenErpInterface {
     private static OpenErpInterface instance;
     private static OpenErpConfiguration config = null;
 
-    static final String REQUEST_AUTHENTICATE = "/web/session/authenticate";
-    static final String REQUEST_SEARCH_READ = "/web/dataset/search_read";
-
-    static final String METHOD = "call";
-
-
-    private URL mAuthenticateUrl;
     private URL mSearchReadUrl;
-    private JSONRPC2Session mJsonSession;
-    private JSONObject mUserContext;
-    private String mSessionId;
-
+    private OpenERPConnector mOpenERPConnector;
 
     /***
      * Singleton getInstance()
@@ -64,54 +47,17 @@ public class OpenErpClient implements OpenErpInterface {
      * @throws MalformedURLException if the hostname is not a valid url
      */
     private OpenErpClient() throws MalformedURLException {
-
         //If any of these variables is null, print an error message and exit(1)
         if (config == null || !config.validate()) {
-
             System.err.println("ERROR while initializing OpenErpClient. Configuration vars missing.\n" +
                                        "The configuration (username, password, hostname and database) has to be set \n " +
                                        "using the class OpenErpConfiguration.\n");
             System.exit(1);
         }
-
-        mAuthenticateUrl = new URL(config.getHostname() + REQUEST_AUTHENTICATE);
-        mSearchReadUrl = new URL(config.getHostname() + REQUEST_SEARCH_READ);
-        authenticate();
+        mSearchReadUrl = new URL(config.getHostname() + OpenERPConst.REQUEST_SEARCH_READ);
+        mOpenERPConnector = new OpenERPConnector(config,OpenERPConst.REQUEST_AUTHENTICATE);
+        mOpenERPConnector.authenticate();
     }
-
-    /***
-     * Authenticates this JsonSession to the service.
-     * This method has to be called before doing any requests to the service.
-     */
-    private void authenticate() {
-
-        mJsonSession = new JSONRPC2Session(mAuthenticateUrl);
-        mJsonSession.getOptions().acceptCookies(true);
-
-        Map<String, Object> authParams = new HashMap<>();
-        authParams.put("db", config.getDatabase());
-        authParams.put("login", config.getUsername());
-        authParams.put("password", config.getPassword());
-
-        JSONRPC2Request authRequest = new JSONRPC2Request(METHOD, authParams, OpenERPUtil.generateRequestID());
-        JSONRPC2Response jsonRPC2Response;
-
-        try {
-            jsonRPC2Response = mJsonSession.send(authRequest);
-            mSessionId = ((JSONObject) jsonRPC2Response.getResult()).get("session_id").toString();
-
-            //get the user_context from the connection result, to send to OpenERP in the next request
-            mUserContext = (JSONObject) ((JSONObject) jsonRPC2Response.getResult()).get("user_context");
-            mUserContext.put("lang", "de_DE");
-            mUserContext.put("tz", "Europe/Berlin");
-            mUserContext.put("uid", "27");
-            mUserContext.put("search_default_filter_to_sell", "1");
-
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
-        }
-    }
-
 
     /***
      * Requests a lists of all Categories as a tree
@@ -121,7 +67,7 @@ public class OpenErpClient implements OpenErpInterface {
      */
     @Override
     public List<Category> getCategories() throws OpenErpException{
-        CategoryClient categoryClient = new CategoryClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         return categoryClient.getCategories();
     }
 
@@ -134,13 +80,13 @@ public class OpenErpClient implements OpenErpInterface {
      */
     @Override
     public List<Product> getProducts(int limit, int offset) throws OpenErpException {
-        CategoryClient categoryClient = new CategoryClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
-        LocationClient locationClient = new LocationClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
+        LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
 
 
-        ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         List<Product> products = productClient.getProducts(limit,offset);
 
         for(Product product : products){
@@ -161,14 +107,14 @@ public class OpenErpClient implements OpenErpInterface {
      */
     @Override
     public List<Product> searchForProductsByName(String searchString, int limit, int offset) throws OpenErpException {
-        ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         return productClient.searchForProductsByName(searchString, limit, offset);
     }
 
 
     @Override
     public List<Product> searchForProductsByCategory(String searchString, int limit, int offset) throws OpenErpException {
-        ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         return productClient.searchForProductsByCategory(searchString, limit, offset);
     }
 
@@ -179,11 +125,11 @@ public class OpenErpClient implements OpenErpInterface {
      */
     @Override
     public Product searchForProductsById(String id) throws OpenErpException {
-        ProductClient productClient = new ProductClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         Product product = productClient.searchForProductsById(id);
 
-        CategoryClient categoryClient = new CategoryClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
-        LocationClient locationClient = new LocationClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
+        LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
 
@@ -193,28 +139,8 @@ public class OpenErpClient implements OpenErpInterface {
     }
 
 
-    /***
-     * Checks if a given {@link JSONRPC2Response} contains an error code 300
-     * if so, it might be an expired session.
-     * If the param contains an error 300, this method re-authenticates the client and throws an
-     * {@link OpenErpSessionExpiredException}
-     *
-     * @param response the {@link JSONRPC2Response} to check
-     * @throws OpenErpSessionExpiredException when response contains error code 300
-     */
-    private void assertSessionNotExpired(JSONRPC2Response response) throws OpenErpSessionExpiredException {
-        if (response.getError() != null) {
-            if (response.getError().getCode() == 300) {
-                //instantly try to re-authenticate at the service
-                authenticate();
-                //notify the caller about the expired session
-                throw new OpenErpSessionExpiredException();
-            }
-        }
-    }
-
     public List<Location> getLocations(){
-        LocationClient locationClient = new LocationClient(mJsonSession,mSearchReadUrl,mSessionId,mUserContext);
+        LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         return locationClient.getLocations();
     }
 
@@ -241,6 +167,5 @@ public class OpenErpClient implements OpenErpInterface {
             }
         }
         return category;
-
     }
 }

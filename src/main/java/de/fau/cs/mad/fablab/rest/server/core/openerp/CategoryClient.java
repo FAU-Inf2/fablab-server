@@ -20,7 +20,8 @@ public class CategoryClient {
     static final String FIELD_CODE = "code";
     static final String FIELD_NAME = "name";
     static final String FIELD_LOCATION = "property_stock_location";
-
+    static final String FIELD_CHILDS = "child_id";
+    static final String FIELD_PARENT = "parent_id";
 
     private static JSONArray fields = new JSONArray();
 
@@ -29,19 +30,20 @@ public class CategoryClient {
         fields.add(1, FIELD_NAME);
         fields.add(2, FIELD_LOCATION);
         fields.add(3, FIELD_CODE);
+        fields.add(4, FIELD_CHILDS);
+        fields.add(5, FIELD_PARENT);
     }
-
 
     private JSONRPC2Session mJSONRPC2Session;
     private URL mSearchReadUrl;
     private String mJSONSessionId;
     private JSONObject mUsercontext;
 
-    public CategoryClient(JSONRPC2Session aJsonSession, URL aSearchReadURL, String aJSONJsonrpc2SessionId,JSONObject aUsercontext){
-        mJSONRPC2Session = aJsonSession;
+    public CategoryClient(OpenERPConnector aOpenERPConnector , URL aSearchReadURL){
+        mJSONRPC2Session = aOpenERPConnector.getOpenERPJsonSession();
         mSearchReadUrl = aSearchReadURL;
-        mJSONSessionId = aJSONJsonrpc2SessionId;
-        mUsercontext = aUsercontext;
+        mJSONSessionId = aOpenERPConnector.getOpenERPSessionId();
+        mUsercontext = aOpenERPConnector.getOpenERPUserContext();
     }
 
     /***
@@ -56,23 +58,17 @@ public class CategoryClient {
         JSONRPC2Response jsonRPC2Response = null;
         try {
             mJSONRPC2Session.setURL(mSearchReadUrl);
-
             JSONArray domain = new JSONArray();
-            JSONArray categoryFields = new JSONArray();
-            categoryFields.add(0,"name");
-            categoryFields.add(1,"id");
-            categoryFields.add(2,"property_stock_location");
-
-
             Map<String, Object> categoryParams = new HashMap<>();
             categoryParams.put("session_id", mJSONSessionId);
             categoryParams.put("context", mUsercontext);
             categoryParams.put("domain", domain);
             categoryParams.put("model", "product.category");
             categoryParams.put("sort", "");
-            categoryParams.put("fields", categoryFields);
+            categoryParams.put("fields", fields);
 
             jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, OpenERPUtil.generateRequestID()));
+            System.out.println(jsonRPC2Response.toString());
             categories = generateCategoryListFromJson(jsonRPC2Response);
 
         } catch (JSONRPC2SessionException e) {
@@ -94,22 +90,32 @@ public class CategoryClient {
             Category anotherCategory = new Category();
             anotherCategory.setCategoryId((long) productJson.get("id"));
             anotherCategory.setName((String) productJson.get("name"));
-            if((productJson.get("property_stock_location") instanceof Boolean)){
+
+            if((productJson.get(FIELD_LOCATION) instanceof Boolean)){
                 anotherCategory.setLocation_id(0);
             }
             else{
-                long location_id = (Long) ((JSONArray) productJson.get("property_stock_location")).get(0);
+                long location_id = (Long) ((JSONArray) productJson.get(FIELD_LOCATION)).get(0);
                 anotherCategory.setLocation_id(location_id);
             }
+
+            JSONArray childArray = (JSONArray) productJson.get(FIELD_CHILDS);
+
+            List<Long> childIds = new ArrayList<>();
+            if(childArray.size() > 0){
+                for(int index = 0; index < childArray.size();index++){
+                    childIds.add(new Long((long)childArray.get(index)));
+                }
+            }
+            anotherCategory.setCategories(childIds);
+
             categories.add(anotherCategory);
         }
         return categories;
     }
 
-
     private String parseLocationString(String aLocationString){
-        String newString =  aLocationString.replaceAll("tatsächliche Lagerorte  / ", "");
-        return newString;
+        return  aLocationString.replaceAll("tatsächliche Lagerorte  / ", "");
     }
 
 }

@@ -31,11 +31,11 @@ public class ERPTest {
         List<Location> locations = new ArrayList<>();
 
         try{
-            products = openErp.getProducts(0,0);
+            //products = openErp.getProducts(0,0);
             //searchedProducts = openErp.searchForProductsByName("Holz", 0, 0);
             //searchedProductsCategory = openErp.searchForProductsByCategory("1", 5, 0);
             //searchedProductId = openErp.searchForProductsById("0008");
-            //categories = openErp.getCategories();
+            categories = openErp.getCategories();
             //locations = openErp.getLocations();
 
         }catch (OpenErpException erp){
@@ -80,6 +80,13 @@ public class ERPTest {
         for(Category loc : categories){
             index++;
             System.out.println(index + " " + loc.getName() + " " + loc.getLocation_id());
+
+            for(Long aChildId : loc.getCategories()){
+                System.out.print(aChildId + " ");
+            }
+            if(loc.getCategories().size() > 0){
+                System.out.println();
+            }
         }
     }
 }

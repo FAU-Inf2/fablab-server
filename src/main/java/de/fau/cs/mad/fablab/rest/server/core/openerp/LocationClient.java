@@ -31,11 +31,11 @@ public class LocationClient {
     private String mJSONSessionId;
     private JSONObject mUsercontext;
 
-    public LocationClient(JSONRPC2Session aJsonSession, URL aSearchReadURL, String aJSONJsonrpc2SessionId,JSONObject aUsercontext){
-        mJSONRPC2Session = aJsonSession;
+    public LocationClient(OpenERPConnector aOpenERPConnector , URL aSearchReadURL){
+        mJSONRPC2Session = aOpenERPConnector.getOpenERPJsonSession();
         mSearchReadUrl = aSearchReadURL;
-        mJSONSessionId = aJSONJsonrpc2SessionId;
-        mUsercontext = aUsercontext;
+        mJSONSessionId = aOpenERPConnector.getOpenERPSessionId();
+        mUsercontext = aOpenERPConnector.getOpenERPUserContext();
     }
 
     public List<Location> getLocations(){

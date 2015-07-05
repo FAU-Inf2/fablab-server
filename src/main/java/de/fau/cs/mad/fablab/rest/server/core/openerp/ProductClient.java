@@ -45,11 +45,11 @@ public class ProductClient {
     private String mJSONSessionId;
     private JSONObject mUsercontext;
 
-    public ProductClient(JSONRPC2Session aJsonSession, URL aSearchReadURL, String aJSONJsonrpc2SessionId,JSONObject aUsercontext){
-        mJSONRPC2Session = aJsonSession;
+    public ProductClient(OpenERPConnector aOpenERPConnector , URL aSearchReadURL){
+        mJSONRPC2Session = aOpenERPConnector.getOpenERPJsonSession();
         mSearchReadUrl = aSearchReadURL;
-        mJSONSessionId = aJSONJsonrpc2SessionId;
-        mUsercontext = aUsercontext;
+        mJSONSessionId = aOpenERPConnector.getOpenERPSessionId();
+        mUsercontext = aOpenERPConnector.getOpenERPUserContext();
     }
 
 

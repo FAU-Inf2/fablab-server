@@ -14,6 +14,11 @@
             <p>URL += <code>?code=XXX</code> für bestimmten Warenkorb</p>
         </header>
 
+        <div id="createNewCartCode" class="container">
+            <p class="button bgDarkGreen" onclick="createNewCartCode()">gültigen Code generieren</p>
+            <small>*Das Erstellen eines neuen Codes macht diesen Simulator zum aktuell gültigen, sollten parallel jemand anderes ebenfalls diesen Dummy benutzten, wird seine Session ungültig. </small>
+        </div>
+
         <div id="hasCart" class="container" >
             <h2 class="center">Warenkorb:</h2>
 
@@ -53,7 +58,7 @@
             <small>
             Warenkorb für Code: <input type="text" id="setCode" />
                 <input type="button" onclick="showCartForCodeButtonTouched()" value="Anzeigen" id="" />
-                <input type="button" onclick="newQRCode()" value="neuen QR Erzeugen" id="" />
+                <input type="button" onclick="createNewCartCode()" value="neuen QR Erzeugen" id="" />
             </small>
         </footer>
     </body>

@@ -167,6 +167,11 @@ public class NewsClient implements NewsInterface {
         return allNews;
     }
 
+    @Override
+    public long lastUpdate() {
+        return -1;
+    }
+
     /***
      * Parses a {@link DrupalNode} into a {@link News}-object
      *

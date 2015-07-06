@@ -149,6 +149,7 @@ buildNumber.properties
 
 #database files
 server-db.*.db
+src/dist/schema.sql
 
 #log files
 *.log

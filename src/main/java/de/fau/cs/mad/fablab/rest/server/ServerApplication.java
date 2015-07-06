@@ -9,7 +9,6 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushResource;
-import de.fau.cs.mad.fablab.rest.core.DoorState;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
@@ -26,8 +25,10 @@ import io.dropwizard.jersey.setup.JerseyContainerHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.servlet.ServletContainer;
+import org.hibernate.cfg.Configuration;
 
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 
 /**
  * The Core of our rest server
@@ -43,6 +44,7 @@ class ServerApplication extends Application<ServerConfiguration> {
     public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
 
         bootstrap.addBundle(hibernate);
+
         //enables the use of environment variables in yaml config file
         bootstrap.setConfigurationSourceProvider(new SubstitutingSourceProvider(
                 bootstrap.getConfigurationSourceProvider(),
@@ -62,6 +64,7 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         CacheBuilderSpec.disableCaching();
 
+        exportDatabaseSchema(configuration.getDatabase());
 
         // add health check and resource to our jersey environment
         environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
@@ -143,5 +146,27 @@ class ServerApplication extends Application<ServerConfiguration> {
             return configuration.getDatabase();
         }
     };
+
+    public void exportDatabaseSchema(DataSourceFactory database) {
+
+        Properties p = new Properties();
+        p.putAll(database.getProperties());
+
+        Configuration config = new Configuration();
+        config.setProperties(p);
+
+        config.addAnnotatedClass(News.class);
+        config.addAnnotatedClass(ICal.class);
+        config.addAnnotatedClass(Product.class);
+        config.addAnnotatedClass(Cart.class);
+        config.addAnnotatedClass(CartServer.class);
+        config.addAnnotatedClass(CartEntry.class);
+        config.addAnnotatedClass(CartEntryServer.class);
+        config.addAnnotatedClass(DoorState.class);
+        config.addAnnotatedClass(RegistrationId.class);
+
+        SchemaExporter exporter = new SchemaExporter(config, "src/dist/schema.sql");
+        exporter.export();
+    }
 }
 

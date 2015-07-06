@@ -74,7 +74,8 @@ public class dummyData {
                 "20140522T100000Z",
                 "https://fablab.fau.de/termine/2014-05-08-studentlab",
                 "FabLab",
-                "Betreuer: Christopher S\\, Christopher R");
+                "Betreuer: Christopher S\\, Christopher R",
+                false);
         session.save(c1);
 
         ICal c2 = new ICal("calendar.494.field_datetime.2.1",
@@ -83,7 +84,8 @@ public class dummyData {
                 "20140522T120000Z",
                 "https://fablab.fau.de/termine/2014-05-08-studentlab-0",
                 "FabLab",
-                "Betreuer: Lucas\\, Max B");
+                "Betreuer: Lucas\\, Max B",
+                false);
         session.save(c2);
 
         ICal c3 = new ICal("calendar.472.field_datetime.0.2",
@@ -92,7 +94,8 @@ public class dummyData {
                 "20140523T200000Z",
                 "https://fablab.fau.de/termine/2014-05-23-openlab",
                 "FabLab, siehe Seite Kontakt und Ort",
-                "Das FabLab ist geöffnet, du kannst einfach so vorbeikommen. Wenn es nicht nur um Kleinigkeiten geht, sollte man spätestens zwei Stunden vor Ende vorbeikommen.");
+                "Das FabLab ist geöffnet, du kannst einfach so vorbeikommen. Wenn es nicht nur um Kleinigkeiten geht, sollte man spätestens zwei Stunden vor Ende vorbeikommen.",
+                false);
         session.save(c3);
 
         ICal c4 = new ICal("calendar.495.field_datetime.2.3",
@@ -101,7 +104,8 @@ public class dummyData {
                 "20140526T140000Z",
                 "https://fablab.fau.de/termine/2014-05-12-studentlab",
                 "FabLab",
-                "Betreuer: Lucas\\, Michael J\\, Sonja");
+                "Betreuer: Lucas\\, Michael J\\, Sonja",
+                false);
         session.save(c4);
     }
 }

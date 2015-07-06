@@ -3,6 +3,9 @@ package de.fau.cs.mad.fablab.rest.server.core.drupal;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +24,12 @@ public class NewsFeedClient implements NewsInterface {
     private String feedUrl;
 
     private List<News> allNews;
+
+    private Date lastUpdate;
+    //private final long TIMESPAN = 3600000L; // 1h
+    private final long TIMESPAN = 600000L; // 10 min
+
+    private static final Object LOCK = new Object();
 
     private static final String LOGO = "/sites/fablab.fau.de/files/fablab_logo.png";
 
@@ -59,7 +68,7 @@ public class NewsFeedClient implements NewsInterface {
 
     @Override
     public News findById(long id) {
-        if (allNews == null) updateNews();
+        if (updateNeeded()) updateNews();
         for (News news : allNews) {
             if (news.getId() == id) return news;
         }
@@ -75,7 +84,7 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public List<News> find(int offset, int limit) {
-        updateNews();
+        if (updateNeeded()) updateNews();
 
         List<News> news = new LinkedList<>();
 
@@ -102,8 +111,31 @@ public class NewsFeedClient implements NewsInterface {
      */
     @Override
     public List<News> findAll() {
-        updateNews();
+        if (updateNeeded()) updateNews();
         return allNews;
+    }
+
+    /***
+     *
+     * @return timestamp of the last update
+     */
+    @Override
+    public long lastUpdate() {
+        if (lastUpdate != null) return lastUpdate.getTime();
+        else return 0;
+    }
+
+    /***
+     * Checks if a update is needed (if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) )
+     *
+     * @return true, if update needed; otherwise false
+     */
+    private boolean updateNeeded() {
+        if (allNews == null) return true;
+
+        Date now = new Date();
+        if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) return true;
+        return false;
     }
 
     /***
@@ -145,7 +177,12 @@ public class NewsFeedClient implements NewsInterface {
                     "The Reason is : " + e.getMessage());
         }
 
-        if (allNews != null) this.allNews = allNews;
+        synchronized(LOCK) {
+            if (allNews != null) {
+                this.allNews = allNews;
+                this.lastUpdate = new Date();
+            }
+        }
     }
 
     private List<News> parseNews(List<RSSFeedItem> items) throws ParseException {
@@ -164,46 +201,36 @@ public class NewsFeedClient implements NewsInterface {
      */
     private News getNewsFromRSSFeedItem(RSSFeedItem item) throws ParseException {
         String body = item.getDescription();
-        String imageLink = extractImageLink(body);
+        Document doc = Jsoup.parse(body, fabUrl);
+        String imageLink = extractImageLink(doc);
 
         News news = new News();
         news.setId(Long.parseLong(extractId(item.getGuid())));
         news.setTitle(item.getTitle());
-        news.setDescription(parseBody(body));
-        news.setDescriptionShort(removeHTML(body));
+        news.setDescription(parseBody(doc));
+        news.setDescriptionShort(removeHTML(doc));
         news.setIsPermaLink(false);
         news.setLink(item.getLink());
         news.setCreator(item.getCreator());
         news.setPubDate(dateFormat.parse(item.getPubDate()));
-        //news.setPubDate(new Date(item.getPubDate()));
         news.setLinkToPreviewImage(imageLink);
         news.setCategory(item.getCategory());
         return news;
     }
 
     /***
-     * Extracts the first image of a given 'body'-String and returns it
+     * Extracts the first image of a given {@link Document} and returns it
      *
-     * @param body the input body
+     * @param doc the input {@link Document}
      * @return the link to the image, if no image is found return link to FabLab-Logo
      */
-    private String extractImageLink(String body) {
-        String[] parts = body.split("<img.*?src=.*?\"", 2);
+    private String extractImageLink(Document doc) {
+        Element image = doc.select("img").first();
 
         // no image found, return null
-        if (parts.length == 1) return null;//return fabUrl + LOGO;
+        if (image == null) return null;
 
-        String link = "";
-        int i = 0;
-        char c = '\0';
-        while ((c = parts[1].charAt(i)) != '\"') {
-            // if relative link, insert fabUrl
-            if (i == 0 && c == '/') link += fabUrl;
-            link += c;
-            i++;
-        }
-
-        return link;
+        return image.attr("abs:src");
     }
 
     private String extractId(String guid) {
@@ -213,84 +240,85 @@ public class NewsFeedClient implements NewsInterface {
     /***
      * Removes the first image, fixes relative links and replaces <li> and </li>-tags
      *
-     * @param body the input body
+     * @param doc the input document
      * @return the parsed body
      */
-    private String parseBody(String body) {
-        body = removeFirstImg(body);
-        body = fixLinks(body);
-        body = fixListElements(body);
-        return body;
+    private String parseBody(Document doc) {
+        doc = removeFirstImg(doc);
+        doc = fixElements(doc);
+        return doc.body().toString();
     }
 
     /***
      * Removes the first image
      *
-     * @param body the input body
+     * @param doc the input Document
      * @return the parsed body
      */
-    private String removeFirstImg(String body) {
-        body = body.replaceFirst("<img.*?>", "");
-        return body.replaceFirst("<a.*?></a>", "");
-    }
+    private Document removeFirstImg(Document doc) {
+        Element image = doc.select("img").first();
 
-    /***
-     * Splits the given body at img- or a href-tags and calls fixLinksHelper(String[] parts, String tag)
-     *
-     * @param body the input body
-     * @return the parsed body
-     */
-    private String fixLinks(String body) {
-        String[] parts = body.split("<a href=.*?");
-        String result = fixLinksHelper(parts, "<a href=\"");
+        if (image != null) {
+            // remove first image and link
+            image.remove();
+            //doc.select("a").first().remove();
+            String link = image.attr("abs:src");
 
-        parts = result.split("<img.*?src=.*?");
-        result = fixLinksHelper(parts, "<img alt=\"\" src=\"");
-
-        return result;
-    }
-
-    /***
-     * Replaces <li>-tags with "- " and </li>-tags with newline
-     *
-     * @param body the input body
-     * @return the parsed body
-     */
-    private String fixListElements(String body) {
-        body = body.replaceAll("<li>", "- ");
-        return body.replaceAll("</li>", "<br />");
-    }
-
-    /***
-     * Reinserts the removed html-Tag and inserts the 'fabUrl' if a 'parts'-element contains a relative link
-     *
-     * @param parts the splitted input body
-     * @param tag the tag to be reinserted (example: "<a href=\"" or "<img alt=\"\" src=\"")
-     * @return the parsed body
-     */
-    private String fixLinksHelper(String[] parts, String tag) {
-        String result = "";
-
-        for (int i = 0; i < parts.length; i++) {
-            parts[i] = parts[i].replaceFirst("internal:", fabUrl + "/");
-            if (i > 0 && parts[i].charAt(0) == '"') {
-                parts[i] = parts[i].replaceFirst("\"", "");
-                result += tag;
-                if (parts[i].charAt(0) == '/') result += fabUrl;
+            for (Element a : doc.select("a")) {
+                if (link.equals(a.attr("abs:href"))) {
+                    a.remove();
+                    break;
+                }
             }
-            result += parts[i];
         }
 
-        return result;
+        return doc;
     }
 
     /***
-     * Removes all HTML-Tags in the given text
+     * Fixes relative-links and relative-links to images and adds "- " at the beginning and "<br>" at the end
+     * of <li></li>-tags
+     *
+     * @param doc the input text
+     * @return the parsed text
+     */
+    private Document fixElements(Document doc) {
+        for (Element a : doc.select("a")) {
+            String link = a.attr("abs:href");
+            a.attr("href", link);
+        }
+
+        for (Element img : doc.select("img")) {
+            String link = img.attr("abs:src");
+            img.attr("src", link);
+        }
+
+        for (Element li : doc.select("li")) {
+            li.prepend("- ");
+            li.append("<br />");
+        }
+
+        return doc;
+    }
+
+    /***
+     * Removes all HTML-Tags in the given Document
+     *
+     * @param doc the input text
+     * @return the parsed text
+     */
+    private String removeHTML(Document doc) {
+        return doc.body().text();
+    }
+
+    /***
+     * Removes all \n and nbsp; from the given text
      *
      * @param text the input text
      * @return the parsed text
      */
-    private String removeHTML(String text) {
-        return text.replaceAll("<.*?>", "");
+    private String removeNewlines(String text) {
+        text = text.replaceAll("&nbsp;", "");
+        return text.replaceAll("\n", "");
     }
 }

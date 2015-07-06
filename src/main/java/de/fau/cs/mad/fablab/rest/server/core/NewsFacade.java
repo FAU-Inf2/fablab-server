@@ -4,6 +4,7 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsInterface;
 
+import java.util.Date;
 import java.util.List;
 
 public class NewsFacade {
@@ -29,6 +30,10 @@ public class NewsFacade {
     public List<News> find(int offset, int limit) {
         //return this.dao.find(offset, limit);
         return newsInterface.find(offset, limit);
+    }
+
+    public long lastUpdate() {
+        return newsInterface.lastUpdate();
     }
 
     public News create(News obj) {

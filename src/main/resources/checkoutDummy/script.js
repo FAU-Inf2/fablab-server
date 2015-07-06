@@ -7,17 +7,13 @@ var url = "../../checkout/", code, cart, requestRepeater;
 $(document).ready(function() {
     //Dummy can be used to display Carts, just use the url ?code=XXX for displaying
     code = getUrlParameter('code');
-    if(code == undefined){
-        code = Math.floor((Math.random() * 1000000) + 1);
-        generateQRCode();
-    }else{
+    if(code != undefined){
         $("#hasCart").hide();
         $("#qrcode").hide();
         $("#waiting").show();
         $("#waitingCode").val("Warenkorb [mit Code:"+ code +"]  nicht vorhanden")
     }
     getCart();
-    console.log("code: " + code);
 });
 
 
@@ -36,7 +32,7 @@ function getCart(){
             $("#hasCart").show();
             $("#qrcode").hide();
             $("#waiting").hide();
-
+            $("#createNewCartCode").hide();
             $("#code").val(code);
             $("#status").val(cart.status);
             switch (cart.status){
@@ -67,6 +63,7 @@ function updateCartInformation() {
         if (response == undefined) {
             $("#hasCart").hide();
             $("#qrcode").hide();
+            $("#createNewCartCode").hide();
             $("#waiting").show();
             $("#waitingCode").val("Warenkorb [mit Code:"+ code +"]  nicht vorhanden")
         } else {
@@ -100,6 +97,21 @@ function generateQRCode(){
        functions of the buttons
  */
 
+
+function createNewCartCode(){
+    console.log("createNewCartCode")
+    $.get(url + "createCode?password=dummyPassword", function (response) {
+        code = response
+        getCart();
+        generateQRCode();
+        console.log("code: " + code);
+        $("#hasCart").hide();
+        $("#createNewCartCode").hide();
+        $("#qrcode").show();
+        $("#waiting").hide();
+    });
+}
+
 function paidButtonTouched(){
     $.post( url + "paid/" + code, function(statusChanged) {
         if(statusChanged == "true")
@@ -130,22 +142,13 @@ function showCartForCodeButtonTouched(){
     code = $("#setCode").val();
     $("#hasCart").hide();
     $("#qrcode").hide();
+    $("#createNewCartCode").hide();
     $("#waiting").show();
     $("#waitingCode").val("Warenkorb [mit Code:"+ code +"]  nicht vorhanden")
     getCart();
 }
 
 
-
-function newQRCode(){
-    code = Math.floor((Math.random() * 1000000) + 1);
-    $("#hasCart").hide();
-    $("#qrcode").show();
-    $("#waiting").hide();
-    getCart();
-    generateQRCode();
-    console.log("code: " + code);
-}
 
 /*
         Helper functions

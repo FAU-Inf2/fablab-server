@@ -35,6 +35,10 @@ public class ICalFacade {
         return iCalInterface.find(offset, limit);
     }
 
+    public long lastUpdate() {
+        return iCalInterface.lastUpdate();
+    }
+
     public void updateAll() {
         List<ICal> events = iCalInterface.findAll();
         for (ICal event : events) {

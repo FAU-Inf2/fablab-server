@@ -48,6 +48,11 @@ input{
     padding-bottom: 15px;
 }
 
+#createNewCartCode{
+    display: block;
+}
+
+
 #hasCart{
     display: none;
     margin-left:auto;
@@ -64,7 +69,7 @@ input{
 }
 
 #qrcode{
-    display: block;
+    display: none;
     margin: 30px auto 15px;
     padding:0px;
 }

@@ -8,6 +8,7 @@ import de.fau.cs.mad.fablab.rest.server.exceptions.Http404Exception;
 import de.fau.cs.mad.fablab.rest.server.exceptions.Http500Exception;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -39,6 +40,12 @@ public class NewsResource implements NewsApi {
         }
         if (result.size() == 0) throw new Http404Exception("Result is empty");
         return result;
+    }
+
+    @UnitOfWork
+    @Override
+    public Long lastUpdate() {
+        return this.facade.lastUpdate();
     }
 
     @UnitOfWork

@@ -4,6 +4,7 @@ import de.fau.cs.mad.fablab.rest.api.CartApi;
 import de.fau.cs.mad.fablab.rest.api.NewsApi;
 import de.fau.cs.mad.fablab.rest.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.*;
+import de.fau.cs.mad.fablab.rest.server.exceptions.Http403Exception;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
@@ -12,9 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/**
- * Created by EE on 12.05.15.
- */
 
 public class CartResource implements CartApi {
 
@@ -27,7 +25,10 @@ public class CartResource implements CartApi {
     @UnitOfWork
     @Override
     public void create(CartServer obj) {
-         this.facade.create(obj);
+        if(String.valueOf(CheckoutResource.getAcceptedCode()).equals(obj.getCartCode()))
+            this.facade.create(obj);
+        else
+            throw new Http403Exception("Your cart code (" + obj.getCartCode() + ") is not valid.");
     }
 
     @UnitOfWork

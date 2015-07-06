@@ -9,6 +9,13 @@ import javax.ws.rs.core.MediaType;
 public interface Checkout {
 
     @GET
+    @Path("createCode")
+    @Produces(MediaType.APPLICATION_JSON)
+    long createCode(@QueryParam("password") String password); // ../createCode?password=XXX
+
+
+
+    @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     CartServer getCart(@PathParam("id") String id);

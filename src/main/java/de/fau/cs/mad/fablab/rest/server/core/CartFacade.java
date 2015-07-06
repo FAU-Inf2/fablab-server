@@ -14,7 +14,7 @@ public class CartFacade{
     }
 
     public CartServer create(CartServer obj) {
-        obj.setSentToServer(); //time needs to be set for OldCartRemover
+        obj.setSentToServer();
         return this.dao.create(obj);
     }
 

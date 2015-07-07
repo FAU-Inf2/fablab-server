@@ -4,8 +4,10 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Tag;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -32,6 +34,7 @@ public class NewsFeedClient implements NewsInterface {
     private static final Object LOCK = new Object();
 
     private static final String LOGO = "/sites/fablab.fau.de/files/fablab_logo.png";
+    private static final String ZUM_VIDEO = "Zum Video";
 
     //Tue, 12 May 2015 11:29:28 +0000
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
@@ -245,7 +248,9 @@ public class NewsFeedClient implements NewsInterface {
      */
     private String parseBody(Document doc) {
         doc = removeFirstImg(doc);
-        doc = fixElements(doc);
+        doc = fixRelativeLinks(doc);
+        doc = fixListTags(doc);
+        doc = fixVideoLinks(doc);
         return doc.body().toString();
     }
 
@@ -282,7 +287,7 @@ public class NewsFeedClient implements NewsInterface {
      * @param doc the input text
      * @return the parsed text
      */
-    private Document fixElements(Document doc) {
+    private Document fixRelativeLinks(Document doc) {
         for (Element a : doc.select("a")) {
             String link = a.attr("abs:href");
             a.attr("href", link);
@@ -292,10 +297,52 @@ public class NewsFeedClient implements NewsInterface {
             String link = img.attr("abs:src");
             img.attr("src", link);
         }
+        return doc;
+    }
 
+    /***
+     * Adds "- " at the beginning and "<br>" at the end of <li></li>-tags
+     *
+     * @param doc the input text
+     * @return the parsed text
+     */
+    private Document fixListTags(Document doc) {
         for (Element li : doc.select("li")) {
             li.prepend("- ");
             li.append("<br />");
+        }
+        return doc;
+    }
+
+    /***
+     * Replaces embedded videos by a link to the video
+     *
+     * @param doc the input text
+     * @return the parsed text
+     */
+    private Document fixVideoLinks(Document doc) {
+        for (Element video : doc.select("video")) {
+            String link = video.attr("src");
+            Attributes attr = new Attributes();
+            attr.put("href", link);
+
+            Element a = new Element(Tag.valueOf("a"), "", attr);
+            a.text(ZUM_VIDEO + ": " + link);
+
+            video.replaceWith(a);
+        }
+
+        for (Element iframe : doc.select("iframe")) {
+            String link = iframe.attr("src");
+            if (link.charAt(0) == '/' && link.charAt(1) == '/') link = "http:" + link;
+
+            Attributes attr = new Attributes();
+            attr.put("href", link);
+
+            Element a = new Element(Tag.valueOf("a"), "", attr);
+            a.text(ZUM_VIDEO + ": " + link);
+
+            iframe.replaceWith(a);
         }
 
         return doc;

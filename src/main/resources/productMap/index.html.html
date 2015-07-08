@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="de">
+	<head>
+	<meta charset="utf-8"/>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script type="text/javascript" src="jquery.svg/jquery.svg.js" ></script
+	
+	
+	</head>
+	<body>	
+	SVG Picture
+	<svg width="1000" height="1000">
+		<defs>
+			<g id="ks" stroke-width="2" stroke="rgb(255,0,0) ">
+				<!-- top wall of fablab -->
+				<line id="id0815" x1="1" y1="1" x2="100" y2="1" />
+				<!-- left wall of fablab part 1 -->
+				<line x1="1" y1="0" x2="1" y2="130" />
+				<!-- left wall of fablab part 2 -->
+				<line x1="1" y1="160" x2="1" y2="201" />
+				<!-- bottom wall of fablab part 1 -->
+				<line x1="1" y1="200" x2="70" y2="200" />
+				<!-- bottom wall of fablab part 2 -->
+				<line x1="90" y1="200" x2="101" y2="200" />
+				<!-- right wall of fablab -->
+				<line x1="100" y1="200" x2="100" y2="0" />
+				<!-- middle wall of fablab  part 1-->
+				<line x1="1" y1="100" x2="70" y2="100" />
+				<!-- middle wall of fablab  part 2-->
+				<line x1="90" y1="100" x2="100" y2="100" />
+			</g>
+		</defs>
+		
+		<svg>
+			<use xlink:href="#ks" transform="scale(3)"/>			
+		</svg>
+		
+	</svg> 
+	
+	
+	<script>
+	
+	function get_url_param( name )
+	{
+		name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+		
+		var regex_search = "[\\?&]" + name + "=([^&#]*)";
+		var regex = new RegExp( regex_search );
+		var result = regex.exec( window.location.href );
+		
+		if ( result == null )
+			return "";		
+		else
+			return result[1];
+	} 
+	
+	function change_color( object_id )
+	{
+		var id_string = "id" + object_id;
+		var svgElement = document.getElementById(id_string);
+		svgElement.style.stroke="blue";
+	}
+	
+	
+	$( document ).ready( change_color );
+
+	
+	id = get_url_param( 'id' );
+	change_color( id );
+	alert(id);
+	
+	
+	
+	</script>
+	
+	</body>
+</html>

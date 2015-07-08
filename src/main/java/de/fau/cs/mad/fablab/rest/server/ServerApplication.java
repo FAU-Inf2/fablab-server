@@ -51,7 +51,10 @@ class ServerApplication extends Application<ServerConfiguration> {
                 new EnvironmentVariableSubstitutor()
         ));
 
+
         bootstrap.addBundle(new AssetsBundle("/checkoutDummy", "/checkoutDummy", "index.html"));
+        bootstrap.addBundle(new AssetsBundle("/productMap", "/productMap", "index.html"));
+
 
     }
 

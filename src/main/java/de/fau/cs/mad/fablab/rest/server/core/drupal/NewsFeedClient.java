@@ -25,8 +25,9 @@ public class NewsFeedClient implements NewsInterface {
     private String fabUrl;
     private String feedUrl;
 
-    private List<News> allNews;
+    private LinkedList<News> allNews;
 
+    private Date lastTry;
     private Date lastUpdate;
     //private final long TIMESPAN = 3600000L; // 1h
     private final long TIMESPAN = 600000L; // 10 min
@@ -119,6 +120,24 @@ public class NewsFeedClient implements NewsInterface {
     }
 
     /***
+     * Gets all News since 'timestamp' from the RSS-Feed and parses them into a List of {@link News}
+     *
+     * @param timestamp the timestamp
+     * @return a List of {@link News}
+     */
+//    @Override
+    public List<News> findNewsSince(long timestamp) {
+        if (updateNeeded()) updateNews();
+        Date refDate = new Date(timestamp);
+        List<News> newNews = new LinkedList<>();
+        for (News n : allNews) {
+            if (n.getPubDate().equals(refDate) || n.getPubDate().before(refDate)) break;
+            else newNews.add(n);
+        }
+        return newNews;
+    }
+
+    /***
      *
      * @return timestamp of the last update
      */
@@ -137,7 +156,7 @@ public class NewsFeedClient implements NewsInterface {
         if (allNews == null) return true;
 
         Date now = new Date();
-        if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) return true;
+        if ((now.getTime() - lastTry.getTime()) > TIMESPAN) return true;
         return false;
     }
 
@@ -172,26 +191,61 @@ public class NewsFeedClient implements NewsInterface {
                     "The Reason is : " + e.getMessage());
         }
 
-        List<News> allNews = null;
-        try {
-            allNews = parseNews(feed.getChannel().getItem());
-        } catch (ParseException e) {
-            System.err.println("ERROR - ParseException while parsing News. \n" +
-                    "The Reason is : " + e.getMessage());
-        }
+        if (this.allNews == null) {
+            LinkedList<News> allNews = null;
+            try {
+                allNews = parseNews(feed.getChannel().getItem());
+            } catch (ParseException e) {
+                System.err.println("ERROR - ParseException while parsing News. \n" +
+                        "The Reason is : " + e.getMessage());
+            }
 
-        synchronized(LOCK) {
-            if (allNews != null) {
-                this.allNews = allNews;
-                this.lastUpdate = new Date();
+            synchronized (LOCK) {
+                if (allNews != null) {
+                    this.allNews = allNews;
+                    this.lastTry = new Date();
+                    this.lastUpdate = new Date();
+                }
+            }
+
+        } else {
+
+            LinkedList<News> newNews = null;
+            try {
+                newNews = parseNewNews(feed.getChannel().getItem());
+            } catch (ParseException e) {
+                System.err.println("ERROR - ParseException while parsing News. \n" +
+                        "The Reason is : " + e.getMessage());
+            }
+
+            synchronized (LOCK) {
+                if (newNews != null) {
+                    News n;
+                    while ((n = newNews.pollLast()) != null) {
+                        this.allNews.addFirst(n);
+                        this.lastUpdate = new Date();
+                    }
+                    this.lastTry = new Date();
+                }
             }
         }
     }
 
-    private List<News> parseNews(List<RSSFeedItem> items) throws ParseException {
-        List<News> news = new LinkedList<>();
+    private LinkedList<News> parseNews(List<RSSFeedItem> items) throws ParseException {
+        LinkedList<News> news = new LinkedList<>();
         for (RSSFeedItem item : items) {
             news.add(getNewsFromRSSFeedItem(item));
+        }
+        return news;
+    }
+
+    private LinkedList<News> parseNewNews(List<RSSFeedItem> items) throws ParseException {
+        LinkedList<News> news = new LinkedList<>();
+        for (RSSFeedItem item : items) {
+            News n = getNewsFromRSSFeedItem(item);
+
+            if (n.getId() == allNews.peekFirst().getId()) break;
+            else news.add(n);
         }
         return news;
     }

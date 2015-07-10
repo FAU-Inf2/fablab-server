@@ -9,5 +9,6 @@ public interface NewsInterface {
     public News findById(long id);
     public List<News> find(int offset, int limit);
     public List<News> findAll();
+    public List<News> findNewsSince(long timestamp);
     public long lastUpdate();
 }

@@ -168,6 +168,11 @@ public class NewsClient implements NewsInterface {
     }
 
     @Override
+    public List<News> findNewsSince(long timestamp) {
+        return null;
+    }
+
+    @Override
     public long lastUpdate() {
         return -1;
     }

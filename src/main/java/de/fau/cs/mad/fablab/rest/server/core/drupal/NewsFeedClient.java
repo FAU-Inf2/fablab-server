@@ -125,7 +125,7 @@ public class NewsFeedClient implements NewsInterface {
      * @param timestamp the timestamp
      * @return a List of {@link News}
      */
-//    @Override
+    @Override
     public List<News> findNewsSince(long timestamp) {
         if (updateNeeded()) updateNews();
         Date refDate = new Date(timestamp);

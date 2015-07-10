@@ -32,6 +32,10 @@ public class NewsFacade {
         return newsInterface.find(offset, limit);
     }
 
+    public List<News> findNewsSince(long timestamp) {
+        return newsInterface.findNewsSince(timestamp);
+    }
+
     public long lastUpdate() {
         return newsInterface.lastUpdate();
     }

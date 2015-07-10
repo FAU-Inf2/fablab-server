@@ -42,6 +42,16 @@ public class NewsResource implements NewsApi {
         return result;
     }
 
+    @Override
+    public List<News> findNewsSince(long timestamp) {
+        List<News> result = this.facade.findNewsSince(timestamp);
+        if (result == null){
+            throw new Http500Exception("An error occurred while updating the News-list");
+        }
+        if (result.size() == 0) throw new Http404Exception("Result is empty");
+        return result;
+    }
+
     @UnitOfWork
     @Override
     public Long lastUpdate() {

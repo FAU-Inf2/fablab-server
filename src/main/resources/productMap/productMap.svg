@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html lang="de">
-	<head>
-	<meta charset="utf-8"/>
-	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script type="text/javascript" src="jquery.svg/jquery.svg.js" ></script>
-	
-	
-	</head>
-	<body>	
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
 
-<svg width="100%" height="100%"
+<svg
    xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -408,44 +399,3 @@
        inkscape:connector-curvature="0" />
   </g>
 </svg>
-
-
-
-	
-	
-	
-	<script>
-	
-	function get_url_param( name )
-	{
-		name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-		
-		var regex_search = "[\\?&]" + name + "=([^&#]*)";
-		var regex = new RegExp( regex_search );
-		var result = regex.exec( window.location.href );
-		
-		if ( result == null )
-			return "";		
-		else
-			return result[1];
-	} 
-	
-	function change_color( object_id )
-	{
-		var id_string = "id" + object_id;
-		var svgElement = document.getElementById(id_string);
-		svgElement.style.fill="blue";
-	}
-	
-	
-	$( document ).ready( change_color );
-
-	
-	id = get_url_param( 'id' );
-	change_color( id );	
-	
-	
-	</script>
-	
-	</body>
-</html>

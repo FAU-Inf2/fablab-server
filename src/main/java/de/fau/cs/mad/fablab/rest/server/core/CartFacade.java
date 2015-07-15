@@ -1,7 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.CartServer;
-import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
+import de.fau.cs.mad.fablab.rest.core.CartStatus;
 
 public class CartFacade{
 
@@ -22,11 +22,11 @@ public class CartFacade{
         return this.dao.findById(id);
     }
 
-    public CartStatusEnum getStatus(String id) {
+    public CartStatus getStatus(String id) {
         return this.dao.findById(id).getStatus();
     }
 
-    public boolean updateCartStatus(String id, CartStatusEnum status){
+    public boolean updateCartStatus(String id, CartStatus status){
         remover.removeAllOldCarts();
         return this.dao.updateCartStatus(id, status);
     }

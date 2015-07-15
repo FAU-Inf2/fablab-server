@@ -1,7 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
 import de.fau.cs.mad.fablab.rest.core.CartServer;
-import de.fau.cs.mad.fablab.rest.core.CartStatusEnum;
+import de.fau.cs.mad.fablab.rest.core.CartStatus;
 import de.fau.cs.mad.fablab.rest.server.core.CartFacade;
 import de.fau.cs.mad.fablab.rest.server.core.Checkout;
 import de.fau.cs.mad.fablab.rest.server.exceptions.Http401Exception;
@@ -42,13 +42,13 @@ public class CheckoutResource implements Checkout {
     @UnitOfWork
     @Override
     public boolean markCartAsPaid(String id) {
-        return this.facade.updateCartStatus(id, CartStatusEnum.PAID);
+        return this.facade.updateCartStatus(id, CartStatus.PAID);
     }
 
     @UnitOfWork
     @Override
     public boolean markCartAsCancelled(String id) {
-        return this.facade.updateCartStatus(id, CartStatusEnum.CANCELLED);
+        return this.facade.updateCartStatus(id, CartStatus.CANCELLED);
 
     }
 

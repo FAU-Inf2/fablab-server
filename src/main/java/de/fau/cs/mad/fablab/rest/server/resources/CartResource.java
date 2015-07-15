@@ -33,7 +33,7 @@ public class CartResource implements CartApi {
 
     @UnitOfWork
     @Override
-    public CartStatusEnum getStatus(String id) {
+    public CartStatus getStatus(String id) {
         return this.facade.getStatus(id);
     }
 }

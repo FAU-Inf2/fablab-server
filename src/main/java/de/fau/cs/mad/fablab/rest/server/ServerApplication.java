@@ -138,9 +138,7 @@ class ServerApplication extends Application<ServerConfiguration> {
             News.class,
             ICal.class,
             Product.class,
-            Cart.class,
             CartServer.class,
-            CartEntry.class,
             CartEntryServer.class,
             DoorState.class,
             RegistrationId.class) {
@@ -161,9 +159,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         config.addAnnotatedClass(News.class);
         config.addAnnotatedClass(ICal.class);
         config.addAnnotatedClass(Product.class);
-        config.addAnnotatedClass(Cart.class);
         config.addAnnotatedClass(CartServer.class);
-        config.addAnnotatedClass(CartEntry.class);
         config.addAnnotatedClass(CartEntryServer.class);
         config.addAnnotatedClass(DoorState.class);
         config.addAnnotatedClass(RegistrationId.class);

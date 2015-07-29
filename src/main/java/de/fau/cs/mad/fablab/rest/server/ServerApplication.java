@@ -5,6 +5,7 @@ import de.fau.cs.mad.fablab.rest.core.*;
 import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
+import de.fau.cs.mad.fablab.rest.server.core.drupal.DrupalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
@@ -87,6 +88,9 @@ class ServerApplication extends Application<ServerConfiguration> {
         // configure NewsClient
         NewsFeedClient.setConfiguration(configuration.getNewsConfiguration());
 
+        // configure DrupalClient
+        DrupalClient.setConfiguration(configuration.getNewsConfiguration());
+
         // configure date format for jackson
         //environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         environment.getObjectMapper().setDateFormat(new SimpleDateFormat(Format.DATE_FORMAT));
@@ -112,6 +116,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         // create some resources
         environment.jersey().register(new NewsResource(new NewsFacade(new NewsDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ICalResource(new ICalFacade(new ICalDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new DrupalResource(new DrupalFacade(new DrupalDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ProductResource(new ProductFacade(new ProductDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new PushResource(pushServiceConfiguration, hibernate.getSessionFactory()));
@@ -152,6 +157,7 @@ class ServerApplication extends Application<ServerConfiguration> {
     public final HibernateBundle<ServerConfiguration> hibernate = new HibernateBundle<ServerConfiguration>(
             News.class,
             ICal.class,
+            FabTool.class,
             Product.class,
             CartServer.class,
             CartEntryServer.class,
@@ -173,6 +179,7 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         config.addAnnotatedClass(News.class);
         config.addAnnotatedClass(ICal.class);
+        config.addAnnotatedClass(FabTool.class);
         config.addAnnotatedClass(Product.class);
         config.addAnnotatedClass(CartServer.class);
         config.addAnnotatedClass(CartEntryServer.class);

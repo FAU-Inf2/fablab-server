@@ -1,5 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core.drupal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class DrupalNode {
 
@@ -37,10 +38,15 @@ public class DrupalNode {
     private Integer spaminess;
     private String uri;
 
+    @JsonIgnore
+    private String field_image;
+    @JsonIgnore
+    private String field_file;
+
     public DrupalNode() {
     }
 
-    public DrupalNode(Integer nid, String type, String language, Integer uid, Integer status, Long created, Long changed, Integer comment, Integer promote, Integer moderate, Integer sticky, Integer tnid, Integer translate, Integer vid, Integer revision_uid, String title, String body, String teaser, String log, Long revision_timestamp, Integer format, String name, String picture, String data, String path, Integer old_status, Long last_comment_timestamp, String last_comment_name, Integer comment_count, String[] taxonomy, String signature, Integer spaminess, String uri) {
+    public DrupalNode(Integer nid, String type, String language, Integer uid, Integer status, Long created, Long changed, Integer comment, Integer promote, Integer moderate, Integer sticky, Integer tnid, Integer translate, Integer vid, Integer revision_uid, String title, String body, String teaser, String log, Long revision_timestamp, Integer format, String name, String picture, String data, String path, Integer old_status, Long last_comment_timestamp, String last_comment_name, Integer comment_count, String[] taxonomy, String signature, Integer spaminess, String uri, String field_image, String field_file) {
         this.nid = nid;
         this.type = type;
         this.language = language;
@@ -74,6 +80,8 @@ public class DrupalNode {
         this.signature = signature;
         this.spaminess = spaminess;
         this.uri = uri;
+        this.field_image = field_image;
+        this.field_file = field_file;
     }
 
     public Integer getNid() {
@@ -338,6 +346,22 @@ public class DrupalNode {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public String getField_image() {
+        return field_image;
+    }
+
+    public void setField_image(String field_image) {
+        this.field_image = field_image;
+    }
+
+    public String getField_file() {
+        return field_file;
+    }
+
+    public void setField_file(String field_file) {
+        this.field_file = field_file;
     }
 
     public String toString() {

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.fau.cs.mad.fablab.rest.core.News;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attributes;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.parser.Tag;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,9 +30,6 @@ public class NewsFeedClient implements NewsInterface {
     private final long TIMESPAN = 600000L; // 10 min
 
     private static final Object LOCK = new Object();
-
-    private static final String LOGO = "/sites/fablab.fau.de/files/fablab_logo.png";
-    private static final String ZUM_VIDEO = "Zum Video";
 
     //Tue, 12 May 2015 11:29:28 +0000
     private SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z", Locale.ENGLISH);
@@ -259,13 +253,13 @@ public class NewsFeedClient implements NewsInterface {
     private News getNewsFromRSSFeedItem(RSSFeedItem item) throws ParseException {
         String body = item.getDescription();
         Document doc = Jsoup.parse(body, fabUrl);
-        String imageLink = extractImageLink(doc);
+        String imageLink = HTMLHelper.extractImageLink(doc);
 
         News news = new News();
         news.setId(Long.parseLong(extractId(item.getGuid())));
         news.setTitle(item.getTitle());
-        news.setDescription(parseBody(doc));
-        news.setDescriptionShort(removeHTML(doc));
+        news.setDescription(HTMLHelper.parseBody(doc));
+        news.setDescriptionShort(HTMLHelper.removeHTML(doc));
         news.setIsPermaLink(false);
         news.setLink(item.getLink());
         news.setCreator(item.getCreator());
@@ -275,151 +269,8 @@ public class NewsFeedClient implements NewsInterface {
         return news;
     }
 
-    /***
-     * Extracts the first image of a given {@link Document} and returns it
-     *
-     * @param doc the input {@link Document}
-     * @return the link to the image, if no image is found return link to FabLab-Logo
-     */
-    private String extractImageLink(Document doc) {
-        Element image = doc.select("img").first();
-
-        // no image found, return null
-        if (image == null) return null;
-
-        return image.attr("abs:src");
-    }
-
     private String extractId(String guid) {
         return guid.substring(0, guid.indexOf(' '));
     }
 
-    /***
-     * Removes the first image, fixes relative links and replaces <li> and </li>-tags
-     *
-     * @param doc the input document
-     * @return the parsed body
-     */
-    private String parseBody(Document doc) {
-        doc = removeFirstImg(doc);
-        doc = fixRelativeLinks(doc);
-        doc = fixListTags(doc);
-        doc = fixVideoLinks(doc);
-        return doc.body().toString();
-    }
-
-    /***
-     * Removes the first image
-     *
-     * @param doc the input Document
-     * @return the parsed body
-     */
-    private Document removeFirstImg(Document doc) {
-        Element image = doc.select("img").first();
-
-        if (image != null) {
-            // remove first image and link
-            image.remove();
-            //doc.select("a").first().remove();
-            String link = image.attr("abs:src");
-
-            for (Element a : doc.select("a")) {
-                if (link.equals(a.attr("abs:href"))) {
-                    a.remove();
-                    break;
-                }
-            }
-        }
-
-        return doc;
-    }
-
-    /***
-     * Fixes relative-links and relative-links to images and adds "- " at the beginning and "<br>" at the end
-     * of <li></li>-tags
-     *
-     * @param doc the input text
-     * @return the parsed text
-     */
-    private Document fixRelativeLinks(Document doc) {
-        for (Element a : doc.select("a")) {
-            String link = a.attr("abs:href");
-            a.attr("href", link);
-        }
-
-        for (Element img : doc.select("img")) {
-            String link = img.attr("abs:src");
-            img.attr("src", link);
-        }
-        return doc;
-    }
-
-    /***
-     * Adds "- " at the beginning and "<br>" at the end of <li></li>-tags
-     *
-     * @param doc the input text
-     * @return the parsed text
-     */
-    private Document fixListTags(Document doc) {
-        for (Element li : doc.select("li")) {
-            li.prepend("- ");
-            li.append("<br />");
-        }
-        return doc;
-    }
-
-    /***
-     * Replaces embedded videos by a link to the video
-     *
-     * @param doc the input text
-     * @return the parsed text
-     */
-    private Document fixVideoLinks(Document doc) {
-        for (Element video : doc.select("video")) {
-            String link = video.attr("src");
-            Attributes attr = new Attributes();
-            attr.put("href", link);
-
-            Element a = new Element(Tag.valueOf("a"), "", attr);
-            a.text(ZUM_VIDEO + ": " + link);
-
-            video.replaceWith(a);
-        }
-
-        for (Element iframe : doc.select("iframe")) {
-            String link = iframe.attr("src");
-            if (link.charAt(0) == '/' && link.charAt(1) == '/') link = "http:" + link;
-
-            Attributes attr = new Attributes();
-            attr.put("href", link);
-
-            Element a = new Element(Tag.valueOf("a"), "", attr);
-            a.text(ZUM_VIDEO + ": " + link);
-
-            iframe.replaceWith(a);
-        }
-
-        return doc;
-    }
-
-    /***
-     * Removes all HTML-Tags in the given Document
-     *
-     * @param doc the input text
-     * @return the parsed text
-     */
-    private String removeHTML(Document doc) {
-        return doc.body().text();
-    }
-
-    /***
-     * Removes all \n and nbsp; from the given text
-     *
-     * @param text the input text
-     * @return the parsed text
-     */
-    private String removeNewlines(String text) {
-        text = text.replaceAll("&nbsp;", "");
-        return text.replaceAll("\n", "");
-    }
 }

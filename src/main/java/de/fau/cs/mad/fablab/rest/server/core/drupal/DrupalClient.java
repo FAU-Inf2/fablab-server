@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.core.drupal;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.core.FabTool;
+import de.fau.cs.mad.fablab.rest.server.configuration.GeneralDataConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -19,6 +20,7 @@ public class DrupalClient implements DrupalInterface {
 
     private static DrupalInterface instance;
     private static NewsConfiguration config = null;
+    private static GeneralDataConfiguration dataConfig = null;
 
     private String baseUrl;
     private String toolsUrl;
@@ -55,11 +57,12 @@ public class DrupalClient implements DrupalInterface {
 
         baseUrl = config.getUrl() + ":" + config.getPort() + "/" + config.getNodeEndpoint();
         toolsUrl = baseUrl + JSON + "/?parameters[type]=tool&page=";
-        fabUrl = config.getFaburl();
+        fabUrl = dataConfig.getFabUrl();
     }
 
-    public static void setConfiguration(NewsConfiguration c) {
+    public static void setConfiguration(NewsConfiguration c, GeneralDataConfiguration dc) {
         config = c;
+        dataConfig = dc;
     }
 
     /***

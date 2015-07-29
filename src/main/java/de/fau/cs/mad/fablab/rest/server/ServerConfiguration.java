@@ -86,6 +86,12 @@ class ServerConfiguration extends Configuration
     @Valid
     @NotNull
     @JsonProperty
+    private GeneralDataConfiguration generalData = new GeneralDataConfiguration();
+    public GeneralDataConfiguration getGeneralDataConfiguration() { return generalData; }
+
+    @Valid
+    @NotNull
+    @JsonProperty
     private PushServiceConfiguration pushConfig = new PushServiceConfiguration();
     public PushServiceConfiguration getPushServiceConfiguration() { return pushConfig; }
 

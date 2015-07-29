@@ -90,7 +90,6 @@ ical:
     icalUrl: /termine/ical
 
 drupalNews:
-    faburl: https://fablab.fau.de
     feedurl: /rss.xml
     url: http://52.28.16.59
     port: 50080
@@ -99,3 +98,8 @@ drupalNews:
 pushConfig:
     pushAPIRegistrationId: ${pushAPIkey}
     googlePushServiceURL: ${pushServiceURL}
+
+generalData:
+    fabMail: fablab@i2.cs.fau.de
+    fabUrl: https://fablab.fau.de
+

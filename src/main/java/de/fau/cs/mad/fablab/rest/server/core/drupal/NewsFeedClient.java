@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.core.drupal;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import de.fau.cs.mad.fablab.rest.core.News;
+import de.fau.cs.mad.fablab.rest.server.configuration.GeneralDataConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,6 +19,7 @@ public class NewsFeedClient implements NewsInterface {
 
     private static NewsInterface instance;
     private static NewsConfiguration config = null;
+    private static GeneralDataConfiguration dataConfig = null;
 
     private String fabUrl;
     private String feedUrl;
@@ -56,12 +58,13 @@ public class NewsFeedClient implements NewsInterface {
                     "using the class NewsConfiguration.\n");
             System.exit(1);
         }
-        fabUrl = config.getFaburl();
+        fabUrl = dataConfig.getFabUrl();
         feedUrl = config.getFeedurl();
     }
 
-    public static void setConfiguration(NewsConfiguration c) {
+    public static void setConfiguration(NewsConfiguration c, GeneralDataConfiguration dc) {
         config = c;
+        dataConfig = dc;
     }
 
     @Override

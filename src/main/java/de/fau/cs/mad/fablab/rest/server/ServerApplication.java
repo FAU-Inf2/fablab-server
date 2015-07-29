@@ -86,10 +86,10 @@ class ServerApplication extends Application<ServerConfiguration> {
         ICalClient.setConfiguration(configuration.getICalConfiguration());
 
         // configure NewsClient
-        NewsFeedClient.setConfiguration(configuration.getNewsConfiguration());
+        NewsFeedClient.setConfiguration(configuration.getNewsConfiguration(), configuration.getGeneralDataConfiguration());
 
         // configure DrupalClient
-        DrupalClient.setConfiguration(configuration.getNewsConfiguration());
+        DrupalClient.setConfiguration(configuration.getNewsConfiguration(), configuration.getGeneralDataConfiguration());
 
         // configure date format for jackson
         //environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
@@ -121,6 +121,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new PushResource(pushServiceConfiguration, hibernate.getSessionFactory()));
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
+
+        environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));

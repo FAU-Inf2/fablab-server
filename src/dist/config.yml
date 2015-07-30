@@ -101,5 +101,6 @@ pushConfig:
 
 generalData:
     fabMail: fablab@i2.cs.fau.de
+    feedbackMail: fablab@i2.cs.fau.de
     fabUrl: https://fablab.fau.de
 

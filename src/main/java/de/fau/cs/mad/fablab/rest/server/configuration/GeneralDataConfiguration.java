@@ -13,8 +13,12 @@ public class GeneralDataConfiguration {
     @JsonProperty
     private String fabMail;
 
+    @NotEmpty
+    @JsonProperty
+    private String feedbackMail;
+
     public boolean validate() {
-        if (fabUrl == null || fabUrl.isEmpty() || fabMail == null || fabMail.isEmpty()) return false;
+        if (fabUrl == null || fabUrl.isEmpty() || fabMail == null || fabMail.isEmpty() || feedbackMail == null || feedbackMail.isEmpty()) return false;
         return true;
     }
 
@@ -32,5 +36,14 @@ public class GeneralDataConfiguration {
 
     public void setFabMail(String fabMail) {
         this.fabMail = fabMail;
+    }
+
+
+    public String getFeedbackMail() {
+        return feedbackMail;
+    }
+
+    public void setFeedbackMail(String feedbackMail) {
+        this.feedbackMail = feedbackMail;
     }
 }

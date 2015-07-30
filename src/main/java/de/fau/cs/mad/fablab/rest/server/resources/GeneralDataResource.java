@@ -14,7 +14,17 @@ public class GeneralDataResource implements DataApi {
     }
 
     @Override
-    public String getMailAddress() {
+    public String getFabLabMailAddress() {
+        String mail = config.getFabMail();
+        if (mail == null){
+            throw new Http500Exception("An error occurred while retrieving the FabMail-Adress");
+        }
+        if (mail.length() == 0) throw new Http404Exception("Result is empty");
+        return mail;
+    }
+
+    @Override
+    public String getFeedbackMailAddress() {
         String mail = config.getFabMail();
         if (mail == null){
             throw new Http500Exception("An error occurred while retrieving the FabMail-Adress");

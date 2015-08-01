@@ -3,7 +3,7 @@
 NAME="rest-server-"$(date +%Y-%m-%d_%H-%M-%S)
 
 docker run -d \
-    -p 80:8080 -p 8081:8081 -p 443:8082 --name="$NAME" \
+    -p 8081:8081 -p 4433:4433 --name="$NAME" \
     -e openerp_hostname=$openerp_hostname \
     -e openerp_database=$openerp_database \
     -e openerp_user=$openerp_user \

@@ -34,10 +34,8 @@ server:
         archivedFileCount: 5
 
   applicationConnectors:
-    - type: http
-      port: 8080
     - type: https
-      port: 8082
+      port: 4433
       keyStorePath: src/dist/fablab-rest-server.keystore
       keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
       validateCerts: false

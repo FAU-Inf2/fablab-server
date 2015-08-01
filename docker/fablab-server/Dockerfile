@@ -19,4 +19,4 @@ CMD 	if [ ! -d "fablab-server" ]; then git clone https://github.com/FAU-Inf2/fab
 	cd fablab-server && \
 	./gradlew run
 
-EXPOSE 8080 8081 8082
+EXPOSE 4433 8081

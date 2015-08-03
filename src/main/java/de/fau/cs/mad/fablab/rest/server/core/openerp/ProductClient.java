@@ -288,7 +288,12 @@ public class ProductClient {
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
-        return generateProductListFromJson(jsonRPC2Response).get(0);
+
+        List<Product> list = generateProductListFromJson(jsonRPC2Response);
+        if(list.size() > 0)
+            return list.get(0);
+        else
+            return null;
     }
 
     /***

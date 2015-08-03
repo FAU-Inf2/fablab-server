@@ -128,6 +128,9 @@ public class OpenErpClient implements OpenErpInterface {
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         Product product = productClient.searchForProductsById(id);
 
+        if(product == null)
+            return null;
+
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         List<Category> categories = categoryClient.getCategories();

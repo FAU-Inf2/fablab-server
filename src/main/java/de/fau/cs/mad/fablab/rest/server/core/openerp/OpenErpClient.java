@@ -84,14 +84,11 @@ public class OpenErpClient implements OpenErpInterface {
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
-
-
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         List<Product> products = productClient.getProducts(limit,offset);
 
         for(Product product : products){
-            product.setCategory(getCategoryObjectById(categories, product.getCategoryId()));
-            product.setLocationObject(getLocationById(locations, product.getLocation_id()));
+            product = buildProduct(product,categories,locations);
         }
 
         return products;
@@ -136,9 +133,15 @@ public class OpenErpClient implements OpenErpInterface {
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
 
-        product.setCategory(getCategoryObjectById(categories, product.getCategoryId()));
-        product.setLocationObject(getLocationById(locations, product.getLocation_id()));
+        product = buildProduct(product,categories,locations);
+
         return product;
+    }
+
+    public Product buildProduct(Product aProduct, List<Category> aCategory, List<Location> aLocations){
+        aProduct.setCategory(getCategoryObjectById(aCategory, aProduct.getCategoryId()));
+        aProduct.setLocationObject(getLocationById(aLocations, aProduct.getLocation_id()));
+        return aProduct;
     }
 
 
@@ -146,6 +149,8 @@ public class OpenErpClient implements OpenErpInterface {
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         return locationClient.getLocations();
     }
+
+
 
     private Location getLocationById(final List<Location> aLocations,final long aLocationId){
         Location newLocation = new Location();
@@ -167,6 +172,7 @@ public class OpenErpClient implements OpenErpInterface {
                 category.setCategoryId(categ.getCategoryId());
                 category.setName(categ.getName());
                 category.setLocation_id(categ.getLocation_id());
+                category.setCategories(categ.getCategories());
             }
         }
         return category;

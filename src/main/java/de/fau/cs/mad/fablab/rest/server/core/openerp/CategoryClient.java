@@ -68,7 +68,6 @@ public class CategoryClient {
             categoryParams.put("fields", fields);
 
             jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, OpenERPUtil.generateRequestID()));
-            System.out.println(jsonRPC2Response.toString());
             categories = generateCategoryListFromJson(jsonRPC2Response);
 
         } catch (JSONRPC2SessionException e) {
@@ -100,7 +99,6 @@ public class CategoryClient {
             }
 
             JSONArray childArray = (JSONArray) productJson.get(FIELD_CHILDS);
-
             List<Long> childIds = new ArrayList<>();
             if(childArray.size() > 0){
                 for(int index = 0; index < childArray.size();index++){

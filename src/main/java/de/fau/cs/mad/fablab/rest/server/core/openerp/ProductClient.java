@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core.openerp;
 
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.client.JSONRPC2Session;
@@ -95,7 +96,6 @@ public class ProductClient {
         JSONArray records = (JSONArray) result.get("records");
 
         for (Object productObject : records) {
-
             JSONObject productJson = (JSONObject) productObject;
             String name = (productJson.get(FIELD_NAME) == null)
                     ? "unknown"
@@ -127,7 +127,9 @@ public class ProductClient {
                     : (Long) ((JSONArray) productJson.get(FIELD_LOCATION)).get(0);
 
             String unit = "";
+            long unit_id = 0;
             if (unitOfMeasureArray.size() == 2) {
+                unit_id = (Long) unitOfMeasureArray.get(0);
                 unit = (String) unitOfMeasureArray.get(1);
             }
 
@@ -140,6 +142,7 @@ public class ProductClient {
             }
             //Create a product and put it in the result list
             Product product = new Product(id, name, price, categoryId, categoryString, unit, location);
+            product.setOum_id(unit_id);
             product.setLocation_id(location_id);
             productList.add(product);
 

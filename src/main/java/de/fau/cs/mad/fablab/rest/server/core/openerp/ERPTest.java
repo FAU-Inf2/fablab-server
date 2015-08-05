@@ -26,18 +26,18 @@ public class ERPTest {
         List<Category> categories = new ArrayList<>();
         List<Product> searchedProducts = new ArrayList<>();
         List<Product> searchedProductsCategory = new ArrayList<>();
-        Product searchedProductId = null;
+        Product searchedProductId = new Product();
         List<UOM> uoms = new ArrayList<>();
 
 
         List<Location> locations = new ArrayList<>();
 
         try{
-            uoms = openErp.getUOMs();
+            //uoms = openErp.getUOMs();
 
-            //products = openErp.getProducts(50,0);
+            products = openErp.getProducts(0,0);
             //searchedProducts = openErp.searchForProductsByName("Holz", 0, 0);
-            //searchedProductsCategory = openErp.searchForProductsByCategory("1", 5, 0);
+            //searchedProductsCategory = openErp.searchForProductsByCategory("1-reihig", 5, 0);
             //searchedProductId = openErp.searchForProductsById("0662");
             //categories = openErp.getCategories();
             //locations = openErp.getLocations();
@@ -60,31 +60,37 @@ public class ERPTest {
             System.out.println(index + ": " + pro.toString());
             System.out.println(" - " + pro.getCategory().toString());
             System.out.println(" - " + pro.getLocationObject().toString());
+            System.out.println(" - " + pro.getUom().toString());
         }
 
         System.out.println("####### Gefundene Objekte: (Produktnamen)" + searchedProducts.size());
         index = 0;
         for(Product pro : searchedProducts){
             index++;
-            System.out.println(index + " " + pro.getName() + " " + pro.getLocation());
+            System.out.println(index + ": " + pro.toString());
+            System.out.println(" - " + pro.getCategory().toString());
+            System.out.println(" - " + pro.getLocationObject().toString());
+            System.out.println(" - " + pro.getUom().toString());
         }
 
         System.out.println("####### Gefundene Objekte (Category): " + searchedProductsCategory.size());
         index = 0;
         for(Product pro : searchedProductsCategory){
             index++;
-            System.out.println(index + " " + pro.getName() + " " + pro.getLocation());
+            System.out.println(index + ": " + pro.toString());
+            System.out.println(" - " + pro.getCategory().toString());
+            System.out.println(" - " + pro.getLocationObject().toString());
+            System.out.println(" - " + pro.getUom().toString());
         }
 
-        System.out.println("####### Gefundenes Objekt (ID)");
-        if(!(searchedProductId == null)){
-            System.out.println(searchedProductId.getProductId() + " " + searchedProductId.getName());
-            List<Long> categoriesList = searchedProductId.getCategory().getCategories();
-            System.out.println("Anzahl an Objekten: " + categoriesList.size());
-            for(Long id : categoriesList){
-                System.out.print(id);
-            }
-        }
+        System.out.println("####### Gefundenes Objekt (ID): ");
+        index = 0;
+        System.out.println(index + ": " + searchedProductId.toString());
+        System.out.println(" - " + searchedProductId.getCategory().toString());
+        System.out.println(" - " + searchedProductId.getLocationObject().toString());
+        System.out.println(" - " + searchedProductId.getUom().toString());
+
+
 
         System.out.println("####### Gefundene Objekte (All Locations): " + searchedProductsCategory.size());
         index = 0;

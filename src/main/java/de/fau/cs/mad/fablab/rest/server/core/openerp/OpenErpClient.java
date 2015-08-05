@@ -77,19 +77,22 @@ public class OpenErpClient implements OpenErpInterface {
      *
      * @param limit  the maximum number of products to return
      * @param offset the record offset
-     * @return a List of {@link Product}
+     * @return List of {@link Product} with Object {@link Category}, {@link Location} and {@link UOM} for each Product
      */
     @Override
     public List<Product> getProducts(int limit, int offset) throws OpenErpException {
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
+        UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+        List<UOM> uoms = uomClient.getUOMs();
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
+
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         List<Product> products = productClient.getProducts(limit,offset);
 
         for(Product product : products){
-            product = buildProduct(product,categories,locations);
+            product = buildProduct(product,categories,locations, uoms);
         }
 
         return products;
@@ -101,19 +104,52 @@ public class OpenErpClient implements OpenErpInterface {
      * @param searchString the substring to search for inside product names
      * @param limit        the maximum number of products to return
      * @param offset       the record offset
-     * @return a List of {@link Product}
+     * @return List of {@link Product} with Object {@link Category}, {@link Location} and {@link UOM} for each Product
      */
     @Override
     public List<Product> searchForProductsByName(String searchString, int limit, int offset) throws OpenErpException {
+        CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
+        LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
+        UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+        List<UOM> uoms = uomClient.getUOMs();
+        List<Category> categories = categoryClient.getCategories();
+        List<Location> locations = locationClient.getLocations();
+
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
-        return productClient.searchForProductsByName(searchString, limit, offset);
+        List<Product> products = productClient.searchForProductsByName(searchString, limit, offset);
+
+        for(Product product : products){
+            product = buildProduct(product,categories,locations, uoms);
+        }
+
+        return products;
     }
 
-
+    /**
+     *
+     * @param searchString the substring to search for products of a category name
+     * @param limit        the maximum number of products to return
+     * @param offset       the record offset
+     * @return List of {@link Product} with Object {@link Category}, {@link Location} and {@link UOM} for each Product
+     * @throws OpenErpException
+     */
     @Override
     public List<Product> searchForProductsByCategory(String searchString, int limit, int offset) throws OpenErpException {
+        CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
+        LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
+        UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+        List<UOM> uoms = uomClient.getUOMs();
+        List<Category> categories = categoryClient.getCategories();
+        List<Location> locations = locationClient.getLocations();
+
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
-        return productClient.searchForProductsByCategory(searchString, limit, offset);
+        List<Product> products = productClient.searchForProductsByCategory(searchString, limit, offset);
+
+        for(Product product : products){
+            product = buildProduct(product,categories,locations, uoms);
+        }
+
+        return products;
     }
 
     /***
@@ -131,30 +167,59 @@ public class OpenErpClient implements OpenErpInterface {
 
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
+
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
-
-        product = buildProduct(product,categories,locations);
+        UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+        List<UOM> uoms = uomClient.getUOMs();
+        product = buildProduct(product,categories,locations, uoms);
 
         return product;
     }
 
+    /**
+     * get all locations
+     * @return List of {@link Location}
+     */
     public List<Location> getLocations(){
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         return locationClient.getLocations();
     }
 
+    /**
+     * get all uom objects
+     * @return List of {@link UOM}
+     * @throws OpenErpException
+     */
     public List<UOM> getUOMs() throws OpenErpException{
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
        return uomClient.getUOMs();
     }
 
-    private Product buildProduct(Product aProduct, List<Category> aCategory, List<Location> aLocations){
+
+
+    private Product buildProduct(Product aProduct, List<Category> aCategory, List<Location> aLocations, List<UOM> aUOMs){
         aProduct.setCategory(getCategoryObjectById(aCategory, aProduct.getCategoryId()));
         aProduct.setLocationObject(getLocationById(aLocations, aProduct.getLocation_id()));
+        aProduct.setUom(getUOMById(aUOMs, aProduct.getOum_id()));
         return aProduct;
     }
 
+    private UOM getUOMById(List<UOM> aUOMs,long aUom_id){
+        UOM newOUM = new UOM();
+        for(UOM uom : aUOMs){
+            if(aUom_id == uom.getUom_id()){
+                newOUM.setUom_id(uom.getUom_id());
+                newOUM.setName(uom.getName());
+                newOUM.setRounding(uom.getRounding());
+                newOUM.setUomType(uom.getUomType());
+                return newOUM;
+
+            }
+        }
+        System.out.println("Found no OUM");
+        return newOUM;
+    }
 
     private Location getLocationById(final List<Location> aLocations,final long aLocationId){
         Location newLocation = new Location();

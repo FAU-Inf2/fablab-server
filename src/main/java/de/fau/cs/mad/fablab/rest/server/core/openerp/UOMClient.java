@@ -73,14 +73,7 @@ public class UOMClient {
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
-        System.out.println(jsonRPC2Response.toString());
         return generateOUMsFromJson(jsonRPC2Response);
-    }
-
-    public UOM getUOMById(String aId){
-        UOM uom = new UOM();
-
-        return uom;
     }
 
     /***
@@ -115,12 +108,6 @@ public class UOMClient {
             uom.setName((String) productJson.get(FIELD_NAME));
             uom.setRounding((Double) productJson.get(FIELD_ROUNDING));
             uom.setUomType((String) productJson.get(FIELD_UOM_TYPE));
-            //Long factorAsString = ((Long)(productJson.get(FIELD_FACTOR)));
-            //System.out.println(factorAsString);
-            //Double factor = Double.parseDouble(factorAsString);
-            //System.out.println(factor);
-            //uom.setFactor(factor);
-            //uom.setFactor_inv((Double) productJson.get(FIELD_FACTOR_INV));
             uoms.add(uom);
         }
         return uoms;

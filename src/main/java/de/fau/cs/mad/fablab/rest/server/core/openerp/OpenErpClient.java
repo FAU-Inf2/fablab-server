@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server.core.openerp;
 import de.fau.cs.mad.fablab.rest.core.Category;
 import de.fau.cs.mad.fablab.rest.core.Location;
 import de.fau.cs.mad.fablab.rest.core.Product;
+import de.fau.cs.mad.fablab.rest.core.UOM;
 import de.fau.cs.mad.fablab.rest.server.configuration.OpenErpConfiguration;
 
 import java.net.MalformedURLException;
@@ -138,18 +139,21 @@ public class OpenErpClient implements OpenErpInterface {
         return product;
     }
 
-    public Product buildProduct(Product aProduct, List<Category> aCategory, List<Location> aLocations){
-        aProduct.setCategory(getCategoryObjectById(aCategory, aProduct.getCategoryId()));
-        aProduct.setLocationObject(getLocationById(aLocations, aProduct.getLocation_id()));
-        return aProduct;
-    }
-
-
     public List<Location> getLocations(){
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         return locationClient.getLocations();
     }
 
+    public List<UOM> getUOMs() throws OpenErpException{
+        UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+       return uomClient.getUOMs();
+    }
+
+    private Product buildProduct(Product aProduct, List<Category> aCategory, List<Location> aLocations){
+        aProduct.setCategory(getCategoryObjectById(aCategory, aProduct.getCategoryId()));
+        aProduct.setLocationObject(getLocationById(aLocations, aProduct.getLocation_id()));
+        return aProduct;
+    }
 
 
     private Location getLocationById(final List<Location> aLocations,final long aLocationId){

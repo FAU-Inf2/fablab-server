@@ -70,7 +70,6 @@ public class ProductClient {
             jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD,
                     getProductParams(limit, offset, domain),
                     OpenERPUtil.generateRequestID()));
-
         }
     } catch (JSONRPC2SessionException e) {
         e.printStackTrace();
@@ -308,9 +307,6 @@ public class ProductClient {
     private void assertSessionNotExpired(JSONRPC2Response response) throws OpenErpSessionExpiredException {
         if (response.getError() != null) {
             if (response.getError().getCode() == 300) {
-                //instantly try to re-authenticate at the service
-                // authenticate();
-                //notify the caller about the expired session
                 throw new OpenErpSessionExpiredException();
             }
         }
@@ -325,22 +321,6 @@ public class ProductClient {
      * @return
      */
     private Map<String, Object> getProductParams(int limit, int offset, JSONArray domain) {
-
-        //we only want products marked as sale_ok and a price >= 0
-        JSONArray filterSaleOk = new JSONArray();
-        filterSaleOk.add(0, "sale_ok");
-        filterSaleOk.add(1, "ilike");
-        filterSaleOk.add(2, "true");
-
-        JSONArray filterPrice = new JSONArray();
-        filterPrice.add(0, "list_price");
-        filterPrice.add(1, ">=");
-        filterPrice.add(2, "0");
-
-        //add the filters to our given domain
-        //domain.add(domain.size(), filterSaleOk);
-        //domain.add(domain.size(), filterPrice);
-
         Map<String, Object> productParams = new HashMap<>();
         productParams.put("session_id", mJSONSessionId);
         productParams.put("context", mUsercontext);

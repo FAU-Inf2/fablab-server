@@ -28,9 +28,13 @@ public class ICalClient implements ICalInterface {
 
     private List<ICal> events;
 
+    private String lastServerUpdate;
+
+    private java.util.Date lastTry;
     private java.util.Date lastUpdate;
+
     private final long TIMESPAN = 43200000L; // 12h
-    //private final long TIMESPAN = 600000L; // 10 min
+    //private final long TIMESPAN = 60000L; // 1 min
     private static final Object LOCK = new Object();
 
     private static final String BEGIN_CAL = "BEGIN:VCALENDAR";
@@ -137,7 +141,7 @@ public class ICalClient implements ICalInterface {
         if (events == null) return true;
 
         Date now = new Date();
-        if ((now.getTime() - lastUpdate.getTime()) > TIMESPAN) return true;
+        if ((now.getTime() - lastTry.getTime()) > TIMESPAN) return true;
         return false;
     }
 
@@ -170,13 +174,17 @@ public class ICalClient implements ICalInterface {
 
         List<ICal> events = parseEvents(components);
 
-        Collections.sort(events, new ICalComparator());
+        if (events != null) {
+            Collections.sort(events, new ICalComparator());
 
-        synchronized (LOCK) {
-            if (events != null) {
+            synchronized (LOCK) {
                 this.events = events;
                 this.lastUpdate = new Date();
+                this.lastServerUpdate = events.get(0).getDtstamp(); // set new value for lastServerUpdate
             }
+        }
+        synchronized (LOCK) {
+            this.lastTry = new Date();
         }
     }
 
@@ -200,7 +208,12 @@ public class ICalClient implements ICalInterface {
                 String end = p.getEnd().toString();
 
                 ICal event = getICalFromComponent(component, start, end);
+
+                if (event == null) continue;
                 event.setId(nextIndex++);
+
+                // we already have the newest data, so we can stop here
+                if (event.getDtstamp().equals(lastServerUpdate)) return null;
                 res.add(event);
             }
         }
@@ -320,9 +333,9 @@ public class ICalClient implements ICalInterface {
         ICal event = new ICal();
         event.setUid(component.getProperty(Property.UID).getValue());
         event.setSummery(component.getProperty(Property.SUMMARY).getValue());
+        event.setDtstamp(component.getProperty(Property.DTSTAMP).getValue());
         event.setStart(start);
         event.setEnd(end);
-
         event.setAllday(isAlldayEvent(start, end));
 
         Property p;

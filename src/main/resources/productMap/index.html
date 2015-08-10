@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" id="doc">
 	<head>
 	<meta charset="utf-8"/>
 	
@@ -475,11 +475,12 @@
 	
 	function setSize()
 	{
-		var width = $( document ).width() + "px";
-		var height = $( document ).height() + "px";
+		var width = $( window ).width() + "px";
+		var height = $( window ).height() + "px";
 		
-		document.getElementById('fablab').setAttribute('height', width);
-		document.getElementById('fablab').setAttribute('width', height);
+		document.getElementById('fablab')[0].setAttribute('width', width);
+		document.getElementById('fablab')[0].setAttribute('height', height);
+	
 	}
 	
 	

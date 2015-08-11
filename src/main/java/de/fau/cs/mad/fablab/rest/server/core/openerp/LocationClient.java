@@ -58,18 +58,17 @@ public class LocationClient {
             jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, OpenERPUtil.generateRequestID()));
             JSONObject result = (JSONObject) jsonRPC2Response.getResult();
             JSONArray records = (JSONArray) result.get("records");
-
             for(Object categoryObject : records) {
                 JSONObject productJson = (JSONObject) categoryObject;
                 Location newLocation = new Location();
 
                 long id = ((Long) productJson.get(FIELD_ID));
                 String locName = (String) productJson.get(FIELD_NAME);
-                String locCode = "unknown code";
+                String locCode = OpenERPConst.UNKNOW_CODE;
                 if(!(productJson.get(FIELD_CODE) instanceof Boolean)) {
                     locCode = (String) productJson.get(FIELD_CODE);
                 }
-                newLocation.setId(id);
+                newLocation.setLocationId(id);
                 newLocation.setName(locName);
                 newLocation.setCode(locCode);
                 locations.add(newLocation);

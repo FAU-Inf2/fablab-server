@@ -36,11 +36,11 @@ public class ERPTest {
             //uoms = openErp.getUOMs();
 
             products = openErp.getProducts(0,0);
-            //searchedProducts = openErp.searchForProductsByName("Holz", 0, 0);
-            //searchedProductsCategory = openErp.searchForProductsByCategory("1-reihig", 5, 0);
-            //searchedProductId = openErp.searchForProductsById("0662");
-            //categories = openErp.getCategories();
-            //locations = openErp.getLocations();
+            searchedProducts = openErp.searchForProductsByName("Holz", 0, 0);
+            searchedProductsCategory = openErp.searchForProductsByCategory("1-reihig", 5, 0);
+            searchedProductId = openErp.searchForProductsById("0662");
+            categories = openErp.getCategories();
+            locations = openErp.getLocations();
 
         }catch (OpenErpException erp){
             //TODO
@@ -57,10 +57,18 @@ public class ERPTest {
         index = 0;
         for(Product pro : products){
             index++;
-            System.out.println(index + ": " + pro.toString());
+            System.out.println(index + ": " + pro.getLocation());
+
+            if(pro.getCategory().getLocationObject() != null) {
+                System.out.println(" - " + pro.getCategory().getLocationObject().toString());
+            }
+            if(pro.getCategory().getLocationObject() == null) {
+                System.out.println(" - " + "war null");
+            }
             System.out.println(" - " + pro.getCategory().toString());
-            System.out.println(" - " + pro.getLocationObject().toString());
             System.out.println(" - " + pro.getUom().toString());
+
+
         }
 
         System.out.println("####### Gefundene Objekte: (Produktnamen)" + searchedProducts.size());
@@ -69,7 +77,6 @@ public class ERPTest {
             index++;
             System.out.println(index + ": " + pro.toString());
             System.out.println(" - " + pro.getCategory().toString());
-            System.out.println(" - " + pro.getLocationObject().toString());
             System.out.println(" - " + pro.getUom().toString());
         }
 
@@ -79,7 +86,6 @@ public class ERPTest {
             index++;
             System.out.println(index + ": " + pro.toString());
             System.out.println(" - " + pro.getCategory().toString());
-            System.out.println(" - " + pro.getLocationObject().toString());
             System.out.println(" - " + pro.getUom().toString());
         }
 
@@ -87,7 +93,6 @@ public class ERPTest {
         index = 0;
         System.out.println(index + ": " + searchedProductId.toString());
         System.out.println(" - " + searchedProductId.getCategory().toString());
-        System.out.println(" - " + searchedProductId.getLocationObject().toString());
         System.out.println(" - " + searchedProductId.getUom().toString());
 
 
@@ -103,7 +108,7 @@ public class ERPTest {
         index = 0;
         for(Category loc : categories){
             index++;
-            System.out.println(index + " " + loc.getName() + " " + loc.getLocation_id());
+            System.out.println(index + " " + loc.toString());
         }
     }
 }

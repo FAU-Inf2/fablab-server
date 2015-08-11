@@ -84,22 +84,26 @@ public class OpenErpClient implements OpenErpInterface {
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
-        List<UOM> uoms = uomClient.getUOMs();
-        List<Category> categories = categoryClient.getCategories();
-        List<Location> locations = locationClient.getLocations();
-
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
-        List<Product> products = productClient.getProducts(limit,offset);
+
+        final List<UOM> uoms = uomClient.getUOMs();
+        final List<Category> categories = categoryClient.getCategories();
+        final List<Location> locations = locationClient.getLocations();
+        final List<Product> products = productClient.getProducts(limit, offset);
+
+        prepareCategories(categories,locations);
 
         for(Product product : products){
-            product = buildProduct(product,categories,locations, uoms);
+            product = buildProduct(product, categories, uoms);
         }
 
         return products;
     }
 
+
+
     /***
-     * searches for a substring inside product namesat the openerp web service
+     * searches for a substring inside product name sat the openerp web service
      *
      * @param searchString the substring to search for inside product names
      * @param limit        the maximum number of products to return
@@ -111,15 +115,17 @@ public class OpenErpClient implements OpenErpInterface {
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
+
         List<UOM> uoms = uomClient.getUOMs();
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
-
-        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         List<Product> products = productClient.searchForProductsByName(searchString, limit, offset);
 
+        prepareCategories(categories,locations);
+
         for(Product product : products){
-            product = buildProduct(product,categories,locations, uoms);
+            product = buildProduct(product,categories,uoms);
         }
 
         return products;
@@ -138,15 +144,17 @@ public class OpenErpClient implements OpenErpInterface {
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
+
         List<UOM> uoms = uomClient.getUOMs();
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
-
-        ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
         List<Product> products = productClient.searchForProductsByCategory(searchString, limit, offset);
 
+        prepareCategories(categories,locations);
+
         for(Product product : products){
-            product = buildProduct(product,categories,locations, uoms);
+            product = buildProduct(product,categories,uoms);
         }
 
         return products;
@@ -167,12 +175,15 @@ public class OpenErpClient implements OpenErpInterface {
 
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
+        UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
 
         List<Category> categories = categoryClient.getCategories();
         List<Location> locations = locationClient.getLocations();
-        UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
         List<UOM> uoms = uomClient.getUOMs();
-        product = buildProduct(product,categories,locations, uoms);
+
+        prepareCategories(categories,locations);
+
+        product = buildProduct(product,categories,uoms);
 
         return product;
     }
@@ -194,15 +205,6 @@ public class OpenErpClient implements OpenErpInterface {
     public List<UOM> getUOMs() throws OpenErpException{
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
        return uomClient.getUOMs();
-    }
-
-
-
-    private Product buildProduct(Product aProduct, List<Category> aCategory, List<Location> aLocations, List<UOM> aUOMs){
-        aProduct.setCategory(getCategoryObjectById(aCategory, aProduct.getCategoryId()));
-        aProduct.setLocationObject(getLocationById(aLocations, aProduct.getLocation_id()));
-        aProduct.setUom(getUOMById(aUOMs, aProduct.getOum_id()));
-        return aProduct;
     }
 
     private UOM getUOMById(List<UOM> aUOMs,long aUom_id){
@@ -241,9 +243,179 @@ public class OpenErpClient implements OpenErpInterface {
                 category.setCategoryId(categ.getCategoryId());
                 category.setName(categ.getName());
                 category.setLocation_id(categ.getLocation_id());
+                category.setLocationString(categ.getLocationString());
                 category.setCategories(categ.getCategories());
+                category.setLocationObject((categ.getLocationObject()));
+                category.setParent_category_id(categ.getParent_category_id());
             }
         }
         return category;
     }
+
+    private void prepareCategories(List<Category> categories, List<Location> locations){
+        for(Category category : categories){
+            category = buildCategory(category, locations);
+        }
+    }
+
+    private Category buildCategory(final Category aCategory, final List<Location> aLocations){
+        try{
+            aCategory.setLocationObject(searchLocationByCategory(aCategory,aLocations));
+        }catch (LocationNotFoundException e) {
+            e.printStackTrace();
+        }
+        return aCategory;
+    }
+
+
+    private Product buildProduct(Product aProduct, List<Category> aCategories,List<UOM> aUOMs){
+        aProduct.setCategory(getCategoryObjectById(aCategories, aProduct.getCategoryId()));
+        aProduct.setUom(getUOMById(aUOMs, aProduct.getOum_id()));
+        // get the location
+        aProduct = prepareProductLocation(aProduct,aCategories);
+        return aProduct;
+    }
+
+    private Product prepareProductLocation(Product aProduct,List<Category> aCategories){
+        if(aProduct.getLocation().equals(OpenERPConst.UNKNOW_LOCATION)){
+            String categoryLocationString = aProduct.getCategory().getLocationString();
+            aProduct.setLocation(categoryLocationString);
+        }
+        return aProduct;
+    }
+
+    private Location searchLocationByCategory(Category aCategory, List<Location> aLocations) throws LocationNotFoundException{
+        if(aCategory.getLocation_id() != 0) {
+            for (Location location : aLocations) {
+                if (aCategory.getLocation_id() == location.getLocationId()) {
+                    return location;
+                }
+            }
+            throw new LocationNotFoundException("Location was not in the list -  locationId: " + aCategory.getLocation_id());
+        }
+        return new Location();
+    }
+/*
+    // 1) Schaue ob es die ParentCategorie ist
+    //  1.1 falls keine Location vorhanden -> unknown location
+    //  1.2 falls location vorhanden -> return location as String - location + Code
+    // 2) Wenn nicht ParentCategory -> Rekursive alle locations zusammensammeln
+    private String prepareLocationString(Category category, List<Category> aCategories) {
+        String locationString = "";
+
+        if(isParentCategory(category)){
+            if(category.getLocation_id() == 0){
+                return "";
+            }
+            else{
+                locationString = category.getLocationObject().getName();
+                if(!category.getLocationObject().getCode().contains(OpenERPConst.UNKNOW_CODE)){
+                    locationString = locationString + "  (" + category.getLocationObject().getCode() + ")";
+                }
+            }
+        }else{
+            List<String> locationList = new LinkedList<>();
+            if(category.getLocation_id() != 0){
+                getLocationStrings(locationList, category, aCategories);
+            }
+            else {
+                getLocationStrings(locationList, category, aCategories);
+            }
+            String newLocationString = getLocationStringByLocationStringList(locationList);
+            locationString = newLocationString;
+        }
+        return locationString;
+    }
+*/
+    /*
+    private String getLocationStringByLocationStringList(List<String> aLocationList) {
+        List<String> newLocationList = new ArrayList<>();
+
+        for(int index = 0; index < aLocationList.size(); index++){
+            if(aLocationList.get(index) !=  null){
+                for(int index2 = index+1; index2 < aLocationList.size();index2++){
+                    if(aLocationList.get(index2) != null) {
+                        if (aLocationList.get(index).contains(aLocationList.get(index2))) {
+                            aLocationList.set(index2, null);
+                        }
+                    }
+                }
+            }
+        }
+
+        for(String locationString : aLocationList){
+            if(locationString != null) {
+                newLocationList.add(locationString);
+            }
+        }
+
+        StringBuilder locationStringBuilder = new StringBuilder("");
+
+
+        if(newLocationList.size() == 1){
+            locationStringBuilder.append(newLocationList.get(0));
+        }
+        if(newLocationList.size() == 2){
+            locationStringBuilder.append(newLocationList.get(0)).append(" / ").append(newLocationList.get(1));
+        }
+        if(newLocationList.size() > 2) {
+            locationStringBuilder.append(newLocationList.get(0));
+            for(int index = 1; index < newLocationList.size();index++){
+                locationStringBuilder.append(" / ");
+                locationStringBuilder.append(newLocationList.get(index));
+            }
+        }
+
+        return locationStringBuilder.toString();
+    }
+*/
+    /*
+    private void getLocationStrings(List<String> aLocation, Category aCategory, List<Category> aCategories){
+        Category newCategory = getParentCategory(aCategory, aCategories);
+        if(isParentCategory(newCategory)){
+            String newLocationString = newCategory.getLocationObject().getName();
+            if(newCategory.getLocationObject().getCode() != null) {
+                if (!newCategory.getLocationObject().getCode().contains(OpenERPConst.UNKNOW_CODE)) {
+                    System.out.println("Mit locationCode");
+                    newLocationString = newLocationString + " (" + newCategory.getLocationObject().getCode() + ")";
+                }
+            }
+            aLocation.add(newLocationString);
+        }
+        else{
+            aLocation.add(newCategory.getLocationObject().getName());
+            getLocationStrings(aLocation, newCategory, aCategories);
+        }
+    }
+*/
+/*
+    private Boolean isParentCategory(Category aCategory){
+        if(aCategory.getParent_category_id() == 0){
+            return true;
+        }
+        return false;
+    }
+*/
+/*
+    private Category getParentCategory(Category aChildCategory,List<Category> aCategories) {
+        long parentId = aChildCategory.getParent_category_id();
+        try {
+            return findCategoryById(parentId, aCategories);
+        }catch (CategoryNotFoundException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+*/
+/*
+    private Category findCategoryById(long aCategoryId, List<Category> aCategories) throws CategoryNotFoundException{
+        for(Category category : aCategories){
+            if(aCategoryId == category.getCategoryId()){
+                return category;
+            }
+        }
+        throw new CategoryNotFoundException("Category was not found - CategoryId: " + aCategoryId);
+    }
+*/
+
 }

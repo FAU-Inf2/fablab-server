@@ -69,7 +69,7 @@ public class CategoryClient {
 
             jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, categoryParams, OpenERPUtil.generateRequestID()));
             categories = generateCategoryListFromJson(jsonRPC2Response);
-            System.out.println(jsonRPC2Response.toString());
+
         } catch (JSONRPC2SessionException e) {
             e.printStackTrace();
         }
@@ -88,16 +88,18 @@ public class CategoryClient {
             JSONObject productJson = (JSONObject) categoryObject;
             Category anotherCategory = new Category();
 
-
             anotherCategory.setCategoryId((long) productJson.get("id"));
             anotherCategory.setName((String) productJson.get("name"));
 
             if((productJson.get(FIELD_LOCATION) instanceof Boolean)){
                 anotherCategory.setLocation_id(0);
+                anotherCategory.setLocationString(OpenERPConst.UNKNOW_LOCATION);
             }
             else{
                 long location_id = (Long) ((JSONArray) productJson.get(FIELD_LOCATION)).get(0);
+                String locationString = (String) (((JSONArray) productJson.get(FIELD_LOCATION)).get(1));
                 anotherCategory.setLocation_id(location_id);
+                anotherCategory.setLocationString(locationString);
             }
 
 
@@ -109,7 +111,6 @@ public class CategoryClient {
                 }
             }
 
-
             anotherCategory.setParent_category_id(parent_id);
             JSONArray childArray = (JSONArray) productJson.get(FIELD_CHILDS);
             List<Long> childIds = new ArrayList<>();
@@ -120,7 +121,6 @@ public class CategoryClient {
             }
 
             anotherCategory.setCategories(childIds);
-
             categories.add(anotherCategory);
         }
         return categories;

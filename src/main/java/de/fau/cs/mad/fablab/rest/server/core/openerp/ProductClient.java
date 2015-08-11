@@ -119,7 +119,7 @@ public class ProductClient {
                     : (JSONArray) productJson.get(FIELD_UNIT_OF_MEASURE);
 
             String location = (productJson.get(FIELD_LOCATION) instanceof Boolean)
-                    ? "unknown location"
+                    ? OpenERPConst.UNKNOW_LOCATION
                     : (String) ((JSONArray) productJson.get(FIELD_LOCATION)).get(1);
 
             long location_id = (productJson.get(FIELD_LOCATION) instanceof Boolean)
@@ -145,7 +145,6 @@ public class ProductClient {
             product.setOum_id(unit_id);
             product.setLocation_id(location_id);
             productList.add(product);
-
         }
         return productList;
     }

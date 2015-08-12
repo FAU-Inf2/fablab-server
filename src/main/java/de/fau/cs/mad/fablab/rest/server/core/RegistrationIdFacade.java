@@ -1,7 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.RegistrationId;
-import org.hibernate.Query;
 
 import java.util.List;
 
@@ -30,6 +29,10 @@ public class RegistrationIdFacade {
 
     public boolean delete(long registrationId_id) {
         return mRegistrationIdDAO.delete(registrationId_id);
+    }
+
+    public boolean delete(String registrationId) {
+        return mRegistrationIdDAO.delete(registrationId);
     }
 
     public void deleteAll(){

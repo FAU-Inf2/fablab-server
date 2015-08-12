@@ -27,25 +27,22 @@ public class PushResource implements PushApi{
     @Override
     public Response addRegistrationId(RegistrationId regId) {
         if(regId == null) {
-            System.out.println("RegistrationID: " + regId.getRegistrationid());
+            System.out.println("RegistrationID is null");
+            return Response.serverError().build();
         }
         if(!mRegistrationIdFacade.alreadyExists(regId)){
             mRegistrationIdFacade.create(regId);
         }
 
-        for(RegistrationId registrationId : mRegistrationIdFacade.findAll()){
-            System.out.println(registrationId.toString());
-        }
-
-        System.out.println("Push");
-        PushFacade pushFacade = new PushFacade(mPushServiceConfiguration,mSessionFactory);
-        pushFacade.pushToDevice(regId,"Hinweis", "Eine neue Nachricht für: " + regId.getRegistrationid());
-        pushFacade.pushToAllDevices("Hinweis", "Hat alles geklappt");
-
-        if(regId == null){
-            return Response.serverError().build();
-        }
-
         return Response.ok().build();
+    }
+
+    @Override
+    @UnitOfWork
+    public Response removeRegistrationId(RegistrationId aRegistrationId) {
+        if (mRegistrationIdFacade.delete(aRegistrationId.getRegistrationid())) {
+            return Response.ok().build();
+        }
+        return Response.serverError().build();
     }
 }

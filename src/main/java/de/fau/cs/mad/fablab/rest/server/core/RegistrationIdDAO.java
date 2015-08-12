@@ -28,8 +28,8 @@ public class RegistrationIdDAO extends AbstractDAO<RegistrationId> {
     }
 
     public boolean alreadyExists(RegistrationId aRegistrationId){
-        Query query = currentSession().createQuery("FROM " + TABLE_NAME +" reg WHERE reg.registrationid LIKE :regId");
-        query.setParameter("regId",aRegistrationId.getRegistrationid());
+        Query query = currentSession().createQuery("FROM " + TABLE_NAME + " reg WHERE reg.registrationid LIKE :regId");
+        query.setParameter("regId", aRegistrationId.getRegistrationid());
 
         if((query.list().size() == 0)){
             return false;
@@ -40,6 +40,19 @@ public class RegistrationIdDAO extends AbstractDAO<RegistrationId> {
     public List<RegistrationId> findAll(){
         Query query = currentSession().createQuery("FROM " + TABLE_NAME);
         return query.list();
+    }
+
+    public boolean delete(String registrationId) {
+        Query query = currentSession().createQuery("FROM " + TABLE_NAME + " reg WHERE reg.registrationid LIKE :regId");
+        query.setParameter("regId", registrationId);
+
+        if((query.list().size() == 0)){
+            return false;
+        }
+        for (Object regId : query.list()) {
+            currentSession().delete(regId);
+        }
+        return true;
     }
 
     public boolean delete(long registrationId_id) {

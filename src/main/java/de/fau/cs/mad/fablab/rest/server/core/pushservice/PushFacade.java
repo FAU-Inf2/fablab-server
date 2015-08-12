@@ -2,8 +2,6 @@ package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
 import de.fau.cs.mad.fablab.rest.core.RegistrationId;
 import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
-import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdDAO;
-import de.fau.cs.mad.fablab.rest.server.core.RegistrationIdFacade;
 import org.hibernate.SessionFactory;
 
 import java.io.IOException;

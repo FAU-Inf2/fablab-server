@@ -9,7 +9,6 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.DrupalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
-import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushResource;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
@@ -25,15 +24,14 @@ import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.setup.JerseyContainerHolder;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.hibernate.cfg.Configuration;
-import org.eclipse.jetty.servlets.CrossOriginFilter;
+
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
-
-import java.util.EnumSet;
-
 import java.text.SimpleDateFormat;
+import java.util.EnumSet;
 import java.util.Properties;
 
 /**

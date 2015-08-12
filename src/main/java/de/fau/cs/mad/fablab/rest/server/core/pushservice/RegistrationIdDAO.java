@@ -1,4 +1,4 @@
-package de.fau.cs.mad.fablab.rest.server.core;
+package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
 import de.fau.cs.mad.fablab.rest.core.RegistrationId;
 import io.dropwizard.hibernate.AbstractDAO;

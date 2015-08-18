@@ -14,8 +14,11 @@ import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
+import de.fau.cs.mad.fablab.rest.server.security.SimpleAuthenticator;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
+import io.dropwizard.auth.AuthFactory;
+import io.dropwizard.auth.basic.BasicAuthFactory;
 import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
 import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -119,6 +122,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new PushResource(pushServiceConfiguration, hibernate.getSessionFactory()));
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new UserResource());
 
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
 
@@ -135,15 +139,20 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.admin().addServlet("log admin resource", jerseyContainerHolder.getContainer()).addMapping("/admin/*");
 
         // Enable CORS headers
-   	final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
 
-    	// Configure CORS parameters
-	cors.setInitParameter("allowedOrigins", "*");
-	cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
-	cors.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
+        // Configure CORS parameters
+        cors.setInitParameter("allowedOrigins", "*");
+        cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
+        cors.setInitParameter("allowedMethods", "OPTIONS,GET,PUT,POST,DELETE,HEAD");
 
-	// Add URL mapping
-	cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+        // Add URL mapping
+        cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
+        // Add AuthenticationService for some special APIs
+        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<User>(new SimpleAuthenticator(),
+                "SUPER SECRET STUFF",
+                User.class)));
     }
 
     public static void main(String[] args) {

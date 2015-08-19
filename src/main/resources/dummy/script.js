@@ -84,12 +84,14 @@ function updateCartInformation() {
  */
 
 function generateQRCode(){
-    $("#qrcode").empty();
-    var qrcode = new QRCode(document.getElementById("qrcode"), {
+    $("#qrCodeDiv").empty();
+    $("#qrCodeAsString").empty();
+    var qrcode = new QRCode(document.getElementById("qrCodeDiv"), {
         width : 300,
         height : 300,
         text: "" + code, //QRCode generator needs a string, so give him one
     });
+    $("#qrCodeAsString").html("als Text: " + code)
 }
 
 

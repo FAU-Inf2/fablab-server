@@ -59,8 +59,9 @@ class ServerApplication extends Application<ServerConfiguration> {
         ));
 
 
-        bootstrap.addBundle(new AssetsBundle("/checkout", "/checkout", null, "dummy.html"));
+        bootstrap.addBundle(new AssetsBundle("/dummy", "/dummy", null, "dummy.html"));
         bootstrap.addBundle(new AssetsBundle("/productMap", "/productMap", null, "productMap.html"));
+        bootstrap.addBundle(new AssetsBundle("/inventories", "/inventories", null, "inventory.html"));
 
 
     }
@@ -122,6 +123,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new PushResource(pushServiceConfiguration, hibernate.getSessionFactory()));
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new InventoryResource(new InventoryFacade(new InventoryDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new UserResource());
 
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
@@ -171,6 +173,7 @@ class ServerApplication extends Application<ServerConfiguration> {
             CartServer.class,
             CartEntryServer.class,
             DoorState.class,
+            InventoryItem.class,
             RegistrationId.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
@@ -194,6 +197,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         config.addAnnotatedClass(CartEntryServer.class);
         config.addAnnotatedClass(DoorState.class);
         config.addAnnotatedClass(RegistrationId.class);
+        config.addAnnotatedClass(InventoryItem.class);
 
         SchemaExporter exporter = new SchemaExporter(config, "src/dist/schema.sql");
         exporter.export();

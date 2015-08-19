@@ -7,9 +7,6 @@ import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-/**
- * Created by EE on 11.05.15.
- */
 public class ICalDAO extends AbstractDAO<ICal> {
 
     public ICalDAO(SessionFactory factory) {

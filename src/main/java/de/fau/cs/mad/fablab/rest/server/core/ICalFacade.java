@@ -6,9 +6,6 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalInterface;
 
 import java.util.List;
 
-/**
- * Created by EE on 14.05.15.
- */
 public class ICalFacade {
 
     private final ICalDAO dao;

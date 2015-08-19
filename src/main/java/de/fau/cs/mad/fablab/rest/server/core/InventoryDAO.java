@@ -25,7 +25,9 @@ public class InventoryDAO extends AbstractDAO<InventoryItem> {
 
     //Create
     public InventoryItem create(InventoryItem obj){
-        return persist(obj);
+        if(persist(obj) != null)
+            return obj;
+        return null;
     }
 
     //Delete

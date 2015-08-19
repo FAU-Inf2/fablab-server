@@ -59,8 +59,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         ));
 
 
-        bootstrap.addBundle(new AssetsBundle("/checkoutDummy", "/checkoutDummy", "index.html"));
-        bootstrap.addBundle(new AssetsBundle("/productMap", "/productMap", "index.html"));
+        bootstrap.addBundle(new AssetsBundle("/checkout", "/checkout", null, "dummy.html"));
+        bootstrap.addBundle(new AssetsBundle("/productMap", "/productMap", null, "productMap.html"));
 
 
     }

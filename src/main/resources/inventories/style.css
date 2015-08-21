@@ -50,8 +50,13 @@ thead {
 
 td{
     padding:5px;
-    border-bottom: 1px soild #788f94;
+    border-bottom: 1px solid #000;
 }
+
+
+tbody tr:nth-child(even) {background: #DDD}
+tbody tr:nth-child(odd) {background: #FFF}
+
 .button{
     border: 2px outset black;
     color: #eee;

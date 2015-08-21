@@ -100,8 +100,6 @@ public class OpenErpClient implements OpenErpInterface {
         return products;
     }
 
-
-
     /***
      * searches for a substring inside product name sat the openerp web service
      *
@@ -271,7 +269,6 @@ public class OpenErpClient implements OpenErpInterface {
     private Product buildProduct(Product aProduct, List<Category> aCategories,List<UOM> aUOMs){
         aProduct.setCategory(getCategoryObjectById(aCategories, aProduct.getCategoryId()));
         aProduct.setUom(getUOMById(aUOMs, aProduct.getOum_id()));
-        // get the location
         aProduct = prepareProductLocation(aProduct,aCategories);
         return aProduct;
     }
@@ -295,127 +292,4 @@ public class OpenErpClient implements OpenErpInterface {
         }
         return new Location();
     }
-/*
-    // 1) Schaue ob es die ParentCategorie ist
-    //  1.1 falls keine Location vorhanden -> unknown location
-    //  1.2 falls location vorhanden -> return location as String - location + Code
-    // 2) Wenn nicht ParentCategory -> Rekursive alle locations zusammensammeln
-    private String prepareLocationString(Category category, List<Category> aCategories) {
-        String locationString = "";
-
-        if(isParentCategory(category)){
-            if(category.getLocation_id() == 0){
-                return "";
-            }
-            else{
-                locationString = category.getLocationObject().getName();
-                if(!category.getLocationObject().getCode().contains(OpenERPConst.UNKNOW_CODE)){
-                    locationString = locationString + "  (" + category.getLocationObject().getCode() + ")";
-                }
-            }
-        }else{
-            List<String> locationList = new LinkedList<>();
-            if(category.getLocation_id() != 0){
-                getLocationStrings(locationList, category, aCategories);
-            }
-            else {
-                getLocationStrings(locationList, category, aCategories);
-            }
-            String newLocationString = getLocationStringByLocationStringList(locationList);
-            locationString = newLocationString;
-        }
-        return locationString;
-    }
-*/
-    /*
-    private String getLocationStringByLocationStringList(List<String> aLocationList) {
-        List<String> newLocationList = new ArrayList<>();
-
-        for(int index = 0; index < aLocationList.size(); index++){
-            if(aLocationList.get(index) !=  null){
-                for(int index2 = index+1; index2 < aLocationList.size();index2++){
-                    if(aLocationList.get(index2) != null) {
-                        if (aLocationList.get(index).contains(aLocationList.get(index2))) {
-                            aLocationList.set(index2, null);
-                        }
-                    }
-                }
-            }
-        }
-
-        for(String locationString : aLocationList){
-            if(locationString != null) {
-                newLocationList.add(locationString);
-            }
-        }
-
-        StringBuilder locationStringBuilder = new StringBuilder("");
-
-
-        if(newLocationList.size() == 1){
-            locationStringBuilder.append(newLocationList.get(0));
-        }
-        if(newLocationList.size() == 2){
-            locationStringBuilder.append(newLocationList.get(0)).append(" / ").append(newLocationList.get(1));
-        }
-        if(newLocationList.size() > 2) {
-            locationStringBuilder.append(newLocationList.get(0));
-            for(int index = 1; index < newLocationList.size();index++){
-                locationStringBuilder.append(" / ");
-                locationStringBuilder.append(newLocationList.get(index));
-            }
-        }
-
-        return locationStringBuilder.toString();
-    }
-*/
-    /*
-    private void getLocationStrings(List<String> aLocation, Category aCategory, List<Category> aCategories){
-        Category newCategory = getParentCategory(aCategory, aCategories);
-        if(isParentCategory(newCategory)){
-            String newLocationString = newCategory.getLocationObject().getName();
-            if(newCategory.getLocationObject().getCode() != null) {
-                if (!newCategory.getLocationObject().getCode().contains(OpenERPConst.UNKNOW_CODE)) {
-                    System.out.println("Mit locationCode");
-                    newLocationString = newLocationString + " (" + newCategory.getLocationObject().getCode() + ")";
-                }
-            }
-            aLocation.add(newLocationString);
-        }
-        else{
-            aLocation.add(newCategory.getLocationObject().getName());
-            getLocationStrings(aLocation, newCategory, aCategories);
-        }
-    }
-*/
-/*
-    private Boolean isParentCategory(Category aCategory){
-        if(aCategory.getParent_category_id() == 0){
-            return true;
-        }
-        return false;
-    }
-*/
-/*
-    private Category getParentCategory(Category aChildCategory,List<Category> aCategories) {
-        long parentId = aChildCategory.getParent_category_id();
-        try {
-            return findCategoryById(parentId, aCategories);
-        }catch (CategoryNotFoundException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-*/
-/*
-    private Category findCategoryById(long aCategoryId, List<Category> aCategories) throws CategoryNotFoundException{
-        for(Category category : aCategories){
-            if(aCategoryId == category.getCategoryId()){
-                return category;
-            }
-        }
-        throw new CategoryNotFoundException("Category was not found - CategoryId: " + aCategoryId);
-    }
-*/
-
 }

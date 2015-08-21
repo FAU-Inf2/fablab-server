@@ -8,7 +8,6 @@ import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import de.fau.cs.mad.fablab.rest.core.UOM;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
-import java.math.BigDecimal;
 
 import java.net.URL;
 import java.util.*;

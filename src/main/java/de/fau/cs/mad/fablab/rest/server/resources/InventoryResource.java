@@ -32,7 +32,7 @@ public class InventoryResource implements InventoryApi {
 
     @UnitOfWork
     @Override
-    public boolean deleteAll() {
+    public Boolean deleteAll() {
         return this.facade.deleteAll();
     }
 }

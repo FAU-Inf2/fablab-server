@@ -11,6 +11,8 @@ import com.relayrides.pushy.apns.util.MalformedTokenStringException;
 import com.relayrides.pushy.apns.util.SSLContextUtil;
 import com.relayrides.pushy.apns.util.SimpleApnsPushNotification;
 import com.relayrides.pushy.apns.util.TokenUtil;
+import de.fau.cs.mad.fablab.rest.server.configuration.APNConfiguration;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -27,12 +29,25 @@ import javax.net.ssl.SSLHandshakeException;
 public class ApplePushService{
 
     private final PushManager<SimpleApnsPushNotification> pushManager;
-
     private final ApnsPayloadBuilder payloadBuilder = new ApnsPayloadBuilder();
+    private APNConfiguration configuration = null;
 
-    public ApplePushService() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, KeyManagementException, IOException {
-        URL cert = getClass().getResource("/src/dist/apple.p12");
 
+    public ApplePushService(APNConfiguration configuration) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, KeyManagementException, IOException {
+        this.configuration = configuration;
+
+        URL cert = getClass().getResource(configuration.getCertificate());
+
+        System.out.println(cert);
+        System.out.println(cert);
+        System.out.println(cert);
+        System.out.println(cert);
+        System.out.println(cert);
+        System.out.println(cert);
+        System.out.println(cert);
+        System.out.println(configuration.getCertificate());
+        System.out.println(configuration.getPassword());
+        System.out.println(URLDecoder.decode(configuration.getCertificate(), "UTF-8"));
         System.out.println(cert);
         System.out.println(cert);
         System.out.println(cert);
@@ -41,7 +56,7 @@ public class ApplePushService{
         System.out.println(cert);
         System.out.println(cert);
         System.out.println(cert.getPath());
-        String password = "";
+        String password = configuration.getPassword();
         this.pushManager = new PushManager<>(
                 ApnsEnvironment.getSandboxEnvironment(),
                 SSLContextUtil.createDefaultSSLContext(URLDecoder.decode(cert.getPath(), "UTF-8"), URLDecoder.decode(cert.getPath(), "UTF-8")),

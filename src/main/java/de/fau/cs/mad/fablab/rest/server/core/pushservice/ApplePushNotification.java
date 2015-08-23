@@ -1,10 +1,12 @@
 package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
+import de.fau.cs.mad.fablab.rest.server.configuration.APNConfiguration;
+
 import java.util.Random;
 
 public class ApplePushNotification {
 
-    public ApplePushNotification(){
+    public ApplePushNotification(APNConfiguration configuration){
         Random random = new Random();
         String testMessage = "Hello Test! " + random.nextInt(1000);
         String testToken = "e6878d3993abfaec48220b9d4d3ea0b576c22351c7fbbb5faeb5449bf7f24452";
@@ -12,7 +14,7 @@ public class ApplePushNotification {
 
         ApplePushService notifier=null;
         try {
-            notifier = new ApplePushService();
+            notifier = new ApplePushService(configuration);
             notifier.sendpush(testMessage, testToken);
         } catch(Exception ex) {
             System.out.println(ex);

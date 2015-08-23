@@ -80,6 +80,13 @@ class ServerConfiguration extends Configuration
     @Valid
     @NotNull
     @JsonProperty
+    private APNConfiguration apn = new APNConfiguration();
+    public APNConfiguration getAPN() { return apn; }
+
+
+    @Valid
+    @NotNull
+    @JsonProperty
     private NewsConfiguration drupalNews = new NewsConfiguration();
     public NewsConfiguration getNewsConfiguration() { return drupalNews; }
 

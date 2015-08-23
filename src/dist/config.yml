@@ -21,6 +21,11 @@ spaceapi:
   keyFile: src/dist/tuerstatus-appserver.key
   hashAlgorithm: HmacSHA256
 
+apn:
+  certificate: src/dist/private_key.p12
+  password: src/dist/public_key.pem
+
+
 server:
   requestLog:
     timeZone: UTC

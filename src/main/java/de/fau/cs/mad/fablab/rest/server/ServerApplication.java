@@ -154,11 +154,14 @@ class ServerApplication extends Application<ServerConfiguration> {
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
         // Add AuthenticationService for some special APIs
-        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<User>(new SimpleAuthenticator(),
+        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(new SimpleAuthenticator(),
                 "SUPER SECRET STUFF",
                 User.class)));
 
-        ApplePushNotification apn = new ApplePushNotification();
+
+
+        //add APN
+        ApplePushNotification apn = new ApplePushNotification(configuration.getAPN());
     }
 
     public static void main(String[] args) {

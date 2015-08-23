@@ -1,10 +1,8 @@
-
-
-
 $(document).ready(function() {
-
     $.get("../../inventory/", function (response) {
         response.forEach(function(item) {
+            $("#inventoryTable").show()
+            $("#loading").hide()
             console.log(item);
             $('#inventoryTable').find('tbody').append('<tr>' +
                     '<td>' + item.productName +'</td>' +
@@ -17,13 +15,3 @@ $(document).ready(function() {
     });
 });
 
-
-
-
-function deleteAllTouched(){
-    if (confirm("Sicher das die gesamte Liste gelöscht werden soll?")) {
-        console.log("del all")
-    } else {
-        console.log("cancelled")
-    }
-}

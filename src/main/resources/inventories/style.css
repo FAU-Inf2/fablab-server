@@ -35,6 +35,7 @@ header h1{
     padding-bottom: 30px;
 }
 #inventoryTable{
+    display: none;
     width:730px;
     text-align: center;
     margin:auto;

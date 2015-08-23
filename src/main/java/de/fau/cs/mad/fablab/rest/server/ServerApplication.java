@@ -125,6 +125,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new InventoryResource(new InventoryFacade(new InventoryDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new UserResource());
+        environment.jersey().register(new ContactReource());
 
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
 

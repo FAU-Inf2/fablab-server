@@ -18,7 +18,7 @@ public class SimpleAuthenticator implements Authenticator<BasicCredentials, User
 
         if ("secret".equals(credentials.getPassword())) {
 
-            User user = new User(credentials.getUsername());
+            User user = new User(credentials.getUsername(), credentials.getPassword());
 
             user.addRole(Roles.USER);
 

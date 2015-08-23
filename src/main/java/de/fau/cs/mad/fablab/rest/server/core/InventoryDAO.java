@@ -32,7 +32,7 @@ public class InventoryDAO extends AbstractDAO<InventoryItem> {
 
     //Delete
     public boolean deleteAll() {
-        currentSession().createQuery("DELETE * FROM InventoryItem").executeUpdate();
+        currentSession().createQuery("DELETE FROM InventoryItem").executeUpdate();
         return true;
     }
 

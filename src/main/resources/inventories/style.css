@@ -12,7 +12,9 @@ body{
 
 header, footer{
     padding: 15px;
+    background: linear-gradient( color-stop(0.05, #006699), color-stop(1, #00557F) );
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );
+    background: -moz-linear-gradient( #006699,  #00557F );
     font-weight: bolder;
     color:#fff;
     text-shadow: 1px 1px 1px #000;
@@ -31,6 +33,9 @@ header h1{
     text-align: center;
 }
 
+#empty{
+    display: none;
+}
 #table{
     padding-bottom: 30px;
 }
@@ -43,7 +48,9 @@ header h1{
 }
 
 thead {
+    background: linear-gradient( color-stop(0.05, #006699), color-stop(1, #00557F) );
     background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );
+    background: -moz-linear-gradient( #006699,  #00557F );
     font-weight: bold;
     padding:5px;
     color:#ddd;

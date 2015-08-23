@@ -270,7 +270,19 @@ public class OpenErpClient implements OpenErpInterface {
         aProduct.setCategory(getCategoryObjectById(aCategories, aProduct.getCategoryId()));
         aProduct.setUom(getUOMById(aUOMs, aProduct.getOum_id()));
         aProduct = prepareProductLocation(aProduct,aCategories);
+        if(aProduct.getLocation().contains(OpenERPConst.UNKNOW_LOCATION)){
+           aProduct.setLocationForProductMap(OpenERPConst.UNKNOW_LOCATION);
+        }
+        else{
+            aProduct.setLocationForProductMap(prepareLocationForProductMap(aProduct.getLocation()));
+        }
         return aProduct;
+    }
+
+    private String prepareLocationForProductMap(String location) {
+        location = location.replace(" / ","/");
+        location = location.replace(" ","_");
+        return location;
     }
 
     private Product prepareProductLocation(Product aProduct,List<Category> aCategories){

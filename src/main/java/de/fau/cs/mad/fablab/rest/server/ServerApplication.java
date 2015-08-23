@@ -9,6 +9,7 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.DrupalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushNotification;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
@@ -156,6 +157,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<User>(new SimpleAuthenticator(),
                 "SUPER SECRET STUFF",
                 User.class)));
+
+        ApplePushNotification apn = new ApplePushNotification();
     }
 
     public static void main(String[] args) {

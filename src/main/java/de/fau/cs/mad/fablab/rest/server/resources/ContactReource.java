@@ -15,21 +15,14 @@ public class ContactReource implements ContactApi{
 
     @Override
     public Response sendFeedback(String aMessage) {
-        System.out.println("Send Feedbacl: String: " + aMessage);
+        System.out.println("Send Feedbac: String: " + aMessage);
         if(aMessage.isEmpty()) {
             return Response.serverError().build();
         }
         return Response.ok().build();
     }
 
-    @Override
-    public Response sendErrorMessage(long aToolId) {
-        System.out.println("Send ErrorMessage: String: " + aToolId);
-        if(aToolId == 0){
-            return Response.serverError().build();
-        }
-        return Response.ok().build();
-    }
+
 
     @Override
     public TestObject create(TestObject obj) {
@@ -75,5 +68,14 @@ public class ContactReource implements ContactApi{
         newObject.setFirst(2);
         newObject.setSecond("asdfa");
         return newObject;
+    }
+
+    @Override
+    public Response sendErrorMessage(long aToolId, String aMessage) {
+        System.out.println("Send ErrorMessage: String: " + aToolId + " and " + aMessage);
+        if(aToolId == 0){
+            return Response.serverError().build();
+        }
+        return Response.ok().build();
     }
 }

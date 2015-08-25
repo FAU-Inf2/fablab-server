@@ -11,11 +11,13 @@ RUN 	apt-get update && apt-get install -y --no-install-recommends \
 
 COPY	fablab-rest-server.keystore fablab-rest-server.keystore
 COPY	tuerstatus-appserver.key tuerstatus-appserver.key
+COPY	apnDev.p12 apnDev.p12
 
 #build and run the server
 CMD 	if [ ! -d "fablab-server" ]; then git clone https://github.com/FAU-Inf2/fablab-server.git; fi && \
 	mv fablab-rest-server.keystore fablab-server/src/dist && \
 	mv tuerstatus-appserver.key fablab-server/src/dist && \
+	mv apnDev.p12 fablab-server/src/dist && \
 	cd fablab-server && \
 	./gradlew run
 

@@ -14,8 +14,12 @@ import com.relayrides.pushy.apns.util.TokenUtil;
 import de.fau.cs.mad.fablab.rest.server.configuration.APNConfiguration;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -30,36 +34,17 @@ public class ApplePushService{
 
     private final PushManager<SimpleApnsPushNotification> pushManager;
     private final ApnsPayloadBuilder payloadBuilder = new ApnsPayloadBuilder();
-    private APNConfiguration configuration = null;
+    private APNConfiguration configuration;
 
 
     public ApplePushService(APNConfiguration configuration) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, KeyManagementException, IOException {
         this.configuration = configuration;
 
-        URL cert = getClass().getResource(configuration.getCertificate());
-
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(configuration.getCertificate());
-        System.out.println(configuration.getPassword());
-        System.out.println(URLDecoder.decode(configuration.getCertificate(), "UTF-8"));
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert);
-        System.out.println(cert.getPath());
-        String password = configuration.getPassword();
+        Path keyFile = Paths.get(configuration.getCertificate());
+        URI cert = keyFile.toUri();
         this.pushManager = new PushManager<>(
                 ApnsEnvironment.getSandboxEnvironment(),
-                SSLContextUtil.createDefaultSSLContext(URLDecoder.decode(cert.getPath(), "UTF-8"), URLDecoder.decode(cert.getPath(), "UTF-8")),
+                SSLContextUtil.createDefaultSSLContext(cert.getPath(),configuration.getPassword()),
                 null, // Optional: custom event loop group
                 null, // Optional: custom ExecutorService for calling listeners
                 null, // Optional: custom BlockingQueue implementation
@@ -70,10 +55,6 @@ public class ApplePushService{
         pushManager.registerFailedConnectionListener(new MyFailedConnectionListener());
     }
 
-    public void sendpush(String message, byte[] token) throws InterruptedException {
-        String payload = payloadBuilder.setAlertBody(message).setSoundFileName("ring-ring.aiff").buildWithDefaultMaximumLength();
-        pushManager.getQueue().put(new SimpleApnsPushNotification(token, payload));
-    }
 
     public void sendpush(String message, String stoken) throws InterruptedException, MalformedTokenStringException {
         byte[]token = TokenUtil.tokenStringToByteArray(stoken);

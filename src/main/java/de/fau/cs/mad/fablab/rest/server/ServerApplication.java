@@ -127,6 +127,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new InventoryResource(new InventoryFacade(new InventoryDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new UserResource());
         environment.jersey().register(new ContactReource());
+        environment.jersey().register(new VersionCheckResource());
 
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
 
@@ -155,7 +156,7 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         // Add AuthenticationService for some special APIs
         environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(new SimpleAuthenticator(),
-                "SUPER SECRET STUFF",
+                "Authentication required",
                 User.class)));
 
 

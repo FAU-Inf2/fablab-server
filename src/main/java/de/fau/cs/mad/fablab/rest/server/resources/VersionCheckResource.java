@@ -13,8 +13,8 @@ public class VersionCheckResource  implements VersionCheckApi {
     public UpdateStatus checkVersion(DeviceType deviceType, int currentVersion) {
         UpdateStatus status = new UpdateStatus();
 
-        status.setCurrentVersion("v1.4");
-        status.setCurrentVersionCode(4);
+        status.setLatestVersion("v1.4");
+        status.setLatestVersionCode(4);
         status.setOldVersionCode(currentVersion);
 
         if (currentVersion <= 0) {

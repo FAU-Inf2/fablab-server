@@ -1,3 +1,4 @@
 - SVG Datei einfach in Incscape öffnen --> Ändern --> Speichern --> Quelltext in HTML kopieren
 - In der ProductMap keine Ids aus dem OpenERP eintragen, sondern die passenden Locationnamen, wie sie in der Location hinterlegt sind (Beispiel: https://user.fablab.fau.de/~buildserver/pricelist/output/price_list-Alle_Produkte.html)
 - Leerzeichen durch Bindestriche austauschen. "Kiste_Dioden" anstatt "Kiste Dioden"
+- Umlaute auschreiben (ae statt ä)

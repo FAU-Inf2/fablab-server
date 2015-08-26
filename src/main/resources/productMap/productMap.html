@@ -457,6 +457,8 @@
 		}
 		if(isIdMatched == true && finestProductLocation !== null)
 			changeColor(finestProductLocation);
+		if(isIdMatched == false && finestProductLocation !== null)
+			alert("Der Standort ist nicht in der Standortkarte verzeichnet");
 	
 	}
 	
@@ -465,6 +467,7 @@
 		var svgElement = document.getElementById(locationId);
 		if(svgElement != null)
 			svgElement.style.fill = "red";
+		
 	}
 	
 	$( document ).ready( setSize );

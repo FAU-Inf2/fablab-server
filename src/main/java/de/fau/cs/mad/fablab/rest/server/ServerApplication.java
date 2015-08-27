@@ -1,15 +1,19 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.google.common.cache.CacheBuilderSpec;
+import de.fau.cs.mad.fablab.rest.api.PushType;
 import de.fau.cs.mad.fablab.rest.core.*;
-import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.AndroidPushConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.ApplePushConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.DrupalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
-import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushNotification;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.AndroidPushManager;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushManager;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
@@ -107,10 +111,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(helloFablabResource);
 
         // create and register instance of SpaceApiResource
-        PushServiceConfiguration pushServiceConfiguration = configuration.getPushServiceConfiguration();
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
-                pushServiceConfiguration,
                 spaceApiConfiguration,
                 hibernate.getSessionFactory()
         );
@@ -122,7 +124,6 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new DrupalResource(new DrupalFacade(new DrupalDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ProductResource(new ProductFacade(new ProductDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
-        environment.jersey().register(new PushResource(pushServiceConfiguration, hibernate.getSessionFactory()));
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new InventoryResource(new InventoryFacade(new InventoryDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new UserResource());
@@ -161,8 +162,10 @@ class ServerApplication extends Application<ServerConfiguration> {
 
 
 
-        //add APN
-        ApplePushNotification apn = new ApplePushNotification(configuration.getAPN());
+        //PUSH --> ADD MANAGERS TO PUSHFACADE SIGLETON
+        PushFacade.getInstance().addPushManager(new AndroidPushManager(configuration.getAndroidPushConfiguration()), PushType.ANDROID);
+        PushFacade.getInstance().addPushManager(new ApplePushManager(configuration.getApplePushConfiguration()), PushType.APPLE);
+
     }
 
     public static void main(String[] args) {
@@ -182,7 +185,7 @@ class ServerApplication extends Application<ServerConfiguration> {
             CartEntryServer.class,
             DoorState.class,
             InventoryItem.class,
-            RegistrationId.class) {
+            PushToken.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
             return configuration.getDatabase();
@@ -204,7 +207,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         config.addAnnotatedClass(CartServer.class);
         config.addAnnotatedClass(CartEntryServer.class);
         config.addAnnotatedClass(DoorState.class);
-        config.addAnnotatedClass(RegistrationId.class);
+        config.addAnnotatedClass(PushToken.class);
         config.addAnnotatedClass(InventoryItem.class);
 
         SchemaExporter exporter = new SchemaExporter(config, "src/dist/schema.sql");

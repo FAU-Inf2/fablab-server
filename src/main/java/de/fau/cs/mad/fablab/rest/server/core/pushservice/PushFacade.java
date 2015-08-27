@@ -40,33 +40,6 @@ public class PushFacade {
 
 
     }
-//    public void pushToAllDevices(String aTitel,Object aMessage){
-//        AndroidPushContent content = new AndroidPushContent();
-//        PushTokenFacade registrationIdFacade = new PushTokenFacade(new PushTokenDAO(mSessionFactory));
-//        List<PushToken> pushTokens = registrationIdFacade.findAll();
-//        for(PushToken pushToken : pushTokens){
-//            content.addRegId(pushToken.getToken());
-//        }
-//        content.addData(aTitel, aMessage);
-//        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
-//        pushJson(pushService,content);
-  //  }
-
-  //  public void pushToDevice(PushToken aPushToken, String aTitel,String aMessage){
-//        AndroidPushContent content = new AndroidPushContent();
-//        content.addRegId(aPushToken.getToken());
-//        content.addData(aTitel,aMessage);
-//        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
-//        pushJson(pushService,content);
- //   }
-
-//    private void pushJson(AndroidPushService aAndroidPushService, AndroidPushContent aPushContent){
-//        try{
-//            aAndroidPushService.pushJson(aPushContent);
-//        }catch (IOException io){
-//            io.printStackTrace();
-//        }
-//    }
 
 
 }

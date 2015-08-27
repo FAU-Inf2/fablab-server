@@ -55,9 +55,20 @@ public class ProductDAO extends AbstractDAO<Product> {
         return super.currentSession().createQuery("FROM Product").list();
     }
 
-    //Create
+    /***
+     * Stores the entry in the database, if it is not existing yet
+     * @param obj
+     * @return the stored {@link Product}
+     */
     public Product create(Product obj){
-        return persist(obj);
+        //try to fetch the value from our storage
+        Product stored = get(obj.getDatabaseId());
+        if(stored == null){
+            //create the value
+            return persist(obj);
+        }
+        //value already exists
+        return stored;
     }
 
 

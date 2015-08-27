@@ -1,7 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.google.common.cache.CacheBuilderSpec;
-import de.fau.cs.mad.fablab.rest.api.PlatformType;
+import de.fau.cs.mad.fablab.rest.core.PlatformType;
 import de.fau.cs.mad.fablab.rest.core.*;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;

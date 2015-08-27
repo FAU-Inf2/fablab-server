@@ -1,6 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
-import de.fau.cs.mad.fablab.rest.api.PlatformType;
+import de.fau.cs.mad.fablab.rest.core.PlatformType;
 import de.fau.cs.mad.fablab.rest.api.VersionCheckApi;
 import de.fau.cs.mad.fablab.rest.core.UpdateStatus;
 

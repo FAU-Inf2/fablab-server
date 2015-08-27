@@ -1,5 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core.openerp;
 
+import com.thetransactioncompany.jsonrpc2.client.JSONRPC2SessionException;
 import de.fau.cs.mad.fablab.rest.core.Category;
 import de.fau.cs.mad.fablab.rest.core.Location;
 import de.fau.cs.mad.fablab.rest.core.Product;
@@ -86,18 +87,22 @@ public class OpenErpClient implements OpenErpInterface {
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
 
-        final List<UOM> uoms = uomClient.getUOMs();
-        final List<Category> categories = categoryClient.getCategories();
-        final List<Location> locations = locationClient.getLocations();
-        final List<Product> products = productClient.getProducts(limit, offset);
+        try {
+            final List<UOM> uoms = uomClient.getUOMs();
+            final List<Category> categories = categoryClient.getCategories();
+            final List<Location> locations = locationClient.getLocations();
+            final List<Product> products = productClient.getProducts(limit, offset);
 
-        prepareCategories(categories,locations);
+            prepareCategories(categories, locations);
 
-        for(Product product : products){
-            product = buildProduct(product, categories, uoms);
+            for (Product product : products) {
+                product = buildProduct(product, categories, uoms);
+            }
+
+            return products;
+        }catch (Exception e){
+            throw new OpenErpException(e.getMessage(), "");
         }
-
-        return products;
     }
 
     /***
@@ -114,19 +119,22 @@ public class OpenErpClient implements OpenErpInterface {
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
+        try{
+            List<UOM> uoms = uomClient.getUOMs();
+            List<Category> categories = categoryClient.getCategories();
+            List<Location> locations = locationClient.getLocations();
+            List<Product> products = productClient.searchForProductsByName(searchString, limit, offset);
 
-        List<UOM> uoms = uomClient.getUOMs();
-        List<Category> categories = categoryClient.getCategories();
-        List<Location> locations = locationClient.getLocations();
-        List<Product> products = productClient.searchForProductsByName(searchString, limit, offset);
+            prepareCategories(categories,locations);
 
-        prepareCategories(categories,locations);
+            for(Product product : products){
+                product = buildProduct(product,categories,uoms);
+            }
 
-        for(Product product : products){
-            product = buildProduct(product,categories,uoms);
+            return products;
+        }catch (Exception e){
+            throw new OpenErpException(e.getMessage(), "");
         }
-
-        return products;
     }
 
     /**
@@ -144,18 +152,22 @@ public class OpenErpClient implements OpenErpInterface {
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
         ProductClient productClient = new ProductClient(mOpenERPConnector,mSearchReadUrl);
 
-        List<UOM> uoms = uomClient.getUOMs();
-        List<Category> categories = categoryClient.getCategories();
-        List<Location> locations = locationClient.getLocations();
-        List<Product> products = productClient.searchForProductsByCategory(searchString, limit, offset);
+        try {
+            List<UOM> uoms = uomClient.getUOMs();
+            List<Category> categories = categoryClient.getCategories();
+            List<Location> locations = locationClient.getLocations();
+            List<Product> products = productClient.searchForProductsByCategory(searchString, limit, offset);
 
-        prepareCategories(categories,locations);
+            prepareCategories(categories, locations);
 
-        for(Product product : products){
-            product = buildProduct(product,categories,uoms);
+            for (Product product : products) {
+                product = buildProduct(product, categories, uoms);
+            }
+
+            return products;
+        }catch (Exception e){
+            throw new OpenErpException(e.getMessage(), "");
         }
-
-        return products;
     }
 
     /***
@@ -174,23 +186,26 @@ public class OpenErpClient implements OpenErpInterface {
         CategoryClient categoryClient = new CategoryClient(mOpenERPConnector,mSearchReadUrl);
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         UOMClient uomClient = new UOMClient(mOpenERPConnector,mSearchReadUrl);
+        try {
+            List<Category> categories = categoryClient.getCategories();
+            List<Location> locations = locationClient.getLocations();
+            List<UOM> uoms = uomClient.getUOMs();
 
-        List<Category> categories = categoryClient.getCategories();
-        List<Location> locations = locationClient.getLocations();
-        List<UOM> uoms = uomClient.getUOMs();
+            prepareCategories(categories, locations);
 
-        prepareCategories(categories,locations);
+            product = buildProduct(product, categories, uoms);
 
-        product = buildProduct(product,categories,uoms);
-
-        return product;
+            return product;
+        }catch (Exception e){
+            throw new OpenErpException(e.getMessage(), "");
+        }
     }
 
     /**
      * get all locations
      * @return List of {@link Location}
      */
-    public List<Location> getLocations(){
+    public List<Location> getLocations() throws OpenErpException{
         LocationClient locationClient = new LocationClient(mOpenERPConnector,mSearchReadUrl);
         return locationClient.getLocations();
     }

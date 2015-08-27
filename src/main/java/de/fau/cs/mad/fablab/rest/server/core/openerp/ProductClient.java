@@ -75,7 +75,7 @@ public class ProductClient {
                     OpenERPUtil.generateRequestID()));
         }
     } catch (JSONRPC2SessionException e) {
-        e.printStackTrace();
+        throw new OpenErpException(e.getMessage(), "");
     }
     return generateProductListFromJson(jsonRPC2Response);
     }
@@ -212,7 +212,7 @@ public class ProductClient {
                         OpenERPUtil.generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
+            throw new OpenErpException(e.getMessage(), "");
         }
         return generateProductListFromJson(jsonRPC2Response);
 
@@ -259,7 +259,7 @@ public class ProductClient {
                         OpenERPUtil.generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
+            throw new OpenErpException(e.getMessage(), "");
         }
         return generateProductListFromJson(jsonRPC2Response);
     }
@@ -294,7 +294,7 @@ public class ProductClient {
                 jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(1, 0, domain), OpenERPUtil.generateRequestID()));
             }
         } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
+            throw new OpenErpException(e.getMessage(), "");
         }
 
         List<Product> list = generateProductListFromJson(jsonRPC2Response);

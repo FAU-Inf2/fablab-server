@@ -49,7 +49,7 @@ public class UOMClient {
         mUsercontext = aOpenERPConnector.getOpenERPUserContext();
     }
 
-    public List<UOM> getUOMs() throws OpenErpException{
+    public List<UOM> getUOMs() throws OpenErpException {
         List<UOM> uoms = new ArrayList<>();
         JSONRPC2Response jsonRPC2Response = null;
         try {
@@ -65,12 +65,10 @@ public class UOMClient {
             } catch (OpenErpSessionExpiredException e) {
                 //do the request one more time.
                 mJSONRPC2Session.setURL(mSearchReadUrl);
-                jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD,
-                        getUOMParams(domain),
-                        OpenERPUtil.generateRequestID()));
+                jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getUOMParams(domain), OpenERPUtil.generateRequestID()));
             }
-        } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
+        }catch (JSONRPC2SessionException e){
+            throw new OpenErpException(e.getMessage(), e.getCause().toString());
         }
         return generateOUMsFromJson(jsonRPC2Response);
     }

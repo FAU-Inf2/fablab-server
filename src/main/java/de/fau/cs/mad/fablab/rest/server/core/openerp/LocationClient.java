@@ -38,7 +38,7 @@ public class LocationClient {
         mUsercontext = aOpenERPConnector.getOpenERPUserContext();
     }
 
-    public List<Location> getLocations(){
+    public List<Location> getLocations() throws OpenErpException {
         List<Location> locations = new ArrayList<>();
 
         JSONRPC2Response jsonRPC2Response = null;
@@ -75,7 +75,7 @@ public class LocationClient {
             }
 
         } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
+            throw new OpenErpException(e.getMessage(), "");
         }
 
         return locations;

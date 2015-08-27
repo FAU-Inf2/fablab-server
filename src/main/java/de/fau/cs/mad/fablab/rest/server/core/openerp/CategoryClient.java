@@ -71,7 +71,7 @@ public class CategoryClient {
             categories = generateCategoryListFromJson(jsonRPC2Response);
 
         } catch (JSONRPC2SessionException e) {
-            e.printStackTrace();
+            throw new OpenErpException(e.getMessage(), "");
         }
         return categories;
     }

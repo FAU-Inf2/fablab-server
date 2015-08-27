@@ -64,7 +64,7 @@ database:
     user: sa
     password:
     logValidationErrors: false
-    url: jdbc:h2:${DB_PORT_9092_TCP}/~/fablab-server
+    url: jdbc:h2:file:/opt/database/fablab-db
 
     properties:
       hibernate.dialect: org.hibernate.dialect.H2Dialect

@@ -14,6 +14,8 @@ public class ProductDAO extends AbstractDAO<Product> {
     private static String PARAM_NAME = "productName";
     private static String PARAM_CATEGORY = "category";
 
+    private static String QUERY_DELETE_ALL = "delete FROM Product";
+    private static String QUERY_FIND_ALL = "FROM Product";
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
     private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE name LIKE :" + PARAM_NAME;
     private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE category_string LIKE :" + PARAM_CATEGORY;
@@ -30,14 +32,12 @@ public class ProductDAO extends AbstractDAO<Product> {
         return super.currentSession().createQuery(QUERY_FIND_BY_NAME).setParameter(PARAM_NAME, "%"+name+"%").list();
     }
 
-    //TODO TESTEN
     public List<Product> findByCategory(String cat){
         return super.currentSession().createQuery(QUERY_FIND_BY_CATEGORY).setParameter(PARAM_CATEGORY, "%" + cat + "%").list();
     }
 
-    @SuppressWarnings("unchecked")
     public List<Product> findAll() {
-        return super.currentSession().createQuery("FROM Product").list();
+        return super.currentSession().createQuery(QUERY_FIND_ALL).list();
     }
 
     /***
@@ -81,6 +81,6 @@ public class ProductDAO extends AbstractDAO<Product> {
     }
 
     public void deleteAll(){
-        currentSession().createQuery("delete FROM Product").executeUpdate();
+        currentSession().createQuery(QUERY_DELETE_ALL).executeUpdate();
     }
 }

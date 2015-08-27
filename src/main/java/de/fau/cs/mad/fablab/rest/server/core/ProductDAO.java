@@ -55,22 +55,7 @@ public class ProductDAO extends AbstractDAO<Product> {
         //value already exists
         return stored;
     }
-
-
-    //Update
-    public Product update(Product modified) {
-        Product stored = this.get(modified.getProductId());
-        stored.setProductId(modified.getProductId());
-        stored.setName(modified.getName());
-        stored.setPrice(modified.getPrice());
-        stored.setDescription(modified.getDescription());
-        stored.setCategoryId(modified.getCategoryId());
-        stored.setCategoryString(modified.getCategoryString());
-        this.persist(stored);
-        return stored;
-    }
-
-
+    
     //Delete
     public boolean delete(long id) {
         if (get(id) == null)

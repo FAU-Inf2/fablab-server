@@ -12,8 +12,10 @@ import java.util.List;
 public class ProductDAO extends AbstractDAO<Product> {
 
     private static String PARAM_ID = "id";
-    
+    private static String PARAM_NAME = "productName";
+
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
+    private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE name LIKE :" + PARAM_NAME;
 
     public ProductDAO(SessionFactory factory) {
         super(factory);
@@ -26,16 +28,7 @@ public class ProductDAO extends AbstractDAO<Product> {
 
     //TODO TESTEN
     public List<Product> findByName(String name){
-        List<Product> products = super.currentSession().createQuery("FROM Product").list();
-        List<Product> foundProducts = new ArrayList<Product>();
-
-        if(products != null) {
-            for (Product p : products) {
-                if(p.getName().contains(name))
-                    foundProducts.add(p);
-            }
-        }
-        return foundProducts;
+        return super.currentSession().createQuery(QUERY_FIND_BY_NAME).setParameter(PARAM_NAME, "%"+name+"%").list();
     }
 
     //TODO TESTEN

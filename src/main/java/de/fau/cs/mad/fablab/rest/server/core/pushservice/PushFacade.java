@@ -48,8 +48,8 @@ public class PushFacade {
 
     //CART STATUS CHANGED
     public void cartStatusChanged(PushToken token, CartStatus state){
-
-
+        PushManger pushManger = pushMangers.get(token.getPlatformType());
+        pushManger.sendCartStautsChanged(token.getToken(), state);
     }
 
 

@@ -4,6 +4,7 @@ import de.fau.cs.mad.fablab.rest.core.PlatformType;
 import de.fau.cs.mad.fablab.rest.core.PushToken;
 import de.fau.cs.mad.fablab.rest.core.TriggerPushType;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
@@ -15,31 +16,33 @@ public class PushDAO extends AbstractDAO<PushToken> {
         super(factory);
     }
 
-    public PushToken subscribeDoorOpensNextTime(PushToken token){
-        token.setTriggerPushType(TriggerPushType.DOOR_OPENS_NEXT_TIME);
-        return persist(token);
+    public void subscribeDoorOpensNextTime(PushToken token){
+        Query query = super.currentSession().createQuery("FROM PushToken WHERE token = :token AND triggerPushType = :trigger");
+        query.setParameter("token", token.getToken());
+        query.setParameter("trigger", token.getTriggerPushType());
+        if(query.list().size() == 0) {
+            token.setTriggerPushType(TriggerPushType.DOOR_OPENS_NEXT_TIME);
+            persist(token);
+        }
     }
 
 
-    public boolean unsubscribeDoorOpensNextTime(PushToken token) {
-        //TODO never TESTED!
-        if (get(token) == null)
-            return false;
-        currentSession().delete(get(token));
-        return true;
+    public void unsubscribeDoorOpensNextTime(PushToken token) {
+        Query query = super.currentSession().createQuery("DELETE PushToken WHERE token = :token AND triggerPushType = :trigger");
+        query.setParameter("token", token.getToken());
+        query.setParameter("trigger", token.getTriggerPushType());
+        query.executeUpdate();
     }
 
     public List<String> findAllTokensWith(PlatformType platformType, TriggerPushType trigger){
-        /*
-            Should be changed to WHERE... dont wanna dance on to much parties -> TODO: FixMe
-               (if... works for now.)
-         */
-         List<PushToken> all = super.currentSession().createQuery("FROM push_token").list();
+        Query query = super.currentSession().createQuery("FROM PushToken WHERE platformType = :platformType AND triggerPushType = :trigger");
+        query.setParameter("platformType", platformType);
+        query.setParameter("trigger", trigger);
+        List<PushToken> list = query.list();
 
         List<String> tokens = new ArrayList<>();
-        for(PushToken pushToken : all)
-            if(pushToken.getPlatformType().equals(platformType) && pushToken.getTriggerPushType().equals(trigger))
-                tokens.add(pushToken.getToken());
+        for(PushToken pushToken : list)
+            tokens.add(pushToken.getToken());
         return tokens;
     }
 

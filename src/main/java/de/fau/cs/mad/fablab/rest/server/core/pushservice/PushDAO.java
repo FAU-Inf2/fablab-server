@@ -35,6 +35,7 @@ public class PushDAO extends AbstractDAO<PushToken> {
     }
 
     public List<String> findAllTokensWith(PlatformType platformType, TriggerPushType trigger){
+
         Query query = super.currentSession().createQuery("FROM PushToken WHERE platformType = :platformType AND triggerPushType = :trigger");
         query.setParameter("platformType", platformType);
         query.setParameter("trigger", trigger);
@@ -46,4 +47,9 @@ public class PushDAO extends AbstractDAO<PushToken> {
         return tokens;
     }
 
+    public void removeTokensForTrigger(TriggerPushType trigger){
+        Query query = super.currentSession().createQuery("DELETE PushToken WHERE triggerPushType = :trigger");
+        query.setParameter("trigger", trigger);
+        query.executeUpdate();
+    }
 }

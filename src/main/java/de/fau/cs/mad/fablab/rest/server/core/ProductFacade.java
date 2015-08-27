@@ -12,32 +12,40 @@ public class ProductFacade {
 
     private final ProductDAO dao;
     private final OpenErpInterface mOpenErp;
+    private boolean initialized = false;
 
     public ProductFacade(ProductDAO dao) {
         this.dao = dao;
         this.mOpenErp = OpenErpClient.getInstance();
     }
 
-    public List<Product> findAll(int limit, int offset) {
+    /***
+     * Use this method to create or update the dao store
+     */
+    public void initializeDao(){
+        //TODO
+        if(initialized) return;
+
+        List<Product> products = null;
         try {
-            List<Product> products = mOpenErp.getProducts(limit, offset);
+            products = mOpenErp.getProducts(0, 0);
             for(Product tmp : products){
                 dao.create(tmp);
             }
-            return dao.findAll();
+            initialized = true;
         } catch (OpenErpException e) {
             e.printStackTrace();
-            return dao.findAll();
         }
     }
 
+    public List<Product> findAll(int limit, int offset) {
+        initializeDao();
+        return dao.findAll();
+    }
+
     public List<String> findAllNames() {
-        List<Product> products = null;
-        try {
-            products = mOpenErp.getProducts(Integer.MAX_VALUE, 0);
-        } catch (OpenErpException e) {
-            products = dao.findAll();
-        }
+        initializeDao();
+        List<Product> products = dao.findAll();
         List<String> names = new ArrayList<>();
         for(Product product : products){
             names.add(product.getName());
@@ -46,33 +54,22 @@ public class ProductFacade {
     }
 
     public List<Product> findByName(String name, int limit, int offset) {
-        try {
-            return mOpenErp.searchForProductsByName(name, limit, offset);
-        } catch (OpenErpException e) {
-            e.printStackTrace();
-            return dao.findByName(name);
-        }
+        initializeDao();
+        return dao.findByName(name);
     }
 
     public List<Product> findByCategory(String category, int limit, int offset) {
-        try {
-            return mOpenErp.searchForProductsByCategory(category, limit, offset);
-        } catch (OpenErpException e) {
-            e.printStackTrace();
-            return dao.findByCategory(category);
-        }
+        initializeDao();
+        return dao.findByCategory(category);
     }
 
     public Product findById(String id) {
-        try {
-            return mOpenErp.searchForProductsById(id);
-        } catch (OpenErpException e) {
-            e.printStackTrace();
-            return dao.findById(id);
-        }
+        initializeDao();
+        return dao.findById(id);
     }
 
     public Product create(Product obj) {
+        initializeDao();
         return this.dao.create(obj);
     }
 

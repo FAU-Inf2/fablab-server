@@ -4,7 +4,7 @@ package de.fau.cs.mad.fablab.rest.server.configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class PushServiceConfiguration {
+public class AndroidPushConfiguration {
 
     @NotEmpty
     @JsonProperty

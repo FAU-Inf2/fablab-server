@@ -3,7 +3,7 @@ package de.fau.cs.mad.fablab.rest.server.configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.NotEmpty;
 
-public class APNConfiguration {
+public class ApplePushConfiguration {
 
     @NotEmpty
     @JsonProperty

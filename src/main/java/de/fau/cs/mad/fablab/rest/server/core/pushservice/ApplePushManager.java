@@ -2,6 +2,8 @@ package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 import de.fau.cs.mad.fablab.rest.core.CartStatus;
 import de.fau.cs.mad.fablab.rest.server.configuration.ApplePushConfiguration;
 
+import java.util.List;
+
 
 public class ApplePushManager implements PushManger{
 
@@ -18,7 +20,7 @@ public class ApplePushManager implements PushManger{
 
 
 
-    public void sendNotificationDoorJustOpens(String[] tokens){
+    public void sendNotificationDoorJustOpened(List<String> tokens){
         //TODO -> Send Notification to all
 //        token = "fef9ae99842c1714c6749dc4106c3ceb61b9f08c388ef8a2ad261d1acdcf4526";
 //        String message = "Das Fablab ist hat gerade geöffnet";

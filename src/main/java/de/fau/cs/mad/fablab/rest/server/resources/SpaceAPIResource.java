@@ -4,7 +4,6 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.api.SpaceApi;
 import de.fau.cs.mad.fablab.rest.core.DoorState;
-import de.fau.cs.mad.fablab.rest.server.configuration.AndroidPushConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateDAO;

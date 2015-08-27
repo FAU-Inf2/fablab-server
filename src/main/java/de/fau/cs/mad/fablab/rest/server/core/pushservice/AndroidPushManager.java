@@ -3,6 +3,8 @@ package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 import de.fau.cs.mad.fablab.rest.core.CartStatus;
 import de.fau.cs.mad.fablab.rest.server.configuration.AndroidPushConfiguration;
 
+import java.util.List;
+
 public class AndroidPushManager implements PushManger {
 
 
@@ -14,7 +16,7 @@ public class AndroidPushManager implements PushManger {
     }
 
     @Override
-    public void sendNotificationDoorJustOpens(String[] tokens) {
+    public void sendNotificationDoorJustOpened(List<String> tokens) {
 
     }
 

@@ -11,13 +11,10 @@ import com.relayrides.pushy.apns.util.MalformedTokenStringException;
 import com.relayrides.pushy.apns.util.SSLContextUtil;
 import com.relayrides.pushy.apns.util.SimpleApnsPushNotification;
 import com.relayrides.pushy.apns.util.TokenUtil;
-import de.fau.cs.mad.fablab.rest.server.configuration.APNConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.ApplePushConfiguration;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyManagementException;
@@ -30,14 +27,14 @@ import java.util.logging.Logger;
 import javax.net.ssl.SSLHandshakeException;
 
 
-public class ApplePushService{
+public class ApplePushService {
 
     private final PushManager<SimpleApnsPushNotification> pushManager;
     private final ApnsPayloadBuilder payloadBuilder = new ApnsPayloadBuilder();
-    private APNConfiguration configuration;
+    private ApplePushConfiguration configuration;
 
 
-    public ApplePushService(APNConfiguration configuration) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, KeyManagementException, IOException {
+    public ApplePushService(ApplePushConfiguration configuration) throws KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, KeyManagementException, IOException {
         this.configuration = configuration;
 
         Path keyFile = Paths.get(configuration.getCertificate());
@@ -49,7 +46,7 @@ public class ApplePushService{
                 null, // Optional: custom ExecutorService for calling listeners
                 null, // Optional: custom BlockingQueue implementation
                 new PushManagerConfiguration(),
-                "ExamplePushManager");
+                "ApplePushManager");
         pushManager.start();
         pushManager.registerRejectedNotificationListener(new MyRejectedNotificationListener());
         pushManager.registerFailedConnectionListener(new MyFailedConnectionListener());

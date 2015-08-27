@@ -5,7 +5,6 @@ import de.fau.cs.mad.fablab.rest.core.Product;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -13,9 +12,11 @@ public class ProductDAO extends AbstractDAO<Product> {
 
     private static String PARAM_ID = "id";
     private static String PARAM_NAME = "productName";
+    private static String PARAM_CATEGORY = "category";
 
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
     private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE name LIKE :" + PARAM_NAME;
+    private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE category_string LIKE :" + PARAM_CATEGORY;
 
     public ProductDAO(SessionFactory factory) {
         super(factory);
@@ -25,26 +26,14 @@ public class ProductDAO extends AbstractDAO<Product> {
         return (Product) super.currentSession().createQuery(QUERY_FIND_BY_ID).setParameter(PARAM_ID, id).uniqueResult();
     }
 
-
-    //TODO TESTEN
     public List<Product> findByName(String name){
         return super.currentSession().createQuery(QUERY_FIND_BY_NAME).setParameter(PARAM_NAME, "%"+name+"%").list();
     }
 
     //TODO TESTEN
     public List<Product> findByCategory(String cat){
-        List<Product> products = super.currentSession().createQuery("FROM Product").list();
-        List<Product> foundProducts = new ArrayList<Product>();
-
-        if(products != null) {
-            for (Product p : products) {
-                if(p.getCategoryString().contains(cat))
-                    foundProducts.add(p);
-            }
-        }
-        return foundProducts;
+        return super.currentSession().createQuery(QUERY_FIND_BY_CATEGORY).setParameter(PARAM_CATEGORY, "%" + cat + "%").list();
     }
-
 
     @SuppressWarnings("unchecked")
     public List<Product> findAll() {

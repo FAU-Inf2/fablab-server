@@ -11,13 +11,16 @@ import java.util.List;
 
 public class ProductDAO extends AbstractDAO<Product> {
 
+    private static String PARAM_ID = "id";
+    
+    private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
+
     public ProductDAO(SessionFactory factory) {
         super(factory);
     }
 
-
     public Product findById(String id) {
-        return super.get(id);
+        return (Product) super.currentSession().createQuery(QUERY_FIND_BY_ID).setParameter(PARAM_ID, id).uniqueResult();
     }
 
 

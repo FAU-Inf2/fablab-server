@@ -18,6 +18,7 @@ import java.util.*;
 public class ProductClient {
 
     static final String METHOD = "call";
+    static final String FIELD_ID = "id";
     static final String FIELD_CODE = "code";
     static final String FIELD_NAME = "name";
     static final String FIELD_RECEPTION_COUNT = "reception_count";
@@ -39,6 +40,7 @@ public class ProductClient {
         fields.add(6, FIELD_UNIT_OF_MEASURE);
         fields.add(7, FIELD_CATEGORY);
         fields.add(8, FIELD_LOCATION);
+        fields.add(9, FIELD_ID);
     }
 
     private JSONRPC2Session mJSONRPC2Session;
@@ -97,6 +99,10 @@ public class ProductClient {
 
         for (Object productObject : records) {
             JSONObject productJson = (JSONObject) productObject;
+
+            //This one should never be null
+            Long databaseId = (Long)productJson.get(FIELD_ID);
+
             String name = (productJson.get(FIELD_NAME) == null)
                     ? "unknown"
                     : (String) productJson.get(FIELD_NAME);
@@ -142,6 +148,7 @@ public class ProductClient {
             }
             //Create a product and put it in the result list
             Product product = new Product(id, name, price, categoryId, categoryString, unit, location);
+            product.setDatabaseId(databaseId);
             product.setOum_id(unit_id);
             product.setLocation_id(location_id);
             productList.add(product);

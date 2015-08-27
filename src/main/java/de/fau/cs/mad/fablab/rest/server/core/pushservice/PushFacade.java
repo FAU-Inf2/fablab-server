@@ -1,6 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
-import de.fau.cs.mad.fablab.rest.api.PushType;
+import de.fau.cs.mad.fablab.rest.api.PlatformType;
 import de.fau.cs.mad.fablab.rest.core.CartStatus;
 import de.fau.cs.mad.fablab.rest.core.PushToken;
 
@@ -17,9 +17,9 @@ public class PushFacade {
         return PushFacade.instance;
     }
 
-    private HashMap<PushType, PushManger> pushMangers = new HashMap<>();
+    private HashMap<PlatformType, PushManger> pushMangers = new HashMap<>();
 
-    public void addPushManager(PushManger manger, PushType type){
+    public void addPushManager(PushManger manger, PlatformType type){
         pushMangers.put(type, manger);
     }
 

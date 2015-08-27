@@ -1,6 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
-import de.fau.cs.mad.fablab.rest.api.PushType;
+import de.fau.cs.mad.fablab.rest.api.PlatformType;
 import de.fau.cs.mad.fablab.rest.api.VersionCheckApi;
 import de.fau.cs.mad.fablab.rest.core.UpdateStatus;
 
@@ -10,7 +10,7 @@ import de.fau.cs.mad.fablab.rest.core.UpdateStatus;
 public class VersionCheckResource  implements VersionCheckApi {
 
     @Override
-    public UpdateStatus checkVersion(PushType deviceType, int currentVersion) {
+    public UpdateStatus checkVersion(PlatformType deviceType, int currentVersion) {
         UpdateStatus status = new UpdateStatus();
 
         status.setLatestVersion("v1.4");

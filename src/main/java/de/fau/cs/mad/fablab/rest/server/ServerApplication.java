@@ -1,10 +1,8 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.google.common.cache.CacheBuilderSpec;
-import de.fau.cs.mad.fablab.rest.api.PushType;
+import de.fau.cs.mad.fablab.rest.api.PlatformType;
 import de.fau.cs.mad.fablab.rest.core.*;
-import de.fau.cs.mad.fablab.rest.server.configuration.AndroidPushConfiguration;
-import de.fau.cs.mad.fablab.rest.server.configuration.ApplePushConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.DrupalClient;
@@ -163,8 +161,8 @@ class ServerApplication extends Application<ServerConfiguration> {
 
 
         //PUSH --> ADD MANAGERS TO PUSHFACADE SIGLETON
-        PushFacade.getInstance().addPushManager(new AndroidPushManager(configuration.getAndroidPushConfiguration()), PushType.ANDROID);
-        PushFacade.getInstance().addPushManager(new ApplePushManager(configuration.getApplePushConfiguration()), PushType.APPLE);
+        PushFacade.getInstance().addPushManager(new AndroidPushManager(configuration.getAndroidPushConfiguration()), PlatformType.ANDROID);
+        PushFacade.getInstance().addPushManager(new ApplePushManager(configuration.getApplePushConfiguration()), PlatformType.APPLE);
 
     }
 

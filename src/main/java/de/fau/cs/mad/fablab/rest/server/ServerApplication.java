@@ -11,6 +11,7 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.AndroidPushManager;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushManager;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushDAO;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
@@ -124,6 +125,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new InventoryResource(new InventoryFacade(new InventoryDAO(hibernate.getSessionFactory()))));
+
         environment.jersey().register(new UserResource());
         environment.jersey().register(new ContactReource());
         environment.jersey().register(new VersionCheckResource());
@@ -163,6 +165,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         //PUSH --> ADD MANAGERS TO PUSHFACADE SIGLETON
         PushFacade.getInstance().addPushManager(new AndroidPushManager(configuration.getAndroidPushConfiguration()), PlatformType.ANDROID);
         PushFacade.getInstance().addPushManager(new ApplePushManager(configuration.getApplePushConfiguration()), PlatformType.APPLE);
+        PushFacade.getInstance().setDao(new PushDAO(hibernate.getSessionFactory()));
+        environment.jersey().register(new PushResource());
 
     }
 

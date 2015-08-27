@@ -20,20 +20,27 @@ public class ProductFacade {
 
     public List<Product> findAll(int limit, int offset) {
         try {
-            return mOpenErp.getProducts(limit, offset);
+            List<Product> products = mOpenErp.getProducts(limit, offset);
+            for(Product tmp : products){
+                dao.create(tmp);
+            }
+            return dao.findAll();
         } catch (OpenErpException e) {
             e.printStackTrace();
-            return null;
+            return dao.findAll();
         }
     }
 
     public List<String> findAllNames() {
-        List<String> names = new ArrayList<>();
+        List<Product> products = null;
         try {
-            for(Product p : mOpenErp.getProducts(Integer.MAX_VALUE, 0))
-                names.add(p.getName());
+            products = mOpenErp.getProducts(Integer.MAX_VALUE, 0);
         } catch (OpenErpException e) {
-            e.printStackTrace();
+            products = dao.findAll();
+        }
+        List<String> names = new ArrayList<>();
+        for(Product product : products){
+            names.add(product.getName());
         }
         return names;
     }
@@ -43,7 +50,7 @@ public class ProductFacade {
             return mOpenErp.searchForProductsByName(name, limit, offset);
         } catch (OpenErpException e) {
             e.printStackTrace();
-            return null;
+            return dao.findByName(name);
         }
     }
 
@@ -52,7 +59,7 @@ public class ProductFacade {
             return mOpenErp.searchForProductsByCategory(category, limit, offset);
         } catch (OpenErpException e) {
             e.printStackTrace();
-            return null;
+            return dao.findByCategory(category);
         }
     }
 
@@ -61,9 +68,8 @@ public class ProductFacade {
             return mOpenErp.searchForProductsById(id);
         } catch (OpenErpException e) {
             e.printStackTrace();
-            return null;
+            return dao.findById(id);
         }
-
     }
 
     public Product create(Product obj) {

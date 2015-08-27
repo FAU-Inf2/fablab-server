@@ -1,6 +1,3 @@
-template: Hello, %s!
-defaultName: Fablab User
-
 logging:
   level: INFO
   appenders:

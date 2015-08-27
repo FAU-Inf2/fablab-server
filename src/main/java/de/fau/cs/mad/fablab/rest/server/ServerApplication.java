@@ -14,7 +14,6 @@ import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushManager;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushDAO;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
-import de.fau.cs.mad.fablab.rest.server.health.HelloFablabHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
@@ -72,17 +71,12 @@ class ServerApplication extends Application<ServerConfiguration> {
 
     @Override
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
-        // Create our basic health check
-        final HelloFablabHealthCheck helloFablabHealthCheck =
-                new HelloFablabHealthCheck(configuration.getTemplate());
-
 
         CacheBuilderSpec.disableCaching();
 
         exportDatabaseSchema(configuration.getDatabase());
 
         // add health check and resource to our jersey environment
-        environment.healthChecks().register("Hello Fablab template", helloFablabHealthCheck);
         environment.healthChecks().register("DBHealthCheck", new DatabaseHealthCheck(hibernate));
 
         // configure OpenERP client
@@ -100,14 +94,6 @@ class ServerApplication extends Application<ServerConfiguration> {
         // configure date format for jackson
         //environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         environment.getObjectMapper().setDateFormat(new SimpleDateFormat(Format.DATE_FORMAT));
-
-
-        // create an instance of our HelloFablabResource
-        final HelloFablabResource helloFablabResource = new HelloFablabResource(
-                configuration.getTemplate(),
-                configuration.getDefaultName()
-        );
-        environment.jersey().register(helloFablabResource);
 
         // create and register instance of SpaceApiResource
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();

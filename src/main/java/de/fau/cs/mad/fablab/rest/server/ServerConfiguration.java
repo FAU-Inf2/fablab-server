@@ -77,11 +77,6 @@ class ServerConfiguration extends Configuration
     private ICalConfiguration ical = new ICalConfiguration();
     public ICalConfiguration getICalConfiguration() { return ical; }
 
-    @Valid
-    @NotNull
-    @JsonProperty
-    private APNConfiguration apn = new APNConfiguration();
-    public APNConfiguration getAPN() { return apn; }
 
 
     @Valid
@@ -99,7 +94,13 @@ class ServerConfiguration extends Configuration
     @Valid
     @NotNull
     @JsonProperty
-    private PushServiceConfiguration pushConfig = new PushServiceConfiguration();
-    public PushServiceConfiguration getPushServiceConfiguration() { return pushConfig; }
+    private AndroidPushConfiguration androidPushConfiguration = new AndroidPushConfiguration();
+    public AndroidPushConfiguration getAndroidPushConfiguration() { return androidPushConfiguration; }
+
+    @Valid
+    @NotNull
+    @JsonProperty
+    private ApplePushConfiguration applePushConfiguration = new ApplePushConfiguration();
+    public ApplePushConfiguration getApplePushConfiguration() { return applePushConfiguration; }
 
 }

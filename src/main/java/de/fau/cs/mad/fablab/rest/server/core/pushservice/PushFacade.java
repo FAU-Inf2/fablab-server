@@ -1,49 +1,72 @@
 package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
-import de.fau.cs.mad.fablab.rest.core.RegistrationId;
-import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
-import org.hibernate.SessionFactory;
+import de.fau.cs.mad.fablab.rest.api.PushType;
+import de.fau.cs.mad.fablab.rest.core.CartStatus;
+import de.fau.cs.mad.fablab.rest.core.PushToken;
 
-import java.io.IOException;
-import java.util.List;
-
+import java.util.HashMap;
 
 public class PushFacade {
 
-    private SessionFactory mSessionFactory;
-    private PushServiceConfiguration mPushServiceConfiguration;
-
-    public PushFacade(PushServiceConfiguration aPushServiceConfiguration,SessionFactory aSessionFactory){
-        mSessionFactory = aSessionFactory;
-        mPushServiceConfiguration = aPushServiceConfiguration;
+    //Singleton
+    private static PushFacade instance;
+    private PushFacade(){}
+    public static PushFacade getInstance () {
+        if (PushFacade.instance == null)
+            PushFacade.instance = new PushFacade ();
+        return PushFacade.instance;
     }
 
-    public void pushToAllDevices(String aTitel,Object aMessage){
-        PushContent content = new PushContent();
-        RegistrationIdFacade registrationIdFacade = new RegistrationIdFacade(new RegistrationIdDAO(mSessionFactory));
-        List<RegistrationId> registrationIds = registrationIdFacade.findAll();
-        for(RegistrationId registrationId : registrationIds){
-            content.addRegId(registrationId.getRegistrationid());
-        }
-        content.addData(aTitel, aMessage);
-        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
-        pushJson(pushService,content);
+    private HashMap<PushType, PushManger> pushMangers = new HashMap<>();
+
+    public void addPushManager(PushManger manger, PushType type){
+        pushMangers.put(type, manger);
     }
 
-    public void pushToDevice(RegistrationId aRegistrationId, String aTitel,String aMessage){
-        PushContent content = new PushContent();
-        content.addRegId(aRegistrationId.getRegistrationid());
-        content.addData(aTitel,aMessage);
-        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
-        pushJson(pushService,content);
-    }
-
-    private void pushJson(AndroidPushService aAndroidPushService, PushContent aPushContent){
-        try{
-            aAndroidPushService.pushJson(aPushContent);
-        }catch (IOException io){
-            io.printStackTrace();
-        }
+    public void subscribeDoorOpensNextTime(PushToken token){
 
     }
+
+    public void unsubscribeDoorOpensNextTime(PushToken token){
+
+    }
+
+    public void fablabDoorJustOpened(){
+
+
+    }
+
+    public void cartStatusChanged(PushToken token, CartStatus state){
+
+
+    }
+//    public void pushToAllDevices(String aTitel,Object aMessage){
+//        AndroidPushContent content = new AndroidPushContent();
+//        PushTokenFacade registrationIdFacade = new PushTokenFacade(new PushTokenDAO(mSessionFactory));
+//        List<PushToken> pushTokens = registrationIdFacade.findAll();
+//        for(PushToken pushToken : pushTokens){
+//            content.addRegId(pushToken.getToken());
+//        }
+//        content.addData(aTitel, aMessage);
+//        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
+//        pushJson(pushService,content);
+  //  }
+
+  //  public void pushToDevice(PushToken aPushToken, String aTitel,String aMessage){
+//        AndroidPushContent content = new AndroidPushContent();
+//        content.addRegId(aPushToken.getToken());
+//        content.addData(aTitel,aMessage);
+//        AndroidPushService pushService = new AndroidPushService(mPushServiceConfiguration);
+//        pushJson(pushService,content);
+ //   }
+
+//    private void pushJson(AndroidPushService aAndroidPushService, AndroidPushContent aPushContent){
+//        try{
+//            aAndroidPushService.pushJson(aPushContent);
+//        }catch (IOException io){
+//            io.printStackTrace();
+//        }
+//    }
+
+
 }

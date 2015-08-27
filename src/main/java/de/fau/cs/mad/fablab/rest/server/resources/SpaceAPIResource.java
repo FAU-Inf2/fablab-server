@@ -4,7 +4,7 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.api.SpaceApi;
 import de.fau.cs.mad.fablab.rest.core.DoorState;
-import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.AndroidPushConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateDAO;
@@ -29,14 +29,12 @@ import javax.ws.rs.client.WebTarget;
  */
 public class SpaceAPIResource implements SpaceApi
 {
-    private final PushServiceConfiguration mPushServiceConfiguration;
     private final SessionFactory mSessionFactory;
     private final SpaceApiConfiguration mConfig;
     private final DoorStateDAO mDAO;
     private final Logger mLogger;
 
-    public SpaceAPIResource(PushServiceConfiguration aPushServiceConfiguration, SpaceApiConfiguration aConfig, SessionFactory aSessionFactory) {
-        mPushServiceConfiguration = aPushServiceConfiguration;
+    public SpaceAPIResource(SpaceApiConfiguration aConfig, SessionFactory aSessionFactory) {
         mSessionFactory = aSessionFactory;
         mConfig = aConfig;
         mDAO = new DoorStateDAO(aSessionFactory);
@@ -66,8 +64,7 @@ public class SpaceAPIResource implements SpaceApi
             mLogger.info("DoorState changed, firing push event. Current state is " + newState);
             mDAO.saveState(newState);
 
-            PushFacade pushFacade = new PushFacade(mPushServiceConfiguration, mSessionFactory);
-            pushFacade.pushToAllDevices("DoorState", newState);
+            //TODO PUSH HERE IF DOOR OPENS
         }
 
         return "{\"success\":\"true\", \"state\":\"" + newState.state + "\"}";

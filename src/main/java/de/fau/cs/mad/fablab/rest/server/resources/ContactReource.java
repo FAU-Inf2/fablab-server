@@ -55,7 +55,7 @@ public class ContactReource implements ContactApi{
 
         newCartServer.setItems(cartEntryList);
         newCartServer.setStatus(CartStatus.CANCELLED);
-        newCartServer.setPushId("asdfas123");
+        newCartServer.setPushToken("asdfas123");
         newCartServer.setSentToServer();
 
 

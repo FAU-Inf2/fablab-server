@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.core;
 
 import de.fau.cs.mad.fablab.rest.core.CartServer;
 import de.fau.cs.mad.fablab.rest.core.CartStatus;
+import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 
 public class CartFacade{
 
@@ -28,8 +29,13 @@ public class CartFacade{
 
     public boolean updateCartStatus(String id, CartStatus status){
         remover.removeAllOldCarts();
-        return this.dao.updateCartStatus(id, status);
+        if(this.dao.updateCartStatus(id, status)){
+            PushFacade.getInstance().cartStatusChanged(this.dao.findById(id));
+            return true;
+        }
+        return false;
     }
+
 
 
 }

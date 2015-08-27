@@ -1,9 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
-import de.fau.cs.mad.fablab.rest.core.PlatformType;
-import de.fau.cs.mad.fablab.rest.core.CartStatus;
-import de.fau.cs.mad.fablab.rest.core.PushToken;
-import de.fau.cs.mad.fablab.rest.core.TriggerPushType;
+import de.fau.cs.mad.fablab.rest.core.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,9 +48,9 @@ public class PushFacade {
 
 
     //CART STATUS CHANGED
-    public void cartStatusChanged(PushToken token, CartStatus state){
-        PushManger pushManger = pushMangers.get(token.getPlatformType());
-        pushManger.sendCartStautsChanged(token.getToken(), state);
+    public void cartStatusChanged(CartServer cartServer){
+        PushManger pushManger = pushMangers.get(cartServer.getPlatformType());
+        pushManger.sendCartStautsChanged(cartServer.getPushToken(), cartServer.getStatus());
     }
 
 

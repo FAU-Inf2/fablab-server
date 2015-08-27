@@ -16,8 +16,7 @@ public class CartDAO extends AbstractDAO<CartServer> {
 
     //GET
     public CartServer findById(String code) {
-        CartServer cartServer = super.get(code);
-        return cartServer;
+        return super.get(code);
     }
 
     @SuppressWarnings("unchecked")

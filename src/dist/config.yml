@@ -21,9 +21,6 @@ spaceapi:
   keyFile: src/dist/tuerstatus-appserver.key
   hashAlgorithm: HmacSHA256
 
-apn:
-  certificate: src/dist/apnDev.p12
-  password: ${APN_PASSWORD}
 
 
 server:
@@ -98,12 +95,17 @@ drupalNews:
     port: 50080
     nodeEndpoint: /rest/node
 
-pushConfig:
-    pushAPIRegistrationId: ${pushAPIkey}
-    googlePushServiceURL: ${pushServiceURL}
+
 
 generalData:
     fabMail: fablab@i2.cs.fau.de
     feedbackMail: fablab@i2.cs.fau.de
     fabUrl: https://fablab.fau.de
 
+androidPushConfiguration:
+    pushAPIRegistrationId: ${pushAPIkey}
+    googlePushServiceURL: ${pushServiceURL}
+
+applePushConfiguration:
+  certificate: src/dist/apnDev.p12
+  password: ${APN_PASSWORD}

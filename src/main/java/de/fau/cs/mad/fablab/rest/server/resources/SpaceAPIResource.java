@@ -64,7 +64,8 @@ public class SpaceAPIResource implements SpaceApi
             mLogger.info("DoorState changed, firing push event. Current state is " + newState);
             mDAO.saveState(newState);
 
-            //TODO PUSH HERE IF DOOR OPENS
+            if(newState.state.equals(DoorState.State.open))
+                PushFacade.getInstance().fablabDoorJustOpened();
         }
 
         return "{\"success\":\"true\", \"state\":\"" + newState.state + "\"}";

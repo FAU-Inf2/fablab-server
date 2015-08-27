@@ -3,7 +3,7 @@ package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.fau.cs.mad.fablab.rest.server.configuration.PushServiceConfiguration;
+import de.fau.cs.mad.fablab.rest.server.configuration.AndroidPushConfiguration;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.HostnameVerifier;
@@ -19,13 +19,13 @@ public class AndroidPushService {
     private static final String REGISTRATION_ID = "";
     private static final String API_KEY = "";
 
-    private PushServiceConfiguration mPushServiceConfiguration;
+    private AndroidPushConfiguration mPushServiceConfiguration;
 
-    public AndroidPushService(PushServiceConfiguration aPushServiceConfiguration){
+    public AndroidPushService(AndroidPushConfiguration aPushServiceConfiguration){
         mPushServiceConfiguration = aPushServiceConfiguration;
     }
 
-    public void pushJson(PushContent aPushContent) throws IOException{
+    public void pushJson(AndroidPushContent aPushContent) throws IOException{
         URL url = new URL(mPushServiceConfiguration.getGooglePushServiceURL());
         HttpsURLConnection
                 .setDefaultHostnameVerifier(new CustomizedHostnameVerifier());

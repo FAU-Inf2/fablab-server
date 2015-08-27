@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 
-public class PushContent {
+public class AndroidPushContent {
 
     private List<String> registration_ids;
     private Map<String, Object> data;
 
-    public PushContent()
+    public AndroidPushContent()
     {
         data = new HashMap<String, Object>();
     }

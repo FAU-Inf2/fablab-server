@@ -17,12 +17,15 @@ public class AndroidPushManager implements PushManger {
 
     @Override
     public void sendNotificationDoorJustOpened(List<String> tokens) {
-
+        for(String token : tokens){
+            System.out.println("ANDROID PUSH TO: " + token);
+        }
     }
 
     @Override
     public void sendCartStautsChanged(String token, CartStatus status) {
-
+        if(token.length() > 0)
+            System.out.println("ANDROID PUSH FOR CARTSTATUS: " + token + " STATUS: " + status.toString());
     }
 
 /**

@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 import com.relayrides.pushy.apns.util.MalformedTokenStringException;
 import de.fau.cs.mad.fablab.rest.core.CartStatus;
+import de.fau.cs.mad.fablab.rest.core.TriggerPushType;
 import de.fau.cs.mad.fablab.rest.server.configuration.ApplePushConfiguration;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class ApplePushManager implements PushManger{
         String message = "Das Fablab hat gerade geöffnet";
         for(String token : tokens){
             try {
-                applePushService.sendpush(message, token);
+                applePushService.sendpush(message, token, TriggerPushType.DOOR_OPENS_NEXT_TIME);
             } catch (InterruptedException | MalformedTokenStringException e) {
                 e.printStackTrace();
             }
@@ -38,7 +39,7 @@ public class ApplePushManager implements PushManger{
             String message = getCartChangedText(status);
             System.out.println("APPLE PUSH FOR CARTSTATUS: " + token + " Message: " + message);
             try {
-                applePushService.sendpush(message, token);
+                applePushService.sendpush(message, token, TriggerPushType.CART_STATUS_CHANGED);
             } catch (InterruptedException | MalformedTokenStringException e) {
                 e.printStackTrace();
             }

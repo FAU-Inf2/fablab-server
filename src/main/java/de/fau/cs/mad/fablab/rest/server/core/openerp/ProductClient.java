@@ -103,10 +103,15 @@ public class ProductClient {
             //This one should never be null
             Long databaseId = (Long)productJson.get(FIELD_ID);
 
+
+
+
             String name = (productJson.get(FIELD_NAME) == null)
                     ? "unknown"
                     : (String) productJson.get(FIELD_NAME);
-
+            System.out.println("Vor prepare : " + name);
+            name = prepareProductName(name);
+            System.out.println("Nach prepare: " + name);
             //When there is no product_id available, the result is a bool value
             String id = (productJson.get(FIELD_CODE) instanceof Boolean)
                     ? ""
@@ -154,6 +159,19 @@ public class ProductClient {
             productList.add(product);
         }
         return productList;
+    }
+
+    private String prepareProductName(String aName){
+        String[] temp = aName.replace(",", " ").replace("\\n"," ").replace("(", " ").replace(")", " ")
+                .replace("_", " ").replace("-", " ").split(" ");
+        StringBuilder stringBuilder = new StringBuilder(temp[0]);
+        for(int index = 1; index < temp.length; index++){
+            if(!temp[index].isEmpty()) {
+                stringBuilder.append(" ");
+                stringBuilder.append(temp[index]);
+            }
+        }
+        return stringBuilder.toString();
     }
 
     /***

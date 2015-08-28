@@ -11,6 +11,7 @@ import com.relayrides.pushy.apns.util.MalformedTokenStringException;
 import com.relayrides.pushy.apns.util.SSLContextUtil;
 import com.relayrides.pushy.apns.util.SimpleApnsPushNotification;
 import com.relayrides.pushy.apns.util.TokenUtil;
+import de.fau.cs.mad.fablab.rest.core.TriggerPushType;
 import de.fau.cs.mad.fablab.rest.server.configuration.ApplePushConfiguration;
 
 import java.io.IOException;
@@ -53,9 +54,9 @@ public class ApplePushService {
     }
 
 
-    public void sendpush(String message, String stoken) throws InterruptedException, MalformedTokenStringException {
+    public void sendpush(String message, String stoken, TriggerPushType type) throws InterruptedException, MalformedTokenStringException {
         byte[]token = TokenUtil.tokenStringToByteArray(stoken);
-        String payload = payloadBuilder.setAlertBody(message).setSoundFileName("ring-ring.aiff").setCategoryName("test").buildWithDefaultMaximumLength();
+        String payload = payloadBuilder.setAlertBody(message).setSoundFileName("ring-ring.aiff").setCategoryName(type.toString()).buildWithDefaultMaximumLength();
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(token, payload);
         pushManager.getQueue().put(notification);
         System.out.println("Queued: "+notification);

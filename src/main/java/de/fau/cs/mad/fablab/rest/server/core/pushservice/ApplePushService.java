@@ -55,7 +55,7 @@ public class ApplePushService {
 
     public void sendpush(String message, String stoken) throws InterruptedException, MalformedTokenStringException {
         byte[]token = TokenUtil.tokenStringToByteArray(stoken);
-        String payload = payloadBuilder.setAlertBody(message).setSoundFileName("ring-ring.aiff").buildWithDefaultMaximumLength();
+        String payload = payloadBuilder.setAlertBody(message).setSoundFileName("ring-ring.aiff").setCategoryName("test").buildWithDefaultMaximumLength();
         SimpleApnsPushNotification notification = new SimpleApnsPushNotification(token, payload);
         pushManager.getQueue().put(notification);
         System.out.println("Queued: "+notification);

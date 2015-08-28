@@ -26,9 +26,7 @@ public class ApplePushManager implements PushManger{
         for(String token : tokens){
             try {
                 applePushService.sendpush(message, token);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (MalformedTokenStringException e) {
+            } catch (InterruptedException | MalformedTokenStringException e) {
                 e.printStackTrace();
             }
         }
@@ -37,13 +35,11 @@ public class ApplePushManager implements PushManger{
     @Override
     public void sendCartStautsChanged(String token, CartStatus status) {
         if(token.length() > 0) {
-            String message = "Warenkorb Status: " + status.toString();
+            String message = getCartChangedText(status);
             System.out.println("APPLE PUSH FOR CARTSTATUS: " + token + " Message: " + message);
             try {
                 applePushService.sendpush(message, token);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (MalformedTokenStringException e) {
+            } catch (InterruptedException | MalformedTokenStringException e) {
                 e.printStackTrace();
             }
         }
@@ -56,4 +52,13 @@ public class ApplePushManager implements PushManger{
             applePushService.closeSender();
     }
 
+
+    private String getCartChangedText(CartStatus status){
+        switch (status){
+            case PAID: return "Warenkorb wurde erfolgreich bezahlt";
+            case CANCELLED: return "Bezahlvorgang wurde abgebrochen";
+            case FAILED: return "Bezahlvorgang ist Fehlgeschlagen";
+            default: return "";
+        }
+    }
 }

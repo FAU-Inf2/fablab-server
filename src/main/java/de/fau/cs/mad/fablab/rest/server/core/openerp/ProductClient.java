@@ -106,9 +106,9 @@ public class ProductClient {
             String name = (productJson.get(FIELD_NAME) == null)
                     ? "unknown"
                     : (String) productJson.get(FIELD_NAME);
-            System.out.println("Vor prepare : " + name);
+
             name = prepareProductName(name);
-            System.out.println("Nach prepare : " + name);
+
             //When there is no product_id available, the result is a bool value
             String id = (productJson.get(FIELD_CODE) instanceof Boolean)
                     ? ""

@@ -7,6 +7,7 @@ import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -185,7 +186,21 @@ public class NewsFeedClient implements NewsInterface {
 
         } catch (IOException e) {
             System.err.println("ERROR - IOException while updating News. \n" +
-                    "The Reason is : " + e.getMessage());
+                    "The Reason is : " + e.getMessage() + "\n trying fallback...!");
+
+            // BEGIN - FALLBACK FOR SERVER DOWNTIME
+            try {
+                RSSFeed fbFeed = tryFallback();
+                if (fbFeed != null) {
+                    feed = fbFeed;
+                    System.out.println("Fallback was successful. Using dummy data.");
+                }
+
+            } catch (IOException e1) {
+                System.err.println("ERROR - IOException while updating News. \n" +
+                        "The Reason is : " + e1.getMessage());
+            }
+            // END - FALLBACK FOR SERVER DOWNTIME
         }
 
         if (this.allNews == null) {
@@ -276,4 +291,15 @@ public class NewsFeedClient implements NewsInterface {
         return guid.substring(0, guid.indexOf(' '));
     }
 
+    private RSSFeed tryFallback() throws IOException {
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(config.getFallback()));
+
+        XmlMapper mapper = new XmlMapper();
+
+        RSSFeed feed = mapper.readValue(reader, RSSFeed.class);
+
+        reader.close();
+
+        return feed;
+    }
 }

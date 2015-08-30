@@ -1,9 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core.drupal;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringReader;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -166,7 +163,24 @@ public class ICalClient implements ICalInterface {
         } catch (IOException e) {
             System.err.println("ERROR - IOException while updating Events. \n" +
                     "The Reason is : "+e.getMessage()+"\n"+
-                    "ICalUrl is : " + config.getEndpoint() + config.getIcalUrl());
+                    "ICalUrl is : " + config.getEndpoint() + config.getIcalUrl() + "\n Try fallback...!");
+
+            // BEGIN - FALLBACK FOR SERVER DOWNTIME
+            try {
+                List<Component> fbComponents = tryFallback();
+                if (fbComponents != null) {
+                    components = fbComponents;
+                    System.out.println("Fallback was successful. Using dummy data.");
+                }
+            } catch (IOException e1) {
+                System.err.println("ERROR - IOException while updating Events. \n" +
+                        "The Reason is : " + e.getMessage() + "\n" +
+                        "ICalUrl is : " + config.getEndpoint() + config.getIcalUrl());
+            } catch (ParserException e1) {
+                System.err.println("ERROR - ParserException while updating Events. \n" +
+                        "The Reason is : "+e.getMessage());
+            }
+            // END - FALLBACK FOR SERVER DOWNTIME
         } catch (ParserException e) {
             System.err.println("ERROR - ParserException while updating Events. \n" +
                     "The Reason is : "+e.getMessage());
@@ -362,5 +376,10 @@ public class ICalClient implements ICalInterface {
 
         if (s.equals(target) && e.equals(target)) return true;
         return false;
+    }
+
+    private List<Component> tryFallback() throws IOException, ParserException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(config.getFallback())));
+        return parseEventsToComponent(reader);
     }
 }

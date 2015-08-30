@@ -24,6 +24,10 @@ public class NewsConfiguration {
     @JsonProperty
     private String nodeEndpoint;
 
+    @NotEmpty
+    @JsonProperty
+    private String fallback;
+
     public boolean validate() {
         if (nodeEndpoint == null || nodeEndpoint.isEmpty() || port == null || port.isEmpty() || url == null || url.isEmpty() || feedurl == null || feedurl.isEmpty()) return false;
         return true;
@@ -59,5 +63,13 @@ public class NewsConfiguration {
 
     public void setFeedurl(String feedurl) {
         this.feedurl = feedurl;
+    }
+
+    public String getFallback() {
+        return fallback;
+    }
+
+    public void setFallback(String fallback) {
+        this.fallback = fallback;
     }
 }

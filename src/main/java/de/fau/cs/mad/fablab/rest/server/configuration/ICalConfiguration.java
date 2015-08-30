@@ -16,6 +16,10 @@ public class ICalConfiguration {
     @JsonProperty
     private String icalUrl;
 
+    @NotEmpty
+    @JsonProperty
+    private String fallback;
+
     public boolean validate() {
         if (endpoint == null || endpoint.isEmpty() || icalUrl == null || icalUrl.isEmpty()) return false;
         return true;
@@ -37,5 +41,11 @@ public class ICalConfiguration {
         this.icalUrl = icalUrl;
     }
 
+    public String getFallback() {
+        return fallback;
+    }
 
+    public void setFallback(String fallback) {
+        this.fallback = fallback;
+    }
 }

@@ -16,7 +16,8 @@ public class PushDAO extends AbstractDAO<PushToken> {
         super(factory);
     }
 
-    public void subscribeDoorOpensNextTime(PushToken token){
+    public Boolean subscribeDoorOpensNextTime(PushToken token){
+        System.out.println("SUBSCRIBING: " + token);
         Query query = super.currentSession().createQuery("FROM PushToken WHERE token = :token AND triggerPushType = :trigger");
         query.setParameter("token", token.getToken());
         query.setParameter("trigger", token.getTriggerPushType());
@@ -24,22 +25,30 @@ public class PushDAO extends AbstractDAO<PushToken> {
             token.setTriggerPushType(TriggerPushType.DOOR_OPENS_NEXT_TIME);
             persist(token);
         }
+        return true;
     }
 
 
-    public void unsubscribeDoorOpensNextTime(PushToken token) {
+    public Boolean unsubscribeDoorOpensNextTime(PushToken token) {
+        System.out.println("DELETEING: " + token);
         Query query = super.currentSession().createQuery("DELETE PushToken WHERE token = :token AND triggerPushType = :trigger");
         query.setParameter("token", token.getToken());
         query.setParameter("trigger", token.getTriggerPushType());
         query.executeUpdate();
+        return doorOpensNextTimeIsSetForToken(token);
     }
 
     public Boolean doorOpensNextTimeIsSetForToken(PushToken token){
+        System.out.println("STATUS: " + token);
         Query query = super.currentSession().createQuery("FROM PushToken WHERE token = :token AND triggerPushType = :trigger");
         query.setParameter("token", token.getToken());
         query.setParameter("trigger", TriggerPushType.DOOR_OPENS_NEXT_TIME);
-        if(query.list().size() == 0)
+
+        if(query.list().size() == 0){
+            System.out.println("NOT FOUND");
             return false;
+        }
+        System.out.println("FOUND");
         return true;
     }
 

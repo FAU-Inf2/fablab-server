@@ -12,16 +12,14 @@ public class PushResource implements PushApi{
 
     @UnitOfWork
     @Override
-    public Response subscribeDoorOpensNextTime(PushToken pushToken) {
-        PushFacade.getInstance().subscribeDoorOpensNextTime(pushToken);
-        return Response.ok().build();
+    public Boolean subscribeDoorOpensNextTime(PushToken pushToken) {
+        return PushFacade.getInstance().subscribeDoorOpensNextTime(pushToken);
     }
 
     @UnitOfWork
     @Override
-    public Response unsubscribeDoorOpensNextTime(PushToken pushToken) {
-        PushFacade.getInstance().unsubscribeDoorOpensNextTime(pushToken);
-        return Response.ok().build();
+    public Boolean unsubscribeDoorOpensNextTime(PushToken pushToken) {
+        return  PushFacade.getInstance().unsubscribeDoorOpensNextTime(pushToken);
     }
 
     @UnitOfWork

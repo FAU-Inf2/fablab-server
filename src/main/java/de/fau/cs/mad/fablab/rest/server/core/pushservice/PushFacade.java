@@ -31,12 +31,12 @@ public class PushFacade {
 
 
     //DOOR STATE (DOOR OPENED)
-    public void subscribeDoorOpensNextTime(PushToken token){
-        this.dao.subscribeDoorOpensNextTime(token);
+    public Boolean subscribeDoorOpensNextTime(PushToken token){
+        return this.dao.subscribeDoorOpensNextTime(token);
     }
 
-    public void unsubscribeDoorOpensNextTime(PushToken token){
-        this.dao.unsubscribeDoorOpensNextTime(token);
+    public Boolean unsubscribeDoorOpensNextTime(PushToken token){
+        return this.dao.unsubscribeDoorOpensNextTime(token);
     }
 
     public Boolean doorOpensNextTimeIsSetForToken(PushToken token){

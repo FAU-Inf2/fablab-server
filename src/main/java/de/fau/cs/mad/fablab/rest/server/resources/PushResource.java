@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 
 import de.fau.cs.mad.fablab.rest.api.PushApi;
 import de.fau.cs.mad.fablab.rest.core.PushToken;
+import de.fau.cs.mad.fablab.rest.core.TriggerPushType;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -13,12 +14,14 @@ public class PushResource implements PushApi{
     @UnitOfWork
     @Override
     public Boolean subscribeDoorOpensNextTime(PushToken pushToken) {
+        pushToken.setTriggerPushType(TriggerPushType.DOOR_OPENS_NEXT_TIME);
         return PushFacade.getInstance().subscribeDoorOpensNextTime(pushToken);
     }
 
     @UnitOfWork
     @Override
     public Boolean unsubscribeDoorOpensNextTime(PushToken pushToken) {
+        pushToken.setTriggerPushType(TriggerPushType.DOOR_OPENS_NEXT_TIME);
         return  PushFacade.getInstance().unsubscribeDoorOpensNextTime(pushToken);
     }
 

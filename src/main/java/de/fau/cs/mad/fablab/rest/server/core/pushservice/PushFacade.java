@@ -39,6 +39,10 @@ public class PushFacade {
         this.dao.unsubscribeDoorOpensNextTime(token);
     }
 
+    public Boolean doorOpensNextTimeIsSetForToken(PushToken token){
+        return this.dao.doorOpensNextTimeIsSetForToken(token);
+    }
+
     public void fablabDoorJustOpened(){
         for(Map.Entry<PlatformType, PushManger> entry : pushMangers.entrySet())
             entry.getValue().sendNotificationDoorJustOpened(this.dao.findAllTokensWith(entry.getKey(), TriggerPushType.DOOR_OPENS_NEXT_TIME));

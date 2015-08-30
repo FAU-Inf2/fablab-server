@@ -34,6 +34,15 @@ public class PushDAO extends AbstractDAO<PushToken> {
         query.executeUpdate();
     }
 
+    public Boolean doorOpensNextTimeIsSetForToken(PushToken token){
+        Query query = super.currentSession().createQuery("FROM PushToken WHERE token = :token AND triggerPushType = :trigger");
+        query.setParameter("token", token.getToken());
+        query.setParameter("trigger", TriggerPushType.DOOR_OPENS_NEXT_TIME);
+        if(query.list().size() == 0)
+            return false;
+        return true;
+    }
+
     public List<String> findAllTokensWith(PlatformType platformType, TriggerPushType trigger){
 
         Query query = super.currentSession().createQuery("FROM PushToken WHERE platformType = :platformType AND triggerPushType = :trigger");

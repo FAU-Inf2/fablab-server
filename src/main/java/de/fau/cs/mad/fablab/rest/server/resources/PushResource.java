@@ -26,6 +26,12 @@ public class PushResource implements PushApi{
 
     @UnitOfWork
     @Override
+    public Boolean doorOpensNextTimeIsSetForToken(String pushToken) {
+        return PushFacade.getInstance().doorOpensNextTimeIsSetForToken(new PushToken(pushToken));
+    }
+
+    @UnitOfWork
+    @Override
     public Response test() {
         PushFacade.getInstance().fablabDoorJustOpened();
         return Response.ok().build();

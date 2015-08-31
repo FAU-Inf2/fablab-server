@@ -10,9 +10,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   viewBox="0 0 744.09448819 1052.3622047"
+   width="744.09448"
+   height="1052.3622"
+   viewBox="0 0 744.09449 1052.3622"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -35,17 +35,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.82838389"
-     inkscape:cx="78.318709"
-     inkscape:cy="545.77093"
+     inkscape:zoom="0.77377953"
+     inkscape:cx="99.815156"
+     inkscape:cy="33.721004"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer3"
      showgrid="true"
      inkscape:window-width="1920"
-     inkscape:window-height="1017"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1">
+     inkscape:window-height="1080"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     units="px">
     <inkscape:grid
        type="xygrid"
        id="grid4150"
@@ -59,7 +60,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,128 +68,7 @@
      inkscape:label="Grobe Regale"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline"><rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect4180"
-   width="120"
-   height="80"
-   x="20"
-   y="432.36221" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect4182"
-   width="120"
-   height="79.999992"
-   x="141.41422"
-   y="432.36221" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect4184"
-   width="300"
-   height="80"
-   x="260"
-   y="432.36221" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="Regal"
-   width="200"
-   height="60"
-   x="520"
-   y="32.362206"
-   inkscape:label="#rect4208" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2.12342215;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect4214"
-   width="159.87659"
-   height="157.93407"
-   x="20.061712"
-   y="514.16547" />
-<path
-   style="opacity:1;fill:#789487;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.01706767;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   d="m 180.71564,514.41249 379.77487,0 0,142.48408 -119.9289,0 0,-61.06461 -259.84597,0 z"
-   id="Werkbank"
-   inkscape:connector-curvature="0"
-   inkscape:label="#path4249" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:1.99599946;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="Drehbanktisch"
-   width="258.94363"
-   height="60.004002"
-   x="279.99802"
-   y="972.36017"
-   inkscape:label="#rect4255" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="Chemietisch"
-   width="260"
-   height="60"
-   x="20"
-   y="972.36218"
-   inkscape:label="#rect4257" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect4259"
-   width="60"
-   height="100"
-   x="18.762566"
-   y="872.00867" />
-<g
-   id="g5737">
-  <rect
-     ry="10.75637"
-     y="985.85583"
-     x="84.362671"
-     height="39.141243"
-     width="62.50647"
-     id="rect4272"
-     style="opacity:1;fill:#788f94;fill-opacity:1;stroke:#ffffff;stroke-width:3.14088035;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-  <rect
-     rx="0"
-     ry="6.3951163"
-     y="1012.24"
-     x="114.67513"
-     height="12.790233"
-     width="1.826871"
-     id="rect5731"
-     style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.31599998;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-</g>
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect5865"
-   width="459.51627"
-   height="199.91829"
-   x="20.040852"
-   y="132.40305" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.88774192;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="Schublade_18"
-   width="380.11224"
-   height="160.31328"
-   x="339.94388"
-   y="732.10504"
-   inkscape:label="#rect5887" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect5889"
-   width="80"
-   height="160"
-   x="260"
-   y="732.36218" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.92238379;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="0815"
-   width="80.077614"
-   height="92.299438"
-   x="639.96118"
-   y="272.32339"
-   inkscape:label="#rect5899" />
-<rect
-   style="opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-   id="rect5901"
-   width="40"
-   height="80"
-   x="680"
-   y="192.3622" />
+     style="display:inline">
 
 
 
@@ -210,215 +90,338 @@
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="Schriften"
-     style="display:inline">
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="201.14001"
-       y="784.93097"
-       id="text4268"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270"
-         x="201.14001"
-         y="784.93097">Chemietisch</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="468.4411"
-       y="785.56683"
-       id="text4268-6"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-9"
-         x="468.4411"
-         y="785.56683">Drehbank</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="575.44122"
-       y="639.21387"
-       id="text4268-3"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-1"
-         x="575.44122"
-         y="639.21387">PC-Arbeitsplätze</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="356.01056"
-       y="639.88843"
-       id="text4268-4"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-4"
-         x="356.01056"
-         y="639.88843">Laser</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="87.52668"
-       y="468.91269"
-       id="text4268-8"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-47"
-         x="87.52668"
-         y="468.91269">Fräse</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="75.93322"
-       y="618.62219"
-       id="text4268-37"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-0"
-         x="75.93322"
-         y="618.62219">Eingang</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="400.92883"
-       y="440.85391"
-       id="text4268-30"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-6"
-         x="400.92883"
-         y="440.85391">Werkbank</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="466.03775"
-       y="373.99005"
-       id="text4268-7"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-8"
-         x="466.03775"
-         y="373.99005">Plexiglasregal</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="201.93088"
-       y="359.79962"
-       id="text4268-0"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-17"
-         x="201.93088"
-         y="359.79962">3D </tspan><tspan
-         sodipodi:role="line"
-         x="201.93088"
-         y="389.8436"
-         id="tspan4281">Drucker</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="61.892204"
-       y="374.79709"
-       id="text4268-9"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-96"
-         x="61.892204"
-         y="374.79709">Plotter</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="254.76111"
-       y="166.90758"
-       id="text4268-08"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-89"
-         x="254.76111"
-         y="166.90758">Elektro-/PC-</tspan><tspan
-         sodipodi:role="line"
-         x="254.76111"
-         y="196.95157"
-         id="tspan4304">Arbeitsplätze</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="769.0907"
-       y="56.382172"
-       id="text4268-01"
-       sodipodi:linespacing="125%"
-       transform="scale(0.77320689,1.2933149)"><tspan
-         sodipodi:role="line"
-         id="tspan4270-964"
-         x="769.0907"
-         y="56.382172">Regal</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:49.58457947px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="42.403885"
-       y="91.364777"
-       id="text4204"
-       sodipodi:linespacing="125%"
-       transform="scale(0.90783329,1.1015238)"><tspan
-         sodipodi:role="line"
-         id="tspan4206"
-         x="42.403885"
-         y="91.364777">FabLab</tspan></text>
-  </g>
+     style="display:inline" />
   <g
      inkscape:groupmode="layer"
      id="layer3"
      inkscape:label="Grundriss"
      style="display:inline">
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4180"
+       width="120"
+       height="80"
+       x="-778.21918"
+       y="1461.1096" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4182"
+       width="120"
+       height="79.999992"
+       x="-656.80499"
+       y="1461.1096" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:3;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4184"
+       width="300"
+       height="80"
+       x="-538.21918"
+       y="1461.1096" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="Regal"
+       width="200"
+       height="60"
+       x="-278.21918"
+       y="1061.1096"
+       inkscape:label="#rect4208" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2.12342215;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4214"
+       width="159.87659"
+       height="157.93407"
+       x="-778.15747"
+       y="1542.9128" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.32114315;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 20,512.3622 0,181.2132"
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:2.01706767;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -617.50355,1543.1598 379.77487,0 0,142.4841 -119.9289,0 0,-61.0646 -259.84597,0 z"
+       id="Werkbank"
+       inkscape:connector-curvature="0"
+       inkscape:label="#path4249" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:1.99599946;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="Drehbanktisch"
+       width="258.94363"
+       height="60.004002"
+       x="-518.22119"
+       y="2001.1075"
+       inkscape:label="#rect4255" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="Chemietisch"
+       width="260"
+       height="60"
+       x="-778.21918"
+       y="2001.1095"
+       inkscape:label="#rect4257" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4259"
+       width="60"
+       height="100"
+       x="-779.4566"
+       y="1900.756" />
+    <g
+       transform="translate(-798.21919,1028.7474)"
+       style="display:inline"
+       id="g5737">
+      <rect
+         ry="10.75637"
+         y="985.85583"
+         x="84.362671"
+         height="39.141243"
+         width="62.50647"
+         id="rect4272"
+         style="opacity:1;fill:#788f94;fill-opacity:1;stroke:#ffffff;stroke-width:3.14088035;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <rect
+         rx="0"
+         ry="6.3951163"
+         y="1012.24"
+         x="114.67513"
+         height="12.790233"
+         width="1.826871"
+         id="rect5731"
+         style="opacity:1;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.31599998;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5865"
+       width="459.51627"
+       height="199.91829"
+       x="-778.17834"
+       y="1161.1504" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.88774192;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="Schublade_18"
+       width="380.11224"
+       height="160.31328"
+       x="-458.2753"
+       y="1760.8524"
+       inkscape:label="#rect5887" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5889"
+       width="80"
+       height="160"
+       x="-538.21918"
+       y="1761.1095" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.92238379;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="0815"
+       width="80.077614"
+       height="92.299438"
+       x="-158.258"
+       y="1301.0708"
+       inkscape:label="#rect5899" />
+    <rect
+       style="display:inline;opacity:1;fill:#789487;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5901"
+       width="40"
+       height="80"
+       x="-118.21918"
+       y="1221.1096" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-831.20874"
+       y="1580.3655"
+       id="text4268"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270"
+         x="-831.20874"
+         y="1580.3655">Chemietisch</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-563.90765"
+       y="1581.0013"
+       id="text4268-6"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-9"
+         x="-563.90765"
+         y="1581.0013">Drehbank</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-456.90756"
+       y="1434.6484"
+       id="text4268-3"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-1"
+         x="-456.90756"
+         y="1434.6484">PC-Arbeitsplätze</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-676.3382"
+       y="1435.323"
+       id="text4268-4"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-4"
+         x="-676.3382"
+         y="1435.323">Laser</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-944.82208"
+       y="1264.3473"
+       id="text4268-8"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-47"
+         x="-944.82208"
+         y="1264.3473">Fräse</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-956.41553"
+       y="1414.0568"
+       id="text4268-37"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-0"
+         x="-956.41553"
+         y="1414.0568">Eingang</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-631.41992"
+       y="1236.2885"
+       id="text4268-30"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-6"
+         x="-631.41992"
+         y="1236.2885">Werkbank</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-566.31104"
+       y="1169.4246"
+       id="text4268-7"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-8"
+         x="-566.31104"
+         y="1169.4246">Plexiglasregal</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-830.41785"
+       y="1155.2341"
+       id="text4268-0"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-17"
+         x="-830.41785"
+         y="1155.2341">3D </tspan><tspan
+         sodipodi:role="line"
+         x="-830.41785"
+         y="1185.2782"
+         id="tspan4281">Drucker</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-970.45654"
+       y="1170.2316"
+       id="text4268-9"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-96"
+         x="-970.45654"
+         y="1170.2316">Plotter</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-777.58765"
+       y="962.34216"
+       id="text4268-08"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-89"
+         x="-777.58765"
+         y="962.34216">Elektro-/PC-</tspan><tspan
+         sodipodi:role="line"
+         x="-777.58765"
+         y="992.38617"
+         id="tspan4304">Arbeitsplätze</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:24.03518867px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-263.25809"
+       y="851.81671"
+       id="text4268-01"
+       sodipodi:linespacing="125%"
+       transform="scale(0.77320689,1.2933149)"><tspan
+         sodipodi:role="line"
+         id="tspan4270-964"
+         x="-263.25809"
+         y="851.81671">Regal</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:49.58457947px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="-836.85358"
+       y="1025.2959"
+       id="text4204"
+       sodipodi:linespacing="125%"
+       transform="scale(0.90783331,1.1015238)"><tspan
+         sodipodi:role="line"
+         id="tspan4206"
+         x="-836.85358"
+         y="1025.2959">FabLab</tspan></text>
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.32114315;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -778.21919,1541.1095 0,181.2132"
        id="path4170"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 20,872.3622 0,160 520,0"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -778.21919,1901.1095 0,160.0001 520,0"
        id="path4154"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 700,1032.3622 20,0"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -98.219194,2061.1096 20,0"
        id="path4178"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.01253223;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 720,29.843138 720,1034.8622"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5.01253223;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -78.219194,1058.5905 0,1005.0191"
        id="path4162"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 720,32.362205 -700,0 0,479.999995"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -78.219194,1061.1096 -699.999996,0 0,479.9999"
        id="path4168"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 20,513.79078 541.42857,0"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -778.21919,1542.5381 541.42857,0"
        id="path4164"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#aa4400;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 540,1032.3622 140,-20"
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#aa4400;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -258.21919,2061.1096 140,-20.0001"
        id="path4176"
        inkscape:connector-curvature="0" />
     <path
-       style="fill:#aa4400;fill-rule:evenodd;stroke:#aa4400;stroke-width:4.72573471;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="M 19.961025,872.3468 40.038975,712.17659"
+       style="display:inline;fill:#aa4400;fill-rule:evenodd;stroke:#aa4400;stroke-width:4.72573471;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m -778.25817,1901.0941 20.07795,-160.1702"
        id="path4174"
        inkscape:connector-curvature="0" />
   </g>

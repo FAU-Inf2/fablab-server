@@ -20,12 +20,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
-   x="10"
-   y="10"
-   viewBox="0 0 744.09448819 1052.3622047"
-   id="svg2"
+   width="744.09448"
+   height="1052.3622"
+   viewBox="0 0 744.09449 1052.3622"
+   x="0.0000000"
+   y="0.0000000"
+   id="fablab"
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="productMap.svg">
@@ -464,7 +464,7 @@
 	function changeColorOfFinestLocationId(idArray )
 	{
 		var isIdMatched = false;
-		var finestProductLocation ;
+		var finestProductLocation;
 		for (i = (idArray.length - 1); i > -1; i--)
 		{
 			var svgElement1 = document.getElementById(idArray[i]);
@@ -476,7 +476,7 @@
 		}
 		if(isIdMatched == true && finestProductLocation !== null)
 			changeColor(finestProductLocation);
-		if(isIdMatched == false && finestProductLocation !== null)
+		if(isIdMatched == false)
 			alert("Der Standort ist nicht in der Standortkarte verzeichnet");
 	
 	}
@@ -497,10 +497,24 @@
 	
 	function setSize()
 	{
-		var width0 = $( window ).width() + "px";
-		var height0 = $( window ).height() + "px";
+		var widthWindow = $( window ).width() + "px";
+		var heightWindow = $( window ).height() + "px";
+		var ratioWindowInv = widthWindow / heightWindow;
+		var ratioWindowInv = heightWindow / widthWindow;
 		
-		document.getElementById('fablab').setAttribute('width', width0);
+		var widthMap = document.getElementById('fablab').getAttribute('width');
+		var heightMap = document.getElementById('fablab').getAttribute('height');
+		var ratioMap = widthMap / heightMap;
+		var ratioMapInv = heightMap / widthMap;
+		
+		
+		document.getElementById('fablab').setAttribute('width', widthWindow);
+		
+		document.getElementById('fablab').setAttribute('height', heightWindow);
+		
+			
+		
+		
 		
 	
 	}

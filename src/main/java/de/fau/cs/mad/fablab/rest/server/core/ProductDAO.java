@@ -46,14 +46,7 @@ public class ProductDAO extends AbstractDAO<Product> {
      * @return the stored {@link Product}
      */
     public Product create(Product obj){
-        //try to fetch the value from our storage
-        Product stored = get(obj.getDatabaseId());
-        if(stored == null){
-            //create the value
-            return persist(obj);
-        }
-        //value already exists
-        return stored;
+        return persist(obj);
     }
     
     //Delete

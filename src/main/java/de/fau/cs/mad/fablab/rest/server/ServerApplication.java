@@ -1,7 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.google.common.cache.CacheBuilderSpec;
-import de.fau.cs.mad.fablab.rest.core.PlatformType;
 import de.fau.cs.mad.fablab.rest.core.*;
 import de.fau.cs.mad.fablab.rest.server.configuration.SpaceApiConfiguration;
 import de.fau.cs.mad.fablab.rest.server.core.*;
@@ -13,6 +12,7 @@ import de.fau.cs.mad.fablab.rest.server.core.pushservice.AndroidPushManager;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushManager;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushDAO;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
+import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
@@ -61,12 +61,10 @@ class ServerApplication extends Application<ServerConfiguration> {
                 new EnvironmentVariableSubstitutor()
         ));
 
-
+        // add assets for dummy checkout, inventory and product map.
         bootstrap.addBundle(new AssetsBundle("/dummy", "/dummy", null, "dummy.html"));
         bootstrap.addBundle(new AssetsBundle("/productMap", "/productMap", null, "productMap.html"));
         bootstrap.addBundle(new AssetsBundle("/inventories", "/inventories", null, "inventory.html"));
-
-
     }
 
     @Override
@@ -99,7 +97,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         SpaceApiConfiguration spaceApiConfiguration = configuration.getSpaceApiConfiguration();
         final SpaceAPIResource spaceAPIResource = new SpaceAPIResource(
                 spaceApiConfiguration,
-                hibernate.getSessionFactory()
+                new DoorStateDAO(hibernate.getSessionFactory())
         );
         environment.jersey().register(spaceAPIResource);
 
@@ -115,7 +113,6 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new UserResource());
         environment.jersey().register(new ContactReource());
         environment.jersey().register(new VersionCheckResource());
-
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
 
         //set the security handler for admin resources
@@ -146,9 +143,7 @@ class ServerApplication extends Application<ServerConfiguration> {
                 "Authentication required",
                 User.class)));
 
-
-
-        //PUSH --> ADD MANAGERS TO PUSHFACADE SIGLETON
+        //PUSH --> ADD MANAGERS TO PushFacade SINGLETON
         PushFacade.getInstance().addPushManager(new AndroidPushManager(configuration.getAndroidPushConfiguration()), PlatformType.ANDROID);
         PushFacade.getInstance().addPushManager(new ApplePushManager(configuration.getApplePushConfiguration()), PlatformType.APPLE);
         PushFacade.getInstance().setDao(new PushDAO(hibernate.getSessionFactory()));

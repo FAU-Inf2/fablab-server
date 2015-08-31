@@ -12,7 +12,6 @@ import de.fau.cs.mad.fablab.rest.server.core.spaceapi.remote.SpaceAPIService;
 import io.dropwizard.hibernate.UnitOfWork;
 import net.spaceapi.HackerSpace;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
-import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,15 +27,13 @@ import javax.ws.rs.client.WebTarget;
  */
 public class SpaceAPIResource implements SpaceApi
 {
-    private final SessionFactory mSessionFactory;
     private final SpaceApiConfiguration mConfig;
     private final DoorStateDAO mDAO;
     private final Logger mLogger;
 
-    public SpaceAPIResource(SpaceApiConfiguration aConfig, SessionFactory aSessionFactory) {
-        mSessionFactory = aSessionFactory;
+    public SpaceAPIResource(SpaceApiConfiguration aConfig, DoorStateDAO aDAO) {
         mConfig = aConfig;
-        mDAO = new DoorStateDAO(aSessionFactory);
+        mDAO = aDAO;
         mLogger = LoggerFactory.getLogger(SpaceAPIResource.class);
     }
 

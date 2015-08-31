@@ -6,11 +6,14 @@ import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpException;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpInterface;
 import io.dropwizard.hibernate.AbstractDAO;
+import io.dropwizard.jersey.DropwizardResourceConfig;
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -28,6 +31,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE category_string LIKE :" + PARAM_CATEGORY;
 
     private SessionFactory mFactory;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductDAO.class);
 
     public ProductDAO(SessionFactory factory) {
         super(factory);
@@ -39,6 +43,7 @@ public class ProductDAO extends AbstractDAO<Product> {
      * Use this method to create or update the dao store
      */
     public void initializeDao(){
+        LOGGER.info("Initializing Product DAO");
         OpenErpInterface openErp = OpenErpClient.getInstance();
 
         Session session = mFactory.openSession();
@@ -55,9 +60,11 @@ public class ProductDAO extends AbstractDAO<Product> {
             }
         } catch (OpenErpException e) {
             e.printStackTrace();
+            LOGGER.error("Initializing Product DAO ERROR!");
         }
         session.flush();
         session.close();
+        LOGGER.info("Initializing Product DAO SUCCESSFUL");
     }
 
     public Product findById(String id) {

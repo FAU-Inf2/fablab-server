@@ -118,7 +118,7 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         UpdateProductDatabaseTask updateProductDatabaseTask = new UpdateProductDatabaseTask(hibernate.getSessionFactory());
         environment.admin().addTask(updateProductDatabaseTask);
-        //updateProductDatabaseTask.execute(null, null);
+        updateProductDatabaseTask.execute(null, null);
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));

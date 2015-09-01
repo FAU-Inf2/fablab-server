@@ -99,7 +99,7 @@ generalData:
 
 androidPushConfiguration:
     pushAPIRegistrationId: ${pushAPIkey}
-    googlePushServiceURL: ${pushServiceURL}
+    googlePushServiceURL: https://android.clients.google.com/gcm/send
 
 applePushConfiguration:
   certificate: src/dist/apnDev.p12

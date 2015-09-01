@@ -29,7 +29,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
     private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE upper(name) LIKE :" + PARAM_NAME;
 
-    private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE category_string LIKE :" + PARAM_CATEGORY;
+    private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE upper(category_string) LIKE :" + PARAM_CATEGORY;
 
     public ProductDAO(SessionFactory factory) {
         super(factory);
@@ -44,7 +44,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     }
 
     public List<Product> findByCategory(String cat){
-        return super.currentSession().createQuery(QUERY_FIND_BY_CATEGORY).setParameter(PARAM_CATEGORY, "%" + cat + "%").list();
+        return super.currentSession().createQuery(QUERY_FIND_BY_CATEGORY).setParameter(PARAM_CATEGORY, "%" + cat.toUpperCase() + "%").list();
     }
 
     public List<Product> findAll() {

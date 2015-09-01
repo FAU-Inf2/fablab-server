@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import de.fau.cs.mad.fablab.rest.server.configuration.*;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Configuration class containing environment specific parameters
@@ -48,8 +49,6 @@ class ServerConfiguration extends Configuration
     private ICalConfiguration ical = new ICalConfiguration();
     public ICalConfiguration getICalConfiguration() { return ical; }
 
-
-
     @Valid
     @NotNull
     @JsonProperty
@@ -73,5 +72,10 @@ class ServerConfiguration extends Configuration
     @JsonProperty
     private ApplePushConfiguration applePushConfiguration = new ApplePushConfiguration();
     public ApplePushConfiguration getApplePushConfiguration() { return applePushConfiguration; }
+
+    @NotNull
+    @JsonProperty
+    private List<MinimumVersionConfiguration> minimumVersion = new ArrayList<>();
+    public List<MinimumVersionConfiguration> getMinimumVersionConfiguration() { return minimumVersion; }
 
 }

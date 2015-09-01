@@ -112,7 +112,7 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         environment.jersey().register(new UserResource());
         environment.jersey().register(new ContactReource());
-        environment.jersey().register(new VersionCheckResource());
+        environment.jersey().register(new VersionCheckResource(configuration.getMinimumVersionConfiguration()));
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
 
         //set the security handler for admin resources

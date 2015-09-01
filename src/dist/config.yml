@@ -36,7 +36,7 @@ server:
       keyStorePath: src/dist/fablab-rest-server.keystore
       keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
       trustStorePath: src/dist/fablab-rest-server.truststore
-      certAlias: devCa
+      certAlias: ${FABLAB_REST_SERVER_TYPE}
       validateCerts: true
 
   adminConnectors:
@@ -45,7 +45,7 @@ server:
       keyStorePath: src/dist/fablab-rest-server.keystore
       keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
       trustStorePath: src/dist/fablab-rest-server.truststore
-      certAlias: devCa
+      certAlias: ${FABLAB_REST_SERVER_TYPE}
       validateCerts: true
 
 

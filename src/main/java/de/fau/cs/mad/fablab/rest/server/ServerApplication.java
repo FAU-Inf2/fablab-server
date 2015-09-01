@@ -18,6 +18,7 @@ import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
 import de.fau.cs.mad.fablab.rest.server.security.SimpleAuthenticator;
+import de.fau.cs.mad.fablab.rest.server.tasks.UpdateProductDatabaseTask;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthFactory;
@@ -114,6 +115,10 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new ContactReource());
         environment.jersey().register(new VersionCheckResource(configuration.getMinimumVersionConfiguration()));
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
+
+        UpdateProductDatabaseTask updateProductDatabaseTask = new UpdateProductDatabaseTask(hibernate.getSessionFactory());
+        environment.admin().addTask(updateProductDatabaseTask);
+        //updateProductDatabaseTask.execute(null, null);
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));

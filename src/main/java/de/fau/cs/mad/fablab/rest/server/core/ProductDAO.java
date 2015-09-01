@@ -27,44 +27,12 @@ public class ProductDAO extends AbstractDAO<Product> {
     private static String QUERY_DELETE_ALL = "delete FROM Product";
     private static String QUERY_FIND_ALL = "FROM Product";
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
-    private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE name LIKE :" + PARAM_NAME;
-    private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE category_string LIKE :" + PARAM_CATEGORY;
+    private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE TO_UPPER(name)name LIKE :" + PARAM_NAME;
 
-    private SessionFactory mFactory;
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProductDAO.class);
+    private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE category_string LIKE :" + PARAM_CATEGORY;
 
     public ProductDAO(SessionFactory factory) {
         super(factory);
-        mFactory = factory;
-        initializeDao();
-    }
-
-    /***
-     * Use this method to create or update the dao store
-     */
-    public void initializeDao(){
-        LOGGER.info("Initializing Product DAO");
-        OpenErpInterface openErp = OpenErpClient.getInstance();
-
-        Session session = mFactory.openSession();
-        session.setDefaultReadOnly(false);
-        session.setCacheMode(CacheMode.NORMAL);
-        session.setFlushMode(FlushMode.AUTO);
-        ManagedSessionContext.bind(session);
-
-        List<Product> products;
-        try {
-            products = openErp.getProducts(0, 0);
-            for(Product tmp : products){
-                create(tmp);
-            }
-        } catch (OpenErpException e) {
-            e.printStackTrace();
-            LOGGER.error("Initializing Product DAO ERROR!");
-        }
-        session.flush();
-        session.close();
-        LOGGER.info("Initializing Product DAO SUCCESSFUL");
     }
 
     public Product findById(String id) {
@@ -72,7 +40,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     }
 
     public List<Product> findByName(String name){
-        return super.currentSession().createQuery(QUERY_FIND_BY_NAME).setParameter(PARAM_NAME, "%"+name+"%").list();
+        return super.currentSession().createQuery(QUERY_FIND_BY_NAME).setParameter(PARAM_NAME, "%"+name.toUpperCase()+"%").list();
     }
 
     public List<Product> findByCategory(String cat){

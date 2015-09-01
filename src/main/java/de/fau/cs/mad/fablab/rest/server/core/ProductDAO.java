@@ -27,7 +27,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     private static String QUERY_DELETE_ALL = "delete FROM Product";
     private static String QUERY_FIND_ALL = "FROM Product";
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
-    private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE TO_UPPER(name)name LIKE :" + PARAM_NAME;
+    private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE upper(name) LIKE :" + PARAM_NAME;
 
     private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE category_string LIKE :" + PARAM_CATEGORY;
 

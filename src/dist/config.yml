@@ -104,6 +104,7 @@ androidPushConfiguration:
 applePushConfiguration:
   certificate: src/dist/apnDev.p12
   password: ${APN_PASSWORD}
+
 minimumVersion:
   - platform: Android
     latestVersionCode: 3

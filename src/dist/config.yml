@@ -35,15 +35,18 @@ server:
       port: 4433
       keyStorePath: src/dist/fablab-rest-server.keystore
       keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
-      validateCerts: false
+      trustStorePath: src/dist/fablab-rest-server.truststore
+      certAlias: devCa
+      validateCerts: true
 
   adminConnectors:
     - type: https
       port: 8081
       keyStorePath: src/dist/fablab-rest-server.keystore
       keyStorePassword: ${FABLAB_KEYSTORE_PASSWORD}
-      validateCerts: false
-
+      trustStorePath: src/dist/fablab-rest-server.truststore
+      certAlias: devCa
+      validateCerts: true
 
 
 # POSTGRES DB

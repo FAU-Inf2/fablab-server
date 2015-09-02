@@ -110,10 +110,13 @@ applePushConfiguration:
 
 minimumVersion:
   - platform: Android
-    latestVersionCode: 3
-    latestVersion: v2.0
+    latestVersionCode: 2
+    latestVersion: v1.1
     minimumRequiredVersionCode: 1
+    updateMessage: Neuer Endpoint und neue Features vorhanden!
   - platform: Apple
-    latestVersionCode: 3
-    latestVersion: v2.0
-    minimumRequiredVersionCode: 2
+    latestVersionCode: 1
+    latestVersion: v1.0
+    minimumRequiredVersionCode: 1
+    updateMessage: Unser initiales Release!
+

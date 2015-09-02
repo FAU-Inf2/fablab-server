@@ -495,11 +495,10 @@
 		
 	}
 	
-	$( document ).ready( setSize );
 	
 	var idString = getUrlParam( 'id' );
 	var idArray = splitParameterString(idString);
-	changeColorOfFinestLocationId(idArray);	
+	$( document ).ready(changeColorOfFinestLocationId(idArray));	
 	
 		
 	</script>

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NAME="rest-server-"$(date +%Y-%m-%d_%H-%M-%S)
-
+echo "Starting container..."
 docker run -d \
     -p 8081:8081 -p 4433:4433 --name="$NAME" \
     -e openerp_hostname=$openerp_hostname \

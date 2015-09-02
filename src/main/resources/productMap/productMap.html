@@ -2,14 +2,14 @@
 <html lang="de" id="doc">
 	<head>
 	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width; initial-scale=1" />
+	<meta name="viewport" content="height=device-height; initial-scale=1" />
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<!-- <script type="text/javascript" src="jquery.svg/jquery.svg.js" ></script> -->
-	
+	<!-- <script type="text/javascript" src="jquery.svg/jquery.svg.js" ></script> -->	
 	
 	</head>
 	<body>	
-
 
 <svg
    xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
@@ -23,6 +23,7 @@
    width="350"
    height="550"
    viewBox="0 0 350 550.00001"
+   preserveAspectRatio="none"
    id="fablab"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -503,8 +504,8 @@
 	
 	function setSize()
 	{
-		var widthWindow = $( window ).width() + "px";
-		var heightWindow = $( window ).height() + "px";
+		var widthWindow = $( window ).width();
+		var heightWindow = $ (window).height();
 		var ratioWindowInv = widthWindow / heightWindow;
 		var ratioWindowInv = heightWindow / widthWindow;
 		
@@ -513,11 +514,16 @@
 		var ratioMap = widthMap / heightMap;
 		var ratioMapInv = heightMap / widthMap;
 		
+		var ratioWidth = widthWindow / widthMap;
+		var ratioHeight = heightWindow / heightMap;
 		
+		var newWidth = widthMap*ratioWidth;
+		var newHeight = heightMap*ratioHeight;		
 		
+		document.getElementById('fablab').setAttribute('width', newWidth);
+		document.getElementById('fablab').setAttribute('height', newHeight);			
 	
-	}
-	
+	}	
 	
 	</script>
 	

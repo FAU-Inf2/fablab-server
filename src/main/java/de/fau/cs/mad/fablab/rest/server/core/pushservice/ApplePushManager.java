@@ -1,6 +1,8 @@
 package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 import com.relayrides.pushy.apns.util.MalformedTokenStringException;
 import de.fau.cs.mad.fablab.rest.core.CartStatus;
+import de.fau.cs.mad.fablab.rest.core.DoorState;
+import de.fau.cs.mad.fablab.rest.core.PushToken;
 import de.fau.cs.mad.fablab.rest.core.TriggerPushType;
 import de.fau.cs.mad.fablab.rest.server.configuration.ApplePushConfiguration;
 
@@ -8,7 +10,6 @@ import java.util.List;
 
 
 public class ApplePushManager implements PushManger{
-
 
     private ApplePushService applePushService;
 
@@ -20,13 +21,12 @@ public class ApplePushManager implements PushManger{
         }
     }
 
-
-
-    public void sendNotificationDoorJustOpened(List<String> tokens){
+    @Override
+    public void sendNotificationDoorJustOpened(List<PushToken> tokens, DoorState doorState){
         String message = "Das Fablab hat gerade geöffnet";
-        for(String token : tokens){
+        for(PushToken token : tokens){
             try {
-                applePushService.sendpush(message, token, TriggerPushType.DOOR_OPENS_NEXT_TIME);
+                applePushService.sendpush(message, token.getToken(), TriggerPushType.DOOR_OPENS_NEXT_TIME);
             } catch (InterruptedException | MalformedTokenStringException e) {
                 e.printStackTrace();
             }
@@ -34,25 +34,25 @@ public class ApplePushManager implements PushManger{
     }
 
     @Override
-    public void sendCartStautsChanged(String token, CartStatus status) {
-        if(token.length() > 0) {
+    public void sendCartStautsChanged(PushToken token, CartStatus status) {
+        if(token.getToken().length() > 0) {
             String message = getCartChangedText(status);
-            System.out.println("APPLE PUSH FOR CARTSTATUS: " + token + " Message: " + message);
+            System.out.println("APPLE PUSH FOR CARTSTATUS: " + token.getToken() + " Message: " + message);
             try {
-                applePushService.sendpush(message, token, TriggerPushType.CART_STATUS_CHANGED);
+                applePushService.sendpush(message, token.getToken(), TriggerPushType.CART_STATUS_CHANGED);
             } catch (InterruptedException | MalformedTokenStringException e) {
                 e.printStackTrace();
             }
         }
     }
 
-
-    //Close / shutdown
+    /**
+     * Close / shutdown
+     */
     public void shutDown(){
         if(applePushService != null)
             applePushService.closeSender();
     }
-
 
     private String getCartChangedText(CartStatus status){
         switch (status){

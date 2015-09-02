@@ -1,12 +1,11 @@
 package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fau.cs.mad.fablab.rest.server.configuration.AndroidPushConfiguration;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,9 +14,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 public class AndroidPushService {
-
-    private static final String REGISTRATION_ID = "";
-    private static final String API_KEY = "";
 
     private AndroidPushConfiguration mPushServiceConfiguration;
 
@@ -53,8 +49,8 @@ public class AndroidPushService {
             response.append(inputLine);
         }
         in.close();
-        System.out.println(response.toString());
 
+        System.out.println(response.toString());
     }
 
     private static class CustomizedHostnameVerifier implements HostnameVerifier {

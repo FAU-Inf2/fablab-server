@@ -7,7 +7,6 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PushDAO extends AbstractDAO<PushToken> {
@@ -45,17 +44,14 @@ public class PushDAO extends AbstractDAO<PushToken> {
         return true;
     }
 
-    public List<String> findAllTokensWith(PlatformType platformType, TriggerPushType trigger){
+    public List<PushToken> findAllTokensWith(PlatformType platformType, TriggerPushType trigger){
 
         Query query = super.currentSession().createQuery("FROM PushToken WHERE platformType = :platformType AND triggerPushType = :trigger");
         query.setParameter("platformType", platformType);
         query.setParameter("trigger", trigger);
         List<PushToken> list = query.list();
 
-        List<String> tokens = new ArrayList<>();
-        for(PushToken pushToken : list)
-            tokens.add(pushToken.getToken());
-        return tokens;
+        return list;
     }
 
     public void removeTokensForTrigger(TriggerPushType trigger){

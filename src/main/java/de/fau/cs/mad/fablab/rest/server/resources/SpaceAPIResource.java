@@ -61,7 +61,7 @@ public class SpaceAPIResource implements SpaceApi
             mDAO.saveState(newState);
 
             if(newState.state.equals(DoorState.State.open))
-                PushFacade.getInstance().fablabDoorJustOpened();
+                PushFacade.getInstance().fablabDoorJustOpened(newState);
         }
 
         return "{\"success\":\"true\", \"state\":\"" + newState.state + "\"}";

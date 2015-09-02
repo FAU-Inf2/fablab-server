@@ -43,9 +43,9 @@ public class PushFacade {
         return this.dao.doorOpensNextTimeIsSetForToken(token);
     }
 
-    public void fablabDoorJustOpened(){
+    public void fablabDoorJustOpened(DoorState doorState){
         for(Map.Entry<PlatformType, PushManger> entry : pushMangers.entrySet())
-            entry.getValue().sendNotificationDoorJustOpened(this.dao.findAllTokensWith(entry.getKey(), TriggerPushType.DOOR_OPENS_NEXT_TIME));
+            entry.getValue().sendNotificationDoorJustOpened(this.dao.findAllTokensWith(entry.getKey(), TriggerPushType.DOOR_OPENS_NEXT_TIME), doorState);
 
         this.dao.removeTokensForTrigger(TriggerPushType.DOOR_OPENS_NEXT_TIME);
     }
@@ -53,8 +53,11 @@ public class PushFacade {
 
     //CART STATUS CHANGED
     public void cartStatusChanged(CartServer cartServer){
-        PushManger pushManger = pushMangers.get(cartServer.getPlatformType());
-        pushManger.sendCartStautsChanged(cartServer.getPushToken(), cartServer.getStatus());
+        PushToken token = new PushToken(cartServer.getPushToken());
+        token.setPlatformType(cartServer.getPlatformType());
+
+        PushManger pushManger = pushMangers.get(token.getPlatformType());
+        pushManger.sendCartStautsChanged(token, cartServer.getStatus());
     }
 
 

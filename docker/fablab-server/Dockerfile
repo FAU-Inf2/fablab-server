@@ -14,6 +14,7 @@ COPY	tuerstatus-appserver.key tuerstatus-appserver.key
 COPY	apnDev.p12 apnDev.p12
 COPY	calendar.ics calendar.ics
 COPY	rss.xml.rss rss.xml.rss
+COPY	config.yml config.yml
 
 #build and run the server
 CMD 	if [ ! -d "fablab-server" ]; then git clone https://github.com/FAU-Inf2/fablab-server.git; fi && \

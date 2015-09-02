@@ -45,22 +45,27 @@ public class AndroidPushManager implements PushManger {
      * push a map of objects to a client device
      * @param token Target device Token (receiver device)
      * @param objects Map of objects to push to device
+     * @return returns true if push has been sent without errors
      * @see AndroidPushManager#pushObject(List, Map)
      */
-    public void pushObject(PushToken token, Map<String, Object> objects) {
+    public boolean pushObject(PushToken token, Map<String, Object> objects) {
         List<PushToken> tokenList = new ArrayList<>();
         tokenList.add(token);
 
-        pushObject(tokenList, objects);
+        return pushObject(tokenList, objects);
     }
 
     /**
      * Push a map of objects to a list of client devices
      * @param targets List of targets devices
      * @param objects Map of objects to push to device
+     * @return returns true if push has been sent without errors
      */
-    public void pushObject(List<PushToken> targets, Map<String, Object> objects) {
+    public boolean pushObject(List<PushToken> targets, Map<String, Object> objects) {
         AndroidPushContent pushContent = new AndroidPushContent();
+
+        if (targets.isEmpty() || objects.isEmpty())
+            return false;
 
         for (PushToken target : targets) {
             pushContent.addRegId(target.getToken());
@@ -73,6 +78,9 @@ public class AndroidPushManager implements PushManger {
             androidPushService.pushJson(pushContent);
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 }

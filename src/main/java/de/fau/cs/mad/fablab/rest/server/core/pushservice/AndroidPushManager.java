@@ -25,7 +25,7 @@ public class AndroidPushManager implements PushManger {
             System.out.println("ANDROID PUSH TO: " + token);
         }
         Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put("doorstate", doorState);
+        objectMap.put("DoorState", doorState);
 
         pushObject(tokens, objectMap);
     }
@@ -36,7 +36,7 @@ public class AndroidPushManager implements PushManger {
             System.out.println("ANDROID PUSH FOR CARTSTATUS: " + token + " STATUS: " + status.toString());
 
         Map<String, Object> objectMap = new HashMap<>();
-        objectMap.put("cartstatus", status);
+        objectMap.put("CartStatus", status);
 
         pushObject(token, objectMap);
     }

@@ -28,14 +28,13 @@ public class VersionCheckResource  implements VersionCheckApi {
         status.setLatestVersion(config.getLatestVersion());
         status.setLatestVersionCode(config.getLatestVersionCode());
         status.setOldVersionCode(currentVersionCode);
+        status.setUpdateMessage(config.getUpdateMessage());
 
         if (currentVersionCode < config.getLatestVersionCode()) {
             if (currentVersionCode < config.getMinimumRequiredVersionCode()) {
                 status.setUpdateAvailable(UpdateStatus.UpdateAvailability.Required);
-                status.setUpdateMessage("Update is required");
             } else {
                 status.setUpdateAvailable(UpdateStatus.UpdateAvailability.Optional);
-                status.setUpdateMessage("Update is optional");
             }
         }
         else {

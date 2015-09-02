@@ -27,6 +27,10 @@ public class MinimumVersionConfiguration {
     @NotEmpty
     int minimumRequiredVersionCode;
 
+    @JsonProperty
+    @NotEmpty
+    String updateMessage;
+
     public String getLatestVersion() {
         return latestVersion;
     }
@@ -50,6 +54,10 @@ public class MinimumVersionConfiguration {
     public void setMinimumRequiredVersionCode(int minimumRequiredVersionCode) {
         this.minimumRequiredVersionCode = minimumRequiredVersionCode;
     }
+
+    public String getUpdateMessage(){ return updateMessage; }
+
+    public void setUpdateMessage(String updateMessage){ this.updateMessage = updateMessage; }
 
     public PlatformType getPlatform() {
         return platform;

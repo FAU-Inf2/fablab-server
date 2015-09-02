@@ -90,7 +90,7 @@ ical:
 
 drupalNews:
     feedurl: /rss.xml
-    url: http://52.28.16.59
+    url: http://ec2-52-28-163-255.eu-central-1.compute.amazonaws.com
     port: 50080
     nodeEndpoint: /rest/node
     fallback: src/dist/rss.xml.rss

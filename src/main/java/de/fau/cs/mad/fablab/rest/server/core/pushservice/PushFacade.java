@@ -3,6 +3,7 @@ package de.fau.cs.mad.fablab.rest.server.core.pushservice;
 import de.fau.cs.mad.fablab.rest.core.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PushFacade {
@@ -44,8 +45,12 @@ public class PushFacade {
     }
 
     public void fablabDoorJustOpened(DoorState doorState){
-        for(Map.Entry<PlatformType, PushManger> entry : pushMangers.entrySet())
-            entry.getValue().sendNotificationDoorJustOpened(this.dao.findAllTokensWith(entry.getKey(), TriggerPushType.DOOR_OPENS_NEXT_TIME), doorState);
+        for(Map.Entry<PlatformType, PushManger> entry : pushMangers.entrySet()) {
+
+            List<PushToken> tokenList = this.dao.findAllTokensWith(entry.getKey(), TriggerPushType.DOOR_OPENS_NEXT_TIME);
+            if (!tokenList.isEmpty())
+                entry.getValue().sendNotificationDoorJustOpened(tokenList, doorState);
+        }
 
         this.dao.removeTokensForTrigger(TriggerPushType.DOOR_OPENS_NEXT_TIME);
     }

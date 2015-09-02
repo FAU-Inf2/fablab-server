@@ -22,6 +22,7 @@ CMD 	if [ ! -d "fablab-server" ]; then git clone https://github.com/FAU-Inf2/fab
 	mv apnDev.p12 fablab-server/src/dist && \
 	mv calendar.ics fablab-server/src/dist && \
 	mv rss.xml.rss fablab-server/src/dist && \
+	mv config.yml fablab-server/src/dist && \
 	cd fablab-server && \
 	./gradlew run
 

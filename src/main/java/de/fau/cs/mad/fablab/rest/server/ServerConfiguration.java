@@ -24,6 +24,12 @@ class ServerConfiguration extends Configuration
     private SpaceApiConfiguration spaceapi;
     public SpaceApiConfiguration getSpaceApiConfiguration(){ return spaceapi; }
 
+    @NotNull
+    @Valid
+    @JsonProperty
+    private NetworkConfiguration network;
+    public NetworkConfiguration getNetworkConfiguration(){ return network; }
+
     @Valid
     @NotNull
     @JsonProperty

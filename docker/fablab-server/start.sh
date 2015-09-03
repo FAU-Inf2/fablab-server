@@ -15,6 +15,8 @@ docker run -d \
     -e pushAPIkey="$pushAPIkey" \
     -e pushServiceURL="$pushServiceURL" \
     -e APN_PASSWORD=$APN_PASSWORD \
+    -e hostname=$hostname \
+    -e admin_port=$admin_port \
     --link fablab-db:db \
     -v ~/databaseFiles:/opt/database \
     container-fablab-server

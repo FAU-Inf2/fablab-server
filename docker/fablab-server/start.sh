@@ -17,6 +17,10 @@ docker run -d \
     -e APN_PASSWORD=$APN_PASSWORD \
     -e hostname=$hostname \
     -e admin_port=$admin_port \
+    -e USER_ADMIN=$USER_ADMIN \
+    -e PASSWORD_ADMIN=$PASSWORD_ADMIN \
+    -e USER_INVENTORY=$USER_INVENTORY \
+    -e PASSWORD_INVENTORY=$PASSWORD_INVENTORY \
     --link fablab-db:db \
     -v ~/databaseFiles:/opt/database \
     container-fablab-server

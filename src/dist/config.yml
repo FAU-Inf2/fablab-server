@@ -125,17 +125,13 @@ minimumVersion:
     updateMessage: Unser initiales Release!
 
 users:
-  - username: admin
-    password: secret
+  - username: ${USER_ADMIN}
+    password: ${PASSWORD_ADMIN}
     roles:
       - ADMIN
       - USER
-  - username: inventory
-    password: secret
+  - username: ${USER_INVENTORY}
+    password: ${PASSWORD_INVENTORY}
     roles:
       - INVENTORY
-      - USER
-  - username: foo
-    password: bar
-    roles:
       - USER

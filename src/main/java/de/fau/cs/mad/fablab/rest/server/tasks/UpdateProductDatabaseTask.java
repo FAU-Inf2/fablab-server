@@ -59,6 +59,11 @@ public class UpdateProductDatabaseTask extends Task {
         List<Product> products;
         try {
             products = openErp.getProducts(0, 0);
+
+            if(products.size() > 0){
+                //Make sure all outdated products are removed, so clear the local storage
+                dao.deleteAll();
+            }
             for(Product tmp : products){
                 dao.create(tmp);
             }

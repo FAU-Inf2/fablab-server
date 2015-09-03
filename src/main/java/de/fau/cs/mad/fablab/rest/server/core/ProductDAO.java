@@ -7,10 +7,7 @@ import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpException;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpInterface;
 import io.dropwizard.hibernate.AbstractDAO;
 import io.dropwizard.jersey.DropwizardResourceConfig;
-import org.hibernate.CacheMode;
-import org.hibernate.FlushMode;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +24,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     private static String QUERY_DELETE_ALL = "delete FROM Product";
     private static String QUERY_FIND_ALL = "FROM Product";
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
-    private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE upper(name) LIKE :" + PARAM_NAME;
+    private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE upper(name) LIKE ?";
 
     private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE upper(category_string) LIKE :" + PARAM_CATEGORY;
 
@@ -40,7 +37,20 @@ public class ProductDAO extends AbstractDAO<Product> {
     }
 
     public List<Product> findByName(String name){
-        return super.currentSession().createQuery(QUERY_FIND_BY_NAME).setParameter(PARAM_NAME, "%"+name.toUpperCase()+"%").list();
+        String[] searchTokens = name.split(" ");
+        String queryString = QUERY_FIND_BY_NAME;
+
+        if(searchTokens.length > 1){
+            for(int i = 1; i < searchTokens.length; i++){
+                queryString += " and upper(name) LIKE ?";
+            }
+        }
+        Query query = super.currentSession().createQuery(queryString);
+        for(int i = 0; i < searchTokens.length; i++){
+            query.setParameter(i, "%"+searchTokens[i].toUpperCase()+"%");
+        }
+
+        return query.list();
     }
 
     public List<Product> findByCategory(String cat){

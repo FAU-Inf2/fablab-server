@@ -14,6 +14,7 @@ import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushDAO;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateDAO;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
+import de.fau.cs.mad.fablab.rest.server.managed.UpdateDatabaseManager;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
 import de.fau.cs.mad.fablab.rest.server.resources.admin.LogResource;
 import de.fau.cs.mad.fablab.rest.server.security.AdminConstraintSecurityHandler;
@@ -29,14 +30,20 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.setup.JerseyContainerHolder;
+import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.hibernate.cfg.Configuration;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
+import java.net.InetSocketAddress;
+import java.nio.channels.ServerSocketChannel;
 import java.text.SimpleDateFormat;
 import java.util.EnumSet;
 import java.util.Properties;
@@ -145,8 +152,8 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         // Add AuthenticationService for some special APIs
         environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(new SimpleAuthenticator(configuration.getUserList()),
-                "Authentication required",
-                User.class)));
+                                                                                "Authentication required",
+                                                                                User.class)));
 
         //PUSH --> ADD MANAGERS TO PushFacade SINGLETON
         PushFacade.getInstance().addPushManager(new AndroidPushManager(configuration.getAndroidPushConfiguration()), PlatformType.ANDROID);
@@ -154,6 +161,25 @@ class ServerApplication extends Application<ServerConfiguration> {
         PushFacade.getInstance().setDao(new PushDAO(hibernate.getSessionFactory()));
         environment.jersey().register(new PushResource());
 
+        UpdateDatabaseManager updateDatabaseManager = new UpdateDatabaseManager(configuration.getAdminConfiguration());
+        environment.jersey().register(updateDatabaseManager);
+
+        environment.lifecycle().addServerLifecycleListener(new ServerLifecycleListener() {
+            @Override
+            public void serverStarted(Server server) {
+                for (final Connector connector : server.getConnectors()) {
+                    if ("admin".equals(connector.getName())) {
+                        ServerConnector serverConnector = (ServerConnector) connector;
+                        try {
+                            updateDatabaseManager.setPort(serverConnector.getLocalPort());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            System.exit(1);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {

@@ -43,6 +43,7 @@ import org.hibernate.cfg.Configuration;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.nio.channels.ServerSocketChannel;
 import java.text.SimpleDateFormat;
 import java.util.EnumSet;
@@ -161,25 +162,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         PushFacade.getInstance().setDao(new PushDAO(hibernate.getSessionFactory()));
         environment.jersey().register(new PushResource());
 
-        UpdateDatabaseManager updateDatabaseManager = new UpdateDatabaseManager(configuration.getAdminConfiguration());
-        environment.jersey().register(updateDatabaseManager);
-
-        environment.lifecycle().addServerLifecycleListener(new ServerLifecycleListener() {
-            @Override
-            public void serverStarted(Server server) {
-                for (final Connector connector : server.getConnectors()) {
-                    if ("admin".equals(connector.getName())) {
-                        ServerConnector serverConnector = (ServerConnector) connector;
-                        try {
-                            updateDatabaseManager.setPort(serverConnector.getLocalPort());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.exit(1);
-                        }
-                    }
-                }
-            }
-        });
+        UpdateDatabaseManager updateDatabaseManager = new UpdateDatabaseManager(configuration.getAdminConfiguration(), configuration.getNetworkConfiguration());
+        environment.lifecycle().manage(updateDatabaseManager);
     }
 
     public static void main(String[] args) {

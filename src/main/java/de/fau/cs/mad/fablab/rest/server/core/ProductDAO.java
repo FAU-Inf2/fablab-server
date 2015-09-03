@@ -70,6 +70,6 @@ public class ProductDAO extends AbstractDAO<Product> {
     }
 
     public void deleteAll(){
-        currentSession().createQuery(QUERY_DELETE_ALL).executeUpdate();
+        super.currentSession().createQuery(QUERY_DELETE_ALL).executeUpdate();
     }
 }

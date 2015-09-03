@@ -144,7 +144,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
         // Add AuthenticationService for some special APIs
-        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(new SimpleAuthenticator(),
+        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(new SimpleAuthenticator(configuration.getUserList()),
                 "Authentication required",
                 User.class)));
 

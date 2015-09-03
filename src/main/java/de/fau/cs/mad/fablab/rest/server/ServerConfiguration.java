@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import de.fau.cs.mad.fablab.rest.core.User;
 import de.fau.cs.mad.fablab.rest.server.configuration.*;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
@@ -77,5 +78,10 @@ class ServerConfiguration extends Configuration
     @JsonProperty
     private List<MinimumVersionConfiguration> minimumVersion = new ArrayList<>();
     public List<MinimumVersionConfiguration> getMinimumVersionConfiguration() { return minimumVersion; }
+
+    @NotNull
+    @JsonProperty
+    private List<User> users = new ArrayList<>();
+    public List<User> getUserList() { return users; }
 
 }

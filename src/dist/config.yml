@@ -120,3 +120,18 @@ minimumVersion:
     minimumRequiredVersionCode: 1
     updateMessage: Unser initiales Release!
 
+users:
+  - username: admin
+    password: secret
+    roles:
+      - ADMIN
+      - USER
+  - username: inventory
+    password: secret
+    roles:
+      - INVENTORY
+      - USER
+  - username: foo
+    password: bar
+    roles:
+      - USER

@@ -7,28 +7,29 @@ import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
 
+import java.util.List;
+
 /**
  * Simple Authenticator, which allows a User that has password = "secret"
  * This should be replaced by Authentication with drupal
  */
 public class SimpleAuthenticator implements Authenticator<BasicCredentials, User> {
 
+    private List<User> users;
+
+    public SimpleAuthenticator (List<User> userList) {
+        this.users = userList;
+    }
+
     @Override
     public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
 
-        if ("secret".equals(credentials.getPassword())) {
+        for (User u : users) {
 
-            User user = new User(credentials.getUsername(), credentials.getPassword());
-
-            user.addRole(Roles.USER);
-
-            if (user.getUsername().equals("inventory"))
-                user.addRole(Roles.INVENTORY);
-
-            if (user.getUsername().equals("admin"))
-                user.addRole(Roles.ADMIN);
-
-            return Optional.of(user);
+            if (u.getUsername().equals(credentials.getUsername()) &&
+                u.getPassword().equals(credentials.getPassword())) {
+                return Optional.of(u);
+            }
         }
 
         return Optional.absent();

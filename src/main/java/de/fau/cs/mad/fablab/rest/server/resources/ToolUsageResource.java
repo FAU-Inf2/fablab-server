@@ -37,7 +37,7 @@ public class ToolUsageResource implements ToolUsageApi {
     public ToolUsage getUsage(long toolId, long usageId) {
         ToolUsage usage = mFacade.getUsage(usageId);
 
-        if (usage.getTool().getId() == toolId)
+        if (usage != null && usage.getTool().getId() == toolId)
             return mFacade.getUsage(usageId);
 
         throw new Http404Exception("Usage not found.");

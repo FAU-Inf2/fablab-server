@@ -8,4 +8,5 @@ public interface DrupalInterface {
 
     List<FabTool> findAllTools();
     FabTool findToolById(long id);
+    boolean updateNeeded();
 }

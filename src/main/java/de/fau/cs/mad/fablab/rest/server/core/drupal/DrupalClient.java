@@ -1,6 +1,5 @@
 package de.fau.cs.mad.fablab.rest.server.core.drupal;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.core.FabTool;
 import de.fau.cs.mad.fablab.rest.server.configuration.GeneralDataConfiguration;
 import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
@@ -9,13 +8,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -97,7 +91,7 @@ public class DrupalClient implements DrupalInterface {
      *
      * @return true, if update needed; otherwise false
      */
-    private boolean updateNeeded() {
+    public boolean updateNeeded() {
         if (allTools == null) return true;
 
         Date now = new Date();

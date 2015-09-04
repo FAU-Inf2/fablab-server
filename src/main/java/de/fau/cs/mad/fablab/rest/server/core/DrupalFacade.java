@@ -17,10 +17,26 @@ public class DrupalFacade {
     }
 
     public FabTool findToolById(Long id) {
-        return drupalInterface.findToolById(id);
+        checkAndUpdateToolList();
+        return dao.findToolById(id);
     }
 
     public List<FabTool> findAllTools() {
-        return drupalInterface.findAllTools();
+        checkAndUpdateToolList();
+
+        return dao.findAllTools();
+    }
+
+    private void checkAndUpdateToolList() {
+
+        if (drupalInterface.updateNeeded()) {
+            dao.deleteAll();
+
+            List<FabTool> toolList = drupalInterface.findAllTools();
+
+            for (FabTool tool : toolList) {
+                dao.create(tool);
+            }
+        }
     }
 }

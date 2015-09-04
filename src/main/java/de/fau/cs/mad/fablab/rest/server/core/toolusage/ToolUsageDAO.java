@@ -41,6 +41,7 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
         ToolUsage newUsage = persist(usage);
 
         // look for ancestor and set (me) new successor
+        // the one without successor is the last one
         List<ToolUsage> usageList = super.currentSession().createQuery("FROM " + TABLE_NAME + " WHERE tool_id = :tool_id AND successor_id IS NULL AND id != :usage_id")
                 .setParameter("tool_id", usage.getToolId())
                 .setParameter("usage_id", newUsage.getId())
@@ -91,18 +92,12 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
 
         if (usage.getTool().getId() == toolId) {
 
-                //find ancestor and set new successor
-                List<ToolUsage> usageList = super.currentSession().createQuery("FROM " + TABLE_NAME + " WHERE tool_id = :tool_id AND successor_id = :successor_id")
-                        .setParameter("tool_id", usage.getToolId())
-                        .setParameter("successor_id", usage.getId())
-                        .list();
-
-                if (usageList.size() == 1) {
-                    ToolUsage ancestor = usageList.get(0);
-
-                    ancestor.setSuccessor(usage.getSuccessor());
-                    currentSession().update(ancestor);
-                }
+            //find ancestor and set new successor
+            ToolUsage ancestor = findAncestor(usage);
+            if (ancestor != null) {
+                ancestor.setSuccessor(usage.getSuccessor());
+                currentSession().update(ancestor);
+            }
 
             currentSession().delete(usage);
             return true;
@@ -147,19 +142,11 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
             return false;
 
         // the successor of "usage" has to be the new successor of the ancestor of "usage"
-        List<ToolUsage> usageList = super.currentSession().createQuery("FROM " + TABLE_NAME + " WHERE successor_id = :successor_id AND tool_id = :tool_id")
-                .setParameter("successor_id", usage.getId())
-                .setParameter("tool_id", usage.getTool().getId())
-                .list();
-
         // maybe "usage" does not have an ancestor
-        if (usageList.size() == 1) {
-            ToolUsage ancestor = usageList.get(0);
-
-            if (ancestor != null) {
-                ancestor.setSuccessor(usage.getSuccessor());
-                currentSession().update(ancestor);
-            }
+        ToolUsage ancestor = findAncestor(usage);
+        if (ancestor != null) {
+            ancestor.setSuccessor(usage.getSuccessor());
+            currentSession().update(ancestor);
         }
 
         // successor of "after" has to be successor of "usage"
@@ -172,5 +159,21 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
         currentSession().update(after);
 
         return true;
+    }
+
+    public ToolUsage findAncestor(ToolUsage usage) {
+
+        if (usage == null)
+            return null;
+
+        List<ToolUsage> usageList = super.currentSession().createQuery("FROM " + TABLE_NAME + " WHERE successor_id = :successor_id AND tool_id = :tool_id")
+                .setParameter("successor_id", usage.getId())
+                .setParameter("tool_id", usage.getTool().getId())
+                .list();
+
+        if (usageList.size() == 1)
+            return  usageList.get(0);
+
+        return null;
     }
 }

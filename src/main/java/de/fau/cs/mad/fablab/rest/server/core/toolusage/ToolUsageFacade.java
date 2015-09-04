@@ -23,8 +23,13 @@ public class ToolUsageFacade {
         return mDAO.getUsageForTool(id);
     }
 
-    public ToolUsage getUsage(long id) {
-        return mDAO.getUsage(id);
+    public ToolUsage getUsage(long toolId, long usageId) {
+        ToolUsage usage = mDAO.getUsage(usageId);
+
+        if (usage == null || usage.getTool().getId() != toolId)
+            return null;
+
+        return usage;
     }
 
     public boolean removeUsage(long toolId, long usageId) {
@@ -33,5 +38,21 @@ public class ToolUsageFacade {
 
     public void clearUsageForTool(long toolId) {
         mDAO.clearUsageForTool(toolId);
+    }
+
+    public boolean moveAfter(long toolId, long usageId, long afterId) {
+
+        ToolUsage usage = mDAO.getUsage(usageId);
+        ToolUsage afterUsage = mDAO.getUsage(afterId);
+
+        if (usage == null ||
+                afterUsage == null ||
+                usage.getTool().getId() != toolId ||
+                afterUsage.getTool().getId() != toolId)
+        {
+            return false;
+        }
+
+        return mDAO.moveAfter(usage, afterUsage);
     }
 }

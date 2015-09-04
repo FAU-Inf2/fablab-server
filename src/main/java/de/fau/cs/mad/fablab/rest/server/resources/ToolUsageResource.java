@@ -35,10 +35,10 @@ public class ToolUsageResource implements ToolUsageApi {
     @Override
     @UnitOfWork
     public ToolUsage getUsage(long toolId, long usageId) {
-        ToolUsage usage = mFacade.getUsage(usageId);
+        ToolUsage usage = mFacade.getUsage(toolId, usageId);
 
-        if (usage != null && usage.getTool().getId() == toolId)
-            return mFacade.getUsage(usageId);
+        if (usage != null)
+            return usage;
 
         throw new Http404Exception("Usage not found.");
     }
@@ -55,9 +55,23 @@ public class ToolUsageResource implements ToolUsageApi {
     }
 
     @Override
+    @UnitOfWork
     public Response removeUsagesForTool(long toolId) {
         mFacade.clearUsageForTool(toolId);
 
         return Response.ok().build();
+    }
+
+    @Override
+    @UnitOfWork
+    /**
+     * @see de.fau.cs.mad.fablab.rest.server.core.toolusage.ToolUsageDAO#moveAfter(ToolUsage, ToolUsage)
+     */
+    public Response moveAfter(long toolId, long usageId, long afterId) {
+
+        if (mFacade.moveAfter(toolId, usageId, afterId))
+            return Response.ok().build();
+
+        throw new Http404Exception("Usage not found.");
     }
 }

@@ -13,6 +13,8 @@ import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushManager;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushDAO;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushFacade;
 import de.fau.cs.mad.fablab.rest.server.core.spaceapi.DoorStateDAO;
+import de.fau.cs.mad.fablab.rest.server.core.toolusage.ToolUsageDAO;
+import de.fau.cs.mad.fablab.rest.server.core.toolusage.ToolUsageFacade;
 import de.fau.cs.mad.fablab.rest.server.health.DatabaseHealthCheck;
 import de.fau.cs.mad.fablab.rest.server.managed.UpdateDatabaseManager;
 import de.fau.cs.mad.fablab.rest.server.resources.*;
@@ -30,21 +32,14 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.jersey.DropwizardResourceConfig;
 import io.dropwizard.jersey.setup.JerseyContainerHolder;
-import io.dropwizard.lifecycle.ServerLifecycleListener;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.hibernate.cfg.Configuration;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.nio.channels.ServerSocketChannel;
 import java.text.SimpleDateFormat;
 import java.util.EnumSet;
 import java.util.Properties;
@@ -118,6 +113,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new InventoryResource(new InventoryFacade(new InventoryDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new ToolUsageResource(new ToolUsageFacade(new ToolUsageDAO(hibernate.getSessionFactory()))));
 
         environment.jersey().register(new UserResource());
         environment.jersey().register(new ContactReource());
@@ -183,7 +179,8 @@ class ServerApplication extends Application<ServerConfiguration> {
             CartEntryServer.class,
             DoorState.class,
             InventoryItem.class,
-            PushToken.class) {
+            PushToken.class,
+            ToolUsage.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
             return configuration.getDatabase();
@@ -207,6 +204,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         config.addAnnotatedClass(DoorState.class);
         config.addAnnotatedClass(PushToken.class);
         config.addAnnotatedClass(InventoryItem.class);
+        config.addAnnotatedClass(ToolUsage.class);
 
         SchemaExporter exporter = new SchemaExporter(config, "src/dist/schema.sql");
         exporter.export();

@@ -21,6 +21,7 @@ docker run -d \
     -e PASSWORD_ADMIN=$PASSWORD_ADMIN \
     -e USER_INVENTORY=$USER_INVENTORY \
     -e PASSWORD_INVENTORY=$PASSWORD_INVENTORY \
+    -e apiKey=$apiKey \
     --link fablab-db:db \
     -v ~/databaseFiles:/opt/database \
     container-fablab-server

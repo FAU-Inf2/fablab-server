@@ -37,6 +37,8 @@ To build and run the server, just type:
     
     export APN_PASSWORD=<APPLE_PUSH_KEY_PASSWORD>
     
+    export apiKey=<PASSWORD_FOR_CHECKOUT_API>
+    
     //start the server
     ./gradlew run
     

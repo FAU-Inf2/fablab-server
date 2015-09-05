@@ -44,6 +44,7 @@ public class DrupalDAO extends AbstractDAO<FabTool> {
     }
 
     public void deleteAll(){
+        currentSession().createQuery("delete FROM ToolUsage").executeUpdate();
         currentSession().createQuery("delete FROM FabTool").executeUpdate();
     }
 }

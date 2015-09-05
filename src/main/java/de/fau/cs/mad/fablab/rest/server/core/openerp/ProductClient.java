@@ -63,8 +63,23 @@ public class ProductClient {
 
         JSONArray domain = new JSONArray();
 
-        jsonRPC2Response = mJSONRPC2Session.send(new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), OpenERPUtil.generateRequestID()));
+        JSONArray filterSaleOk = new JSONArray();
+        filterSaleOk.add(0, "sale_ok");
+        filterSaleOk.add(1, "ilike");
+        filterSaleOk.add(2, "true");
 
+        JSONArray filterPrice = new JSONArray();
+        filterPrice.add(0, "list_price");
+        filterPrice.add(1, ">=");
+        filterPrice.add(2, "0");
+
+        domain.add(filterSaleOk);
+        domain.add(filterPrice);
+
+        JSONRPC2Request request = new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), OpenERPUtil.generateRequestID());
+        System.out.println("Product- Request: " + request);
+        jsonRPC2Response = mJSONRPC2Session.send(request);
+        System.out.println("Product- Result : " + jsonRPC2Response);
         try {
             assertSessionNotExpired(jsonRPC2Response);
         } catch (OpenErpSessionExpiredException e) {
@@ -197,6 +212,7 @@ public class ProductClient {
             filterSaleOk.add(0, "sale_ok");
             filterSaleOk.add(1, "ilike");
             filterSaleOk.add(2, "true");
+;
 
             JSONArray filterPrice = new JSONArray();
             filterPrice.add(0, "list_price");

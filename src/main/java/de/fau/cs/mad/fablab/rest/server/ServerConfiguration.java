@@ -90,4 +90,8 @@ class ServerConfiguration extends Configuration
     private List<User> users = new ArrayList<>();
     public List<User> getUserList() { return users; }
 
+    @NotNull
+    @JsonProperty
+    private CheckOutApiKeyConfiguration checkoutApiKey = new CheckOutApiKeyConfiguration();
+    public CheckOutApiKeyConfiguration getCheckoutApiKeyConfiguration() { return checkoutApiKey; }
 }

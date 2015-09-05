@@ -13,19 +13,16 @@ public class CheckoutResource implements Checkout {
 
     private CartFacade facade;
     private static long acceptedCode;
+    private final String apiKey;
 
-    public CheckoutResource(CartFacade facade){
+    public CheckoutResource(CartFacade facade, String apiKey){
         this.facade = facade;
+        this.apiKey = apiKey;
     }
 
     @Override
     public long createCode(String password){
-        System.out.println("PASSWORD: " + password);
-        //TODO
-        // Set password on serverstart
-        // -> as long as we use the checkoutSimulator password will always be public
-        // -> atm it makes no sense at all.
-        if(password.equals("dummyPassword"))
+        if(password.equals(apiKey))
             return acceptedCode = (new Random()).nextInt();
         if(password.length() == 0)
             throw new Http401Exception("No password given!");

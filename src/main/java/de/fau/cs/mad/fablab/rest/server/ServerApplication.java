@@ -111,7 +111,8 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new DrupalResource(new DrupalFacade(new DrupalDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ProductResource(new ProductFacade(new ProductDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new CartResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
-        environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new CheckoutResource(new CartFacade(new CartDAO(hibernate.getSessionFactory())),
+                                                           configuration.getCheckoutApiKeyConfiguration().getCheckoutApiKey()));
         environment.jersey().register(new InventoryResource(new InventoryFacade(new InventoryDAO(hibernate.getSessionFactory()))));
         environment.jersey().register(new ToolUsageResource(new ToolUsageFacade(new ToolUsageDAO(hibernate.getSessionFactory()))));
 
@@ -126,9 +127,6 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));
-
-        // create dummy data
-        dummyData.createDummyData(hibernate);
 
         //Log resource inside admin environment
         final DropwizardResourceConfig dropwizardResourceConfig = new DropwizardResourceConfig(environment.metrics());

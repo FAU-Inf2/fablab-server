@@ -127,9 +127,6 @@ class ServerApplication extends Application<ServerConfiguration> {
         //set the security handler for admin resources
         environment.admin().setSecurityHandler(new AdminConstraintSecurityHandler(configuration.getAdminConfiguration()));
 
-        // create dummy data
-        dummyData.createDummyData(hibernate);
-
         //Log resource inside admin environment
         final DropwizardResourceConfig dropwizardResourceConfig = new DropwizardResourceConfig(environment.metrics());
         JerseyContainerHolder jerseyContainerHolder = new JerseyContainerHolder(new ServletContainer(dropwizardResourceConfig));

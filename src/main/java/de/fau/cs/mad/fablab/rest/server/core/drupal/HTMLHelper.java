@@ -39,7 +39,27 @@ public class HTMLHelper {
         doc = fixRelativeLinks(doc);
         doc = fixListTags(doc);
         doc = fixVideoLinks(doc);
+        doc = removeStyleAttributes(doc);
         return doc.body().toString();
+    }
+
+    /***
+     * Removes (unwanted) style-attributes
+     *
+     * @param doc the input Document
+     * @return the 'improved' Document
+     */
+    protected static Document removeStyleAttributes(Document doc) {
+        for (Element div : doc.select("div")) {
+            div.removeAttr("style");
+        }
+        for (Element p : doc.select("p")) {
+            p.removeAttr("style");
+        }
+        for (Element span : doc.select("span")) {
+            span.removeAttr("style");
+        }
+        return doc;
     }
 
     /***

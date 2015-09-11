@@ -22,6 +22,7 @@ docker run -d \
     -e USER_INVENTORY=$USER_INVENTORY \
     -e PASSWORD_INVENTORY=$PASSWORD_INVENTORY \
     -e apiKey=$apiKey \
+    -e GITHUB_TOKEN=$GITHUB_TOKEN \
     --link fablab-db:db \
     -v ~/databaseFiles:/opt/database \
     container-fablab-server

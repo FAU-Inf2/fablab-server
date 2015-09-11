@@ -138,3 +138,7 @@ users:
 
 checkoutApiKey:
   key: ${apiKey}
+
+projects:
+  token: ${GITHUB_TOKEN}
+  apiUrl: "https://api.github.com/gists"

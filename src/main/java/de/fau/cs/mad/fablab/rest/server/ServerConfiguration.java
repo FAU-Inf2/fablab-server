@@ -71,6 +71,12 @@ class ServerConfiguration extends Configuration
     @Valid
     @NotNull
     @JsonProperty
+    private ProjectsConfiguration projects = new ProjectsConfiguration();
+    public ProjectsConfiguration getProjectsConfigurationConfiguration() { return projects; }
+
+    @Valid
+    @NotNull
+    @JsonProperty
     private AndroidPushConfiguration androidPushConfiguration = new AndroidPushConfiguration();
     public AndroidPushConfiguration getAndroidPushConfiguration() { return androidPushConfiguration; }
 

@@ -8,6 +8,7 @@ import de.fau.cs.mad.fablab.rest.server.core.drupal.DrupalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.ICalClient;
 import de.fau.cs.mad.fablab.rest.server.core.drupal.NewsFeedClient;
 import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
+import de.fau.cs.mad.fablab.rest.server.core.projects.ProjectsClient;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.AndroidPushManager;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.ApplePushManager;
 import de.fau.cs.mad.fablab.rest.server.core.pushservice.PushDAO;
@@ -93,6 +94,9 @@ class ServerApplication extends Application<ServerConfiguration> {
         // configure DrupalClient
         DrupalClient.setConfiguration(configuration.getNewsConfiguration(), configuration.getGeneralDataConfiguration());
 
+        // configure ProjectsClient
+        ProjectsClient.setConfiguration(configuration.getProjectsConfigurationConfiguration());
+
         // configure date format for jackson
         //environment.getObjectMapper().configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         environment.getObjectMapper().setDateFormat(new SimpleDateFormat(Format.DATE_FORMAT));
@@ -120,6 +124,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new ContactReource());
         environment.jersey().register(new VersionCheckResource(configuration.getMinimumVersionConfiguration()));
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
+        environment.jersey().register(new ProjectsResource());
 
         UpdateProductDatabaseTask updateProductDatabaseTask = new UpdateProductDatabaseTask(hibernate.getSessionFactory());
         environment.admin().addTask(updateProductDatabaseTask);

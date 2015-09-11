@@ -83,6 +83,9 @@ Temporary Items
 .idea/
 # if you remove the above rule, at least ignore the following:
 
+# Local configuration file (sdk path, etc)
+local.properties
+
 # User-specific stuff:
 # .idea/workspace.xml
 # .idea/tasks.xml

@@ -295,8 +295,17 @@ public class OpenErpClient implements OpenErpInterface {
     }
 
     private String prepareLocationForProductMap(String location) {
+        location = location.replace("  / ", "/");
         location = location.replace(" / ","/");
         location = location.replace(" ","_");
+        location = location.replace("ä", "ae");
+        location = location.replace("ö", "oe");
+        location = location.replace("ü", "ue");
+        location = location.replace("Ä", "Ae");
+        location = location.replace("Ö", "Oe");
+        location = location.replace("Ü", "Ue");
+        location = location.replace("ß", "ss");
+
         return location;
     }
 

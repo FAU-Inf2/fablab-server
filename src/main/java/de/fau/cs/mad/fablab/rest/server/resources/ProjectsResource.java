@@ -2,10 +2,9 @@ package de.fau.cs.mad.fablab.rest.server.resources;
 
 import de.fau.cs.mad.fablab.rest.api.ProjectsApi;
 import de.fau.cs.mad.fablab.rest.core.ProjectFile;
-import de.fau.cs.mad.fablab.rest.server.configuration.ProjectsConfiguration;
-import de.fau.cs.mad.fablab.rest.server.core.drupal.DrupalInterface;
 import de.fau.cs.mad.fablab.rest.server.core.projects.ProjectsClient;
 import de.fau.cs.mad.fablab.rest.server.core.projects.ProjectsInterface;
+import de.fau.cs.mad.fablab.rest.server.exceptions.Http500Exception;
 
 public class ProjectsResource implements ProjectsApi {
 
@@ -16,7 +15,11 @@ public class ProjectsResource implements ProjectsApi {
     }
 
     @Override
-    public void createProject(ProjectFile project) {
-        projectsInterface.postProject(project);
+    public String createProject(ProjectFile project) {
+        String gistUrl = projectsInterface.postProject(project);
+        if (gistUrl == null) {
+            throw new Http500Exception("Project was not created.");
+        }
+        return gistUrl;
     }
 }

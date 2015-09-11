@@ -2,8 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.core.projects;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.core.ProjectFile;
-import de.fau.cs.mad.fablab.rest.server.configuration.GeneralDataConfiguration;
-import de.fau.cs.mad.fablab.rest.server.configuration.NewsConfiguration;
+import de.fau.cs.mad.fablab.rest.core.ProjectGistResponse;
 import de.fau.cs.mad.fablab.rest.server.configuration.ProjectsConfiguration;
 import net.minidev.json.JSONObject;
 
@@ -53,8 +52,14 @@ public class ProjectsClient implements ProjectsInterface {
         config = c;
     }
 
+    /**
+     * Posts a new gist to github
+     *
+     * @param project Object with the data for the gist
+     * @return URL to gist
+     */
     @Override
-    public void postProject(ProjectFile project) {
+    public String postProject(ProjectFile project) {
 
         JSONObject createGist = getJSONObject(project.getDescription(), project.getFilename(), project.getContent());
 
@@ -66,6 +71,10 @@ public class ProjectsClient implements ProjectsInterface {
         if (jsonResponse.getStatus() != 201) {
             throw new RuntimeException("Failed: HTTP Error: " + jsonResponse.getStatus() + ". URL was " + apiUrl);
         }
+
+        ProjectGistResponse response = jsonResponse.readEntity(ProjectGistResponse.class);
+
+        return response.getHtml_url();
     }
 
     private JSONObject getJSONObject(String description, String filename, String content) {

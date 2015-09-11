@@ -10,6 +10,7 @@ import de.fau.cs.mad.fablab.rest.server.exceptions.Http404Exception;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.core.Response;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +40,8 @@ public class ToolUsageResource implements ToolUsageApi {
         else {
             throw new Http401Exception("Authentication or token required.");
         }
+
+        usage.setCreationTime(new Date().getTime());
 
         return mFacade.create(usage);
     }

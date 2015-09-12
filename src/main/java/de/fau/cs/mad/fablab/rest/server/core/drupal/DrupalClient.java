@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +29,8 @@ public class DrupalClient implements DrupalInterface {
     private LinkedList<FabTool> allTools;
     private Date lastUpdate;
     private final long TIMESPAN = 86400000L; // 1 day
+
+    private static final FabTool SONSTIGES = new FabTool("Sonstiges", null, null, null, null);
 
     /***
      * Singleton getInstance()
@@ -124,6 +127,12 @@ public class DrupalClient implements DrupalInterface {
         }
 
         if (allTools != null) {
+            // sort tools
+            Collections.sort(allTools, new ToolsComparator());
+            // add "Sonstiges"
+            SONSTIGES.setId(counter);
+            allTools.addFirst(SONSTIGES);
+
             this.allTools = allTools;
             this.lastUpdate = new Date();
         }

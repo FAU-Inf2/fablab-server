@@ -298,13 +298,13 @@ public class OpenErpClient implements OpenErpInterface {
         location = location.replace("  / ", "/");
         location = location.replace(" / ","/");
         location = location.replace(" ","_");
-        location = location.replace("ä", "ae");
-        location = location.replace("ö", "oe");
-        location = location.replace("ü", "ue");
-        location = location.replace("Ä", "Ae");
-        location = location.replace("Ö", "Oe");
-        location = location.replace("Ü", "Ue");
-        location = location.replace("ß", "ss");
+        location = location.replace("Ã¤", "ae");
+        location = location.replace("Ã¶", "oe");
+        location = location.replace("Ã¼", "ue");
+        location = location.replace("Ã„", "Ae");
+        location = location.replace("Ã–", "Oe");
+        location = location.replace("Ãœ", "Ue");
+        location = location.replace("ÃŸ", "ss");
 
         return location;
     }

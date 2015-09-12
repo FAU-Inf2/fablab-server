@@ -2,16 +2,8 @@ package de.fau.cs.mad.fablab.rest.server.core;
 
 
 import de.fau.cs.mad.fablab.rest.core.Product;
-import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpClient;
-import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpException;
-import de.fau.cs.mad.fablab.rest.server.core.openerp.OpenErpInterface;
 import io.dropwizard.hibernate.AbstractDAO;
-import io.dropwizard.jersey.DropwizardResourceConfig;
 import org.hibernate.*;
-import org.hibernate.context.internal.ManagedSessionContext;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
 

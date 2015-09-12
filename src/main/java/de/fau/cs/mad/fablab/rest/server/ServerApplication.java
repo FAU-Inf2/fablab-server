@@ -125,6 +125,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new VersionCheckResource(configuration.getMinimumVersionConfiguration()));
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
         environment.jersey().register(new ProjectsResource());
+        environment.jersey().register(new CategoryResource(new CategoryFacade(new CategoryDAO(hibernate.getSessionFactory()))));
 
         UpdateProductDatabaseTask updateProductDatabaseTask = new UpdateProductDatabaseTask(hibernate.getSessionFactory());
         environment.admin().addTask(updateProductDatabaseTask);
@@ -177,6 +178,7 @@ class ServerApplication extends Application<ServerConfiguration> {
             News.class,
             ICal.class,
             FabTool.class,
+            Category.class,
             Product.class,
             CartServer.class,
             CartEntryServer.class,
@@ -202,6 +204,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         config.addAnnotatedClass(ICal.class);
         config.addAnnotatedClass(FabTool.class);
         config.addAnnotatedClass(Product.class);
+        config.addAnnotatedClass(Category.class);
         config.addAnnotatedClass(CartServer.class);
         config.addAnnotatedClass(CartEntryServer.class);
         config.addAnnotatedClass(DoorState.class);

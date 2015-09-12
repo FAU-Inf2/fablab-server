@@ -10,11 +10,10 @@ import java.util.List;
 public class ProductFacade {
 
     private final ProductDAO dao;
-    private final OpenErpInterface mOpenErp;
 
     public ProductFacade(ProductDAO dao) {
         this.dao = dao;
-        this.mOpenErp = OpenErpClient.getInstance();
+
     }
 
     public List<Product> findAll(int limit, int offset) {

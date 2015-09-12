@@ -127,12 +127,11 @@ public class DrupalClient implements DrupalInterface {
         }
 
         if (allTools != null) {
-            //removed for debugging
-/*            // sort tools
+            // sort tools
             Collections.sort(allTools, new ToolsComparator());
             // add "Sonstiges"
             SONSTIGES.setId(counter);
-            allTools.addFirst(SONSTIGES);*/
+            allTools.addFirst(SONSTIGES);
 
             this.allTools = allTools;
             this.lastUpdate = new Date();

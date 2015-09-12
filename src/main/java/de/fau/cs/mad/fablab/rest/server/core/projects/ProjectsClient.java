@@ -2,7 +2,6 @@ package de.fau.cs.mad.fablab.rest.server.core.projects;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.core.ProjectFile;
-import de.fau.cs.mad.fablab.rest.core.ProjectGistResponse;
 import de.fau.cs.mad.fablab.rest.server.configuration.ProjectsConfiguration;
 import net.minidev.json.JSONObject;
 
@@ -72,7 +71,7 @@ public class ProjectsClient implements ProjectsInterface {
             throw new RuntimeException("Failed: HTTP Error: " + jsonResponse.getStatus() + ". URL was " + apiUrl);
         }
 
-        ProjectGistResponse response = jsonResponse.readEntity(ProjectGistResponse.class);
+        GistResponse response = jsonResponse.readEntity(GistResponse.class);
 
         return response.getHtml_url();
     }

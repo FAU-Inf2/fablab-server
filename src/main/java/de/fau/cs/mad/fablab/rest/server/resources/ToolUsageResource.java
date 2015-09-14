@@ -49,6 +49,15 @@ public class ToolUsageResource implements ToolUsageApi {
     @Override
     @UnitOfWork
     public List<ToolUsage> getUsageForTool(long toolId) {
+        List<ToolUsage> toolUsages = mFacade.getUsageForTool(toolId);
+        for(ToolUsage toolUsage : toolUsages){
+            Date usageDate = new Date(toolUsage.getCreationTime() + (toolUsage.getDuration() * 60000));
+            Date currentDate = new Date();
+            if(usageDate.before(currentDate)){
+                mFacade.removeUsage(toolId,toolUsage.getId());
+            }
+        }
+
         return mFacade.getUsageForTool(toolId);
     }
 

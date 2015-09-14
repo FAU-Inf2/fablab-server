@@ -10,7 +10,6 @@ public interface Checkout {
 
     @GET
     @Path("createCode")
-    @Produces(MediaType.APPLICATION_JSON)
     String createCode(@QueryParam("password") String password); // ../createCode?password=XXX
 
 

@@ -91,7 +91,7 @@ function generateQRCode(){
         height : 300,
         text: "" + code, //QRCode generator needs a string, so give him one
     });
-    $("#qrCodeAsString").html("als Text: " + code)
+    $("#qrCodeAsString").html("" + code)
 }
 
 

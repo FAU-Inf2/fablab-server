@@ -23,7 +23,7 @@ public class CheckoutResource implements Checkout {
     @Override
     public String createCode(String password){
         if(password.equals(apiKey))
-            return "FAU" + (new Random()).nextInt();
+            return acceptedCode = "FAU" + (new Random()).nextInt();
         if(password.length() == 0)
             throw new Http401Exception("No password given!");
         else

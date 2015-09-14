@@ -25,7 +25,7 @@ public class CartResource implements CartApi {
     @UnitOfWork
     @Override
     public void create(CartServer obj) {
-        if(String.valueOf(CheckoutResource.getAcceptedCode()).equals(obj.getCartCode()))
+        if(CheckoutResource.getAcceptedCode().equals(obj.getCartCode()))
             this.facade.create(obj);
         else
             throw new Http403Exception("Your cart code (" + obj.getCartCode() + ") is not valid.");

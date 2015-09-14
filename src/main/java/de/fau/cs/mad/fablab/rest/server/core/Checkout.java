@@ -11,7 +11,7 @@ public interface Checkout {
     @GET
     @Path("createCode")
     @Produces(MediaType.APPLICATION_JSON)
-    long createCode(@QueryParam("password") String password); // ../createCode?password=XXX
+    String createCode(@QueryParam("password") String password); // ../createCode?password=XXX
 
 
 

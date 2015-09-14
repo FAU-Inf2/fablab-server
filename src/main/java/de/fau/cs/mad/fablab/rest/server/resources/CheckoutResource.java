@@ -12,7 +12,7 @@ import java.util.Random;
 public class CheckoutResource implements Checkout {
 
     private CartFacade facade;
-    private static long acceptedCode;
+    private static String acceptedCode;
     private final String apiKey;
 
     public CheckoutResource(CartFacade facade, String apiKey){
@@ -21,9 +21,9 @@ public class CheckoutResource implements Checkout {
     }
 
     @Override
-    public long createCode(String password){
+    public String createCode(String password){
         if(password.equals(apiKey))
-            return acceptedCode = (new Random()).nextInt();
+            return "FAU" + (new Random()).nextInt();
         if(password.length() == 0)
             throw new Http401Exception("No password given!");
         else
@@ -49,7 +49,7 @@ public class CheckoutResource implements Checkout {
 
     }
 
-    public static long getAcceptedCode() {
+    public static String getAcceptedCode() {
         return acceptedCode;
     }
 }

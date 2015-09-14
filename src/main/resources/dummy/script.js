@@ -22,37 +22,47 @@ $(document).ready(function() {
  */
 function getCart(){
     clearTimeout(requestRepeater);
-    $.get(url + code , function(response) {
-        if (response == undefined) {
-            requestRepeater = setTimeout(getCart, 500)
-        }else {
-            cart = response;
-            //console.log(cart);
+    if(code != undefined) {
+        $.get(url + code, function (response) {
+            if (response == undefined) {
+                requestRepeater = setTimeout(getCart, 500)
+            } else {
+                cart = response;
+                //console.log(cart);
 
-            $("#hasCart").show();
-            $("#qrcode").hide();
-            $("#waiting").hide();
-            $("#createNewCartCode").hide();
-            $("#code").val(code);
-            $("#status").val(cart.status);
-            switch (cart.status){
-                case "PENDING": $("#status").css("background-color", "orange");  break;
-                case "PAID": $("#status").css("background-color", "green"); break;
-                case "CANCELLED": $("#status").css("background-color", "red"); break;
-                default: $("#status").css("background-color", "gray"); break;
+                $("#hasCart").show();
+                $("#qrcode").hide();
+                $("#waiting").hide();
+                $("#createNewCartCode").hide();
+                $("#code").val(code);
+                $("#status").val(cart.status);
+                switch (cart.status) {
+                    case "PENDING":
+                        $("#status").css("background-color", "orange");
+                        break;
+                    case "PAID":
+                        $("#status").css("background-color", "green");
+                        break;
+                    case "CANCELLED":
+                        $("#status").css("background-color", "red");
+                        break;
+                    default:
+                        $("#status").css("background-color", "gray");
+                        break;
+                }
+
+
+                var table = "<table border='0' cellpadding='5' cellspacing='0' id='productTable'>";
+                table += "<tr><th></th> <th>OpenERP</th> <th>Amount</th></tr>";
+                for (var i in cart.items) {
+                    var item = cart.items[i];
+                    table += "<tr><td>" + item.id + "</td><td>" + item.productId + "</td><td>" + item.amount + "</td></tr>"
+                }
+                table += "</table>";
+                $("#cart").html(table);
             }
-
-
-            var table = "<table border='0' cellpadding='5' cellspacing='0' id='productTable'>";
-            table += "<tr><th></th> <th>OpenERP</th> <th>Amount</th></tr>";
-            for (var i in cart.items) {
-                var item = cart.items[i];
-                table += "<tr><td>" + item.id + "</td><td>" + item.productId + "</td><td>" + item.amount + "</td></tr>"
-            }
-            table += "</table>";
-            $("#cart").html(table);
-        }
-    });
+        });
+    }
 }
 
 function updateCartInformation() {

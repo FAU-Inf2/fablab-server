@@ -17,7 +17,7 @@ public class ProductDAO extends AbstractDAO<Product> {
     private static String QUERY_FIND_ALL = "FROM Product";
     private static String QUERY_FIND_BY_ID = "FROM Product product WHERE product_id = :" + PARAM_ID;
     private static String QUERY_FIND_BY_NAME = "FROM Product product WHERE upper(name) LIKE ?";
-
+    private static String QUERY_FIND_ALL_SALEABLE_PRODUCTS = "FROM Product product WHERE product.saleable is true";
     private static String QUERY_FIND_BY_CATEGORY = "FROM Product product WHERE upper(category_string) LIKE :" + PARAM_CATEGORY;
 
     public ProductDAO(SessionFactory factory) {
@@ -50,9 +50,13 @@ public class ProductDAO extends AbstractDAO<Product> {
     }
 
     public List<Product> findAll() {
-        return super.currentSession().createQuery(QUERY_FIND_ALL).list();
+        return super.currentSession().createQuery(QUERY_FIND_ALL_SALEABLE_PRODUCTS).list();
     }
 
+
+    public List<Product> findAllWithoutFilter(){
+        return super.currentSession().createQuery(QUERY_FIND_ALL).list();
+    }
     /***
      * Stores the entry in the database, if it is not existing yet
      * @param obj

@@ -125,7 +125,7 @@ class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new VersionCheckResource(configuration.getMinimumVersionConfiguration()));
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
         environment.jersey().register(new ProjectsResource());
-        //environment.jersey().register(new CategoryResource(new CategoryFacade(new CategoryDAO(hibernate.getSessionFactory()))));
+        environment.jersey().register(new CategoryResource(new CategoryFacade(new CategoryDAO(hibernate.getSessionFactory()))));
 
         UpdateProductDatabaseTask updateProductDatabaseTask = new UpdateProductDatabaseTask(hibernate.getSessionFactory());
         environment.admin().addTask(updateProductDatabaseTask);

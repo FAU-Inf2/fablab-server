@@ -119,7 +119,6 @@ public class CategoryClient {
                     childIds.add(new Long((long)childArray.get(index)));
                 }
             }
-
             anotherCategory.setCategories(childIds);
             categories.add(anotherCategory);
         }

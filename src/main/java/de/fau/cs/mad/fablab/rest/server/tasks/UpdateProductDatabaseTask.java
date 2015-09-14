@@ -66,7 +66,7 @@ public class UpdateProductDatabaseTask extends Task {
         try {
             products = openErp.getProducts(0, 0);
             categories = openErp.getCategories();
-/*
+
             if(categories.size() > 0){
                 mCategoryDao.deleteAll();
             }
@@ -74,7 +74,7 @@ public class UpdateProductDatabaseTask extends Task {
             for(Category category: categories){
                 mCategoryDao.create(category);
             }
-*/
+
             if(products.size() > 0){
                 //Make sure all outdated products are removed, so clear the local storage
                 mProductDao.deleteAll();

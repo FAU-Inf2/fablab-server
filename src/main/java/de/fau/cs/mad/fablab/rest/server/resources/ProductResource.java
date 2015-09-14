@@ -53,6 +53,16 @@ public class ProductResource implements ProductApi {
 
     @UnitOfWork
     @Override
+    public List<Product> findAllWithoutFilters(int limit, int offset) {
+        List<Product> result = this.facade.findAllWithoutFilter(limit, offset);
+        if(result == null){
+            throw new InternalServerErrorException("There is a problem getting the results");
+        }
+        return result;
+    }
+
+    @UnitOfWork
+    @Override
     public List<String> findAllNames() {
         List<String> result = this.facade.findAllNames();
         if(result == null){

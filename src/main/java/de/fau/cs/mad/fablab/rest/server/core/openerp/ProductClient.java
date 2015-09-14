@@ -28,6 +28,7 @@ public class ProductClient {
     static final String FIELD_UNIT_OF_MEASURE = "uom_id";
     static final String FIELD_CATEGORY = "categ_id";
     static final String FIELD_LOCATION = "property_stock_location";
+    static final String FIELD_SALEABLE = "sale_ok";
 
     private static JSONArray fields = new JSONArray();
     static {
@@ -41,6 +42,7 @@ public class ProductClient {
         fields.add(7, FIELD_CATEGORY);
         fields.add(8, FIELD_LOCATION);
         fields.add(9, FIELD_ID);
+        fields.add(10,FIELD_SALEABLE);
     }
 
     private JSONRPC2Session mJSONRPC2Session;
@@ -62,7 +64,7 @@ public class ProductClient {
         mJSONRPC2Session.setURL(mSearchReadUrl);
 
         JSONArray domain = new JSONArray();
-
+        /*
         JSONArray filterSaleOk = new JSONArray();
         filterSaleOk.add(0, "sale_ok");
         filterSaleOk.add(1, "ilike");
@@ -72,14 +74,15 @@ public class ProductClient {
         filterPrice.add(0, "list_price");
         filterPrice.add(1, ">=");
         filterPrice.add(2, "0");
-
         domain.add(filterSaleOk);
         domain.add(filterPrice);
+*/
+
 
         JSONRPC2Request request = new JSONRPC2Request(METHOD, getProductParams(limit, offset, domain), OpenERPUtil.generateRequestID());
-        System.out.println("Product- Request: " + request);
+
         jsonRPC2Response = mJSONRPC2Session.send(request);
-        System.out.println("Product- Result : " + jsonRPC2Response);
+
         try {
             assertSessionNotExpired(jsonRPC2Response);
         } catch (OpenErpSessionExpiredException e) {
@@ -132,6 +135,14 @@ public class ProductClient {
                     ? -1
                     : (Double) productJson.get(FIELD_LIST_PRICE);
 
+            Boolean saleable = (productJson.get(FIELD_SALEABLE) == null)
+                    ? false
+                    : (Boolean)productJson.get(FIELD_SALEABLE);
+
+            if(price < 0){
+                saleable = false;
+            }
+
             JSONArray categoryArray = (productJson.get(FIELD_CATEGORY) == null)
                     ? new JSONArray()
                     : (JSONArray) productJson.get(FIELD_CATEGORY);
@@ -165,9 +176,12 @@ public class ProductClient {
             //Create a product and put it in the result list
             Product product = new Product(id, name, price, categoryId, categoryString, unit, location);
             product.setDatabaseId(databaseId);
+            product.setSaleable(saleable);
             product.setOum_id(unit_id);
             product.setLocation_id(location_id);
             productList.add(product);
+
+
         }
         return productList;
     }

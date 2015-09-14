@@ -29,6 +29,10 @@ public class ProductFacade {
         return names;
     }
 
+    public List<Product> findAllWithoutFilter(int limit, int offset){
+        return dao.findAllWithoutFilter();
+    }
+
     public List<Product> findByName(String name, int limit, int offset) {
         return dao.findByName(name);
     }

@@ -2,8 +2,10 @@ package de.fau.cs.mad.fablab.rest.server.core.projects;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import de.fau.cs.mad.fablab.rest.core.ProjectFile;
+import de.fau.cs.mad.fablab.rest.core.ProjectImageUpload;
 import de.fau.cs.mad.fablab.rest.server.configuration.ProjectsConfiguration;
 import net.minidev.json.JSONObject;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -11,6 +13,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.*;
 
 public class ProjectsClient implements ProjectsInterface {
 
@@ -19,6 +22,8 @@ public class ProjectsClient implements ProjectsInterface {
 
     private String token;
     private String apiUrl;
+    private String gistUrl;
+    private String gistUser;
 
     /***
      * Singleton getInstance()
@@ -45,6 +50,8 @@ public class ProjectsClient implements ProjectsInterface {
 
         token = config.getToken();
         apiUrl = config.getApiUrl();
+        gistUrl = config.getGistUrl();
+        gistUser = config.getGistUser();
     }
 
     public static void setConfiguration(ProjectsConfiguration c) {
@@ -76,6 +83,26 @@ public class ProjectsClient implements ProjectsInterface {
         return response.getHtml_url();
     }
 
+    @Override
+    public String commitImage(ProjectImageUpload image) {
+        String path = null;
+        try {
+            path = writeImageToDisk(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String filename = "zImg_" + image.getFilename();
+        String[] args = {"scripts/imgToGist.sh", token, image.getRepoId(), path, filename};
+        try {
+            Runtime.getRuntime().exec(args);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // now construct the filename and return it
+        return gistUrl + gistUser + "/" + image.getRepoId() + "/raw/" + filename;
+    }
+
     private JSONObject getJSONObject(String description, String filename, String content) {
         JSONObject contents = new JSONObject();
         contents.put("content", content);
@@ -89,5 +116,14 @@ public class ProjectsClient implements ProjectsInterface {
         createGist.put("files", file);
 
         return createGist;
+    }
+
+    private String writeImageToDisk(ProjectImageUpload image) throws IOException {
+        //byte[] data = Base64.decodeBase64(image.getData());
+        String path = "/tmp/" + image.getFilename();
+        OutputStream stream = new FileOutputStream(new File(path));
+        stream.write(image.getData());
+        stream.close();
+        return path;
     }
 }

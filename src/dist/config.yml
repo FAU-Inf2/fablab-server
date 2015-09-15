@@ -142,3 +142,5 @@ checkoutApiKey:
 projects:
   token: ${GITHUB_TOKEN}
   apiUrl: "https://api.github.com/gists"
+  gistUrl: "https://gist.githubusercontent.com/"
+  gistUser: "fablabfau"

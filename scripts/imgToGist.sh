@@ -1,10 +1,11 @@
 #!/bin/bash
 
-repo_id=$1
-inputfile=$2
-filename=$3
+token=$1
+repo_id=$2
+inputfile=$3
+filename=$4
 
-git clone https://$GITHUB_TOKEN@gist.github.com/$repo_id.git
+git clone https://$token@gist.github.com/$repo_id.git
 mv $inputfile $repo_id/$filename
 cd $repo_id
 git add $filename

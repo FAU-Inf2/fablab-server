@@ -1,6 +1,7 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
 import de.fau.cs.mad.fablab.rest.api.ProjectsApi;
+import de.fau.cs.mad.fablab.rest.core.ProjectImageUpload;
 import de.fau.cs.mad.fablab.rest.core.ProjectFile;
 import de.fau.cs.mad.fablab.rest.server.core.projects.ProjectsClient;
 import de.fau.cs.mad.fablab.rest.server.core.projects.ProjectsInterface;
@@ -21,5 +22,14 @@ public class ProjectsResource implements ProjectsApi {
             throw new Http500Exception("Project was not created.");
         }
         return gistUrl;
+    }
+
+    @Override
+    public String uploadImage(ProjectImageUpload image) {
+        String imageUrl = projectsInterface.commitImage(image);
+        if (imageUrl == null) {
+            throw new Http500Exception("Image was not committed.");
+        }
+        return imageUrl;
     }
 }

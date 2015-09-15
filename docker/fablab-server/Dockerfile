@@ -16,9 +16,6 @@ COPY	calendar.ics calendar.ics
 COPY	rss.xml.rss rss.xml.rss
 COPY	config.yml config.yml
 
-#configure git for image upload
-CMD	git config --global user.email "fablab@i2.cs.fau.de" && \
-	git config --global user.name "fablab-server"
 #build and run the server
 CMD 	if [ ! -d "fablab-server" ]; then git clone https://github.com/FAU-Inf2/fablab-server.git; fi && \
 	mv fablab-rest-server.keystore fablab-server/src/dist && \

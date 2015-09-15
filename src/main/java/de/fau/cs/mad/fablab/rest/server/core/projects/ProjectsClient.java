@@ -66,7 +66,7 @@ public class ProjectsClient implements ProjectsInterface {
      * Posts a new gist to github
      *
      * @param project Object with the data for the gist
-     * @return URL to gist
+     * @return id of the gist
      */
     @Override
     public String postProject(ProjectFile project) {
@@ -74,7 +74,7 @@ public class ProjectsClient implements ProjectsInterface {
         JSONObject createGist = getJSONObject(Method.POST, project.getDescription(), project.getFilename(), project.getContent());
         GistResponse response = pushToGitHub(Method.POST, apiUrl, createGist);
 
-        return response.getHtml_url();
+        return response.getId();
     }
 
     /**
@@ -82,7 +82,7 @@ public class ProjectsClient implements ProjectsInterface {
      *
      * @param gistId id of the gist
      * @param project Object with the data for the gist
-     * @return URL to gist
+     * @return id of the gist
      */
     @Override
     public String patchProject(String gistId, ProjectFile project) {
@@ -90,9 +90,14 @@ public class ProjectsClient implements ProjectsInterface {
         JSONObject updateGist = getJSONObject(Method.PATCH, project.getDescription(), project.getFilename(), project.getContent());
         GistResponse response = pushToGitHub(Method.PATCH, apiUrl + "/" + gistId ,updateGist);
 
-        return response.getHtml_url();
+        return response.getId();
     }
 
+    /**
+     * commits an image to a repository
+     * @param image with the image and repository-data
+     * @return direct link to the image
+     */
     @Override
     public String commitImage(ProjectImageUpload image) {
         String path = null;

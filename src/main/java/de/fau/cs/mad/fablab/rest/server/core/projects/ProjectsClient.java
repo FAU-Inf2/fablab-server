@@ -15,6 +15,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.*;
 
+enum Method {
+    POST, PATCH
+}
+
 public class ProjectsClient implements ProjectsInterface {
 
     private static ProjectsInterface instance;
@@ -67,18 +71,24 @@ public class ProjectsClient implements ProjectsInterface {
     @Override
     public String postProject(ProjectFile project) {
 
-        JSONObject createGist = getJSONObject(project.getDescription(), project.getFilename(), project.getContent());
+        JSONObject createGist = getJSONObject(Method.POST, project.getDescription(), project.getFilename(), project.getContent());
+        GistResponse response = pushToGitHub(Method.POST, apiUrl, createGist);
 
-        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
+        return response.getHtml_url();
+    }
 
-        Invocation invocation = client.target(apiUrl).request(MediaType.APPLICATION_JSON).header("Authorization", "token " + token).buildPost(Entity.entity(createGist, MediaType.APPLICATION_JSON));
-        Response jsonResponse = invocation.invoke();
+    /**
+     * Patches an existing gist on github
+     *
+     * @param gistId id of the gist
+     * @param project Object with the data for the gist
+     * @return URL to gist
+     */
+    @Override
+    public String patchProject(String gistId, ProjectFile project) {
 
-        if (jsonResponse.getStatus() != 201) {
-            throw new RuntimeException("Failed: HTTP Error: " + jsonResponse.getStatus() + ". URL was " + apiUrl);
-        }
-
-        GistResponse response = jsonResponse.readEntity(GistResponse.class);
+        JSONObject updateGist = getJSONObject(Method.PATCH, project.getDescription(), project.getFilename(), project.getContent());
+        GistResponse response = pushToGitHub(Method.PATCH, apiUrl + "/" + gistId ,updateGist);
 
         return response.getHtml_url();
     }
@@ -103,7 +113,32 @@ public class ProjectsClient implements ProjectsInterface {
         return gistUrl + gistUser + "/" + image.getRepoId() + "/raw/" + filename;
     }
 
-    private JSONObject getJSONObject(String description, String filename, String content) {
+    /**
+     * pushed the given jsonObject to GitHub
+     * @param targetUrl URL to push to
+     * @param jsonObject
+     * @return the response from github
+     */
+    private GistResponse pushToGitHub(Method method, String targetUrl, JSONObject jsonObject) {
+        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
+
+        Invocation invocation = client.target(targetUrl).request(MediaType.APPLICATION_JSON).header("Authorization", "token " + token).buildPost(Entity.entity(jsonObject, MediaType.APPLICATION_JSON));
+        Response jsonResponse = invocation.invoke();
+
+        if (method == Method.PATCH) {
+            if (jsonResponse.getStatus() != 200) {
+                throw new RuntimeException("Failed: HTTP Error: " + jsonResponse.getStatus() + ". URL was " + apiUrl);
+            }
+        } else if (method == Method.POST) {
+            if (jsonResponse.getStatus() != 201) {
+                throw new RuntimeException("Failed: HTTP Error: " + jsonResponse.getStatus() + ". URL was " + apiUrl);
+            }
+        }
+
+        return jsonResponse.readEntity(GistResponse.class);
+    }
+
+    private JSONObject getJSONObject(Method method, String description, String filename, String content) {
         JSONObject contents = new JSONObject();
         contents.put("content", content);
 
@@ -112,7 +147,7 @@ public class ProjectsClient implements ProjectsInterface {
 
         JSONObject createGist = new JSONObject();
         createGist.put("description", description);
-        createGist.put("public", "true");
+        if (method == Method.POST) createGist.put("public", "true");
         createGist.put("files", file);
 
         return createGist;

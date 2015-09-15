@@ -25,6 +25,15 @@ public class ProjectsResource implements ProjectsApi {
     }
 
     @Override
+    public String updateProject(String gistId, ProjectFile project) {
+        String gistUrl = projectsInterface.patchProject(gistId, project);
+        if (gistUrl == null) {
+            throw new Http500Exception("Project was not patched.");
+        }
+        return gistUrl;
+    }
+
+    @Override
     public String uploadImage(ProjectImageUpload image) {
         String imageUrl = projectsInterface.commitImage(image);
         if (imageUrl == null) {

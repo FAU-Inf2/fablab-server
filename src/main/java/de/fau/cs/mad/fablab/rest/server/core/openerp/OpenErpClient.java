@@ -297,6 +297,8 @@ public class OpenErpClient implements OpenErpInterface {
     private String prepareLocationForProductMap(String location) {
         location = location.replace("  / ", "/");
         location = location.replace(" / ","/");
+        location = location.replace(",", "");
+        location = location.replace("\"", "");
         location = location.replace(" ","_");
         location = location.replace("ä", "ae");
         location = location.replace("ö", "oe");

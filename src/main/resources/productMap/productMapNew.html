@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de" id="doc">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, height=device-height" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    
+
+
+</head>
+<body>
+<object data="productMap.svg" type="image/svg+xml" id="productMapSvg" width="100%" height="100%"></object>
+
+<script>
+window.onload=function()
+//$(document).ready(function()
+{
+	var idString = getUrlParam( 'id' );
+	var idArray = splitParameterString(idString);
+	var svg = document.getElementById("productMapSvg");	
+	
+	var isIdMatched = false;
+	var finestProductLocation;
+	for (i = (idArray.length - 1); i > -1; i--)
+	{
+		var svgDoc = svg.contentDocument;
+		var svgElement = svgDoc.getElementById(idArray[i]);
+		if(svgElement !== null && isIdMatched == false)
+		{
+			isIdMatched = true;
+			finestProductLocation = idArray[i];
+		}				
+	}
+	if(isIdMatched == true && finestProductLocation !== null)
+	{
+		var svgDoc = svg.contentDocument;
+		var svgElement = svgDoc.getElementById(finestProductLocation);
+		if(svgElement != null)
+		{
+			svgElement.style.fill = "red";	
+			var a = svgElement.style.opacity;
+			svgElement.style.opacity = "1";
+			a = svgElement.style.opacity;
+			var alfa = 4;
+			
+		}
+	}
+	else
+		alert("Der Standort ist nicht in der Standortkarte verzeichnet");	
+}
+		
+	
+	
+	function changeColorOfFinestLocationId(idArray, svg)
+	{
+		var isIdMatched = false;
+		var finestProductLocation;
+		for (i = (idArray.length - 1); i > -1; i--)
+		{
+			var svgDoc = svg.contentDocument;
+			var svgElement = svgDoc.getElementById(idArray[i]);
+			if(svgElement !== null && isIdMatched == false)
+			{
+				isIdMatched = true;
+				finestProductLocation = idArray[i];
+			}				
+		}
+		if(isIdMatched == true && finestProductLocation !== null)
+			changeColor(finestProductLocation);
+		if(isIdMatched == false)
+			alert("Der Standort ist nicht in der Standortkarte verzeichnet");
+	
+	}
+	
+	function getUrlParam( name )
+	{
+		name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+		
+		var regex_search = "[\\?&]" + name + "=([^&#]*)";
+		var regex = new RegExp( regex_search );
+		var result = regex.exec( window.location.href );
+		
+		if ( result == null )
+			return "";		
+		else
+			return result[1];
+	} 
+	
+	function splitParameterString(parameterString)
+	{
+		var result = parameterString.split("/");
+		return result;
+	}	
+	
+	function changeColor(locationId, svg)
+	{
+		var svgDoc = svg.contentDocument;
+		var svgElement = svgDoc.getElementById(locationId);
+		if(svgElement != null)
+		{
+			svgElement.style.fill = "rgba(255, 0, 0, 1)";
+			svgElement.style.opacity = "1";
+		}	
+	}
+
+	
+	
+	
+
+	
+	
+	</script>
+
+</body>
+</html>

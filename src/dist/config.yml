@@ -112,17 +112,9 @@ applePushConfiguration:
   certificate: src/dist/apnDev.p12
   password: ${APN_PASSWORD}
 
-minimumVersion:
-  - platform: Android
-    latestVersionCode: 2
-    latestVersion: v1.1
-    minimumRequiredVersionCode: 1
-    updateMessage: Neuer Endpoint und neue Features vorhanden!
-  - platform: Apple
-    latestVersionCode: 1
-    latestVersion: v1.0
-    minimumRequiredVersionCode: 1
-    updateMessage: Unser initiales Release!
+
+versionCheck:
+  path: src/dist/minimumVersion.yml
 
 users:
   - username: ${USER_ADMIN}

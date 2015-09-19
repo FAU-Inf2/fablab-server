@@ -88,8 +88,8 @@ class ServerConfiguration extends Configuration
 
     @NotNull
     @JsonProperty
-    private List<MinimumVersionConfiguration> minimumVersion = new ArrayList<>();
-    public List<MinimumVersionConfiguration> getMinimumVersionConfiguration() { return minimumVersion; }
+    private VersionCheckConfiguration versionCheck = new VersionCheckConfiguration();
+    public VersionCheckConfiguration geVersionCheckConfiguration() { return versionCheck; }
 
     @NotNull
     @JsonProperty

@@ -122,10 +122,16 @@ class ServerApplication extends Application<ServerConfiguration> {
 
         environment.jersey().register(new UserResource());
         environment.jersey().register(new ContactReource());
-        environment.jersey().register(new VersionCheckResource(configuration.getMinimumVersionConfiguration()));
         environment.jersey().register(new GeneralDataResource(configuration.getGeneralDataConfiguration()));
         environment.jersey().register(new ProjectsResource());
         environment.jersey().register(new CategoryResource(new CategoryFacade(new CategoryDAO(hibernate.getSessionFactory()))));
+
+        // version check resource
+        VersionCheckResource versionCheckResource = new VersionCheckResource(configuration.geVersionCheckConfiguration());
+        VersionFileWatcher versionFileWatcher = new VersionFileWatcher(configuration.geVersionCheckConfiguration(), versionCheckResource);
+        Thread versionFileWatcherThread = new Thread(versionFileWatcher);
+        versionFileWatcherThread.start();
+        environment.jersey().register(versionCheckResource);
 
         UpdateProductDatabaseTask updateProductDatabaseTask = new UpdateProductDatabaseTask(hibernate.getSessionFactory());
         environment.admin().addTask(updateProductDatabaseTask);

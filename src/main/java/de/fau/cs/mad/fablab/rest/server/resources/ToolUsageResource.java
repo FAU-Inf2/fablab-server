@@ -58,7 +58,7 @@ public class ToolUsageResource implements ToolUsageApi {
             }
         }
 
-        return mFacade.getUsageForTool(toolId);
+        return toolUsages;
     }
 
     @Override

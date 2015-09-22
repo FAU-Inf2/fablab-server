@@ -2,6 +2,7 @@ package de.fau.cs.mad.fablab.rest.server.core.toolusage;
 
 import de.fau.cs.mad.fablab.rest.core.ToolUsage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,40 @@ public class ToolUsageFacade {
     }
 
     public List<ToolUsage> getUsageForTool(long id) {
-        return mDAO.getUsageForTool(id);
+
+        //we need to sort list
+        List<ToolUsage> list = mDAO.getUsageForTool(id);
+
+        if (list.size() == 0)
+            return list;
+
+        List<ToolUsage> sortedList = new ArrayList<>();
+
+        ToolUsage first = null;
+
+        // find the one without ancestor
+        for (ToolUsage usage : list) {
+
+            boolean isAcestor = false;
+            for (ToolUsage sub : list) {
+                // usage is successor of sub
+                if (usage.getId() == sub.getSuccessorId()) {
+                    isAcestor = true;
+                    break;
+                }
+            }
+
+            if (!isAcestor) {
+                first = usage;
+                break;
+            }
+        }
+
+        sortedList.add(first);
+        while ((first = first.getSuccessor()) != null)
+            sortedList.add(first);
+
+        return sortedList;
     }
 
     public ToolUsage getUsage(long toolId, long usageId) {

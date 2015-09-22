@@ -1,6 +1,9 @@
 # fablab-server [![Build Status](https://travis-ci.org/FAU-Inf2/fablab-server.svg?branch=master)](https://travis-ci.org/FAU-Inf2/fablab-server)
 
-fablab-server is a REST server based on [Dropwizard](http://www.dropwizard.io) needed for the [fablab-android-App](https://github.com/FAU-Inf2/fablab-android).
+fablab-server is a REST server based on [Dropwizard](http://www.dropwizard.io) which is currently used by the following apps:
+- [fablab-android](https://github.com/FAU-Inf2/fablab-android)
+- [fablab-iOS](https://github.com/FAU-Inf2/fablab-ios)
+- [fablab-HTML](https://github.com/FAU-Inf2/fablab-html)
 
 ## Build
 

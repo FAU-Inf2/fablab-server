@@ -98,4 +98,13 @@ public class ToolUsageFacade {
     public boolean setToolEnabled(long toolId, boolean flag) {
         return mDAO.setToolEnabled(toolId, flag);
     }
+
+    public boolean checkIfToolsEnabled(long toolId){
+
+        FabTool tool = mDAO.getTool(toolId);
+        if (tool == null)
+            return false;
+
+        return tool.getEnabledForMachineUsage();
+    }
 }

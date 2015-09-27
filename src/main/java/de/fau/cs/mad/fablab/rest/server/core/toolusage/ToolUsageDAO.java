@@ -211,15 +211,11 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
     }
 
     public boolean setToolEnabled(long toolId, boolean flag) {
-        List<FabTool> toolList = super.currentSession().
-                createQuery("FROM FabTool WHERE id = :toolId ORDER BY title")
-                .setParameter("toolId", toolId)
-                .list();
+        FabTool tool = getTool(toolId);
 
-        if (toolList.size() != 1)
+        if (tool == null)
             return false;
 
-        FabTool tool = toolList.get(0);
         tool.setEnabledForMachineUsage(flag);
         currentSession().update(tool);
 
@@ -234,5 +230,17 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
             currentSession().update(item);
             ancestor = item;
         }
+    }
+
+    public FabTool getTool(long toolId) {
+        List<FabTool> toolList = super.currentSession().
+                createQuery("FROM FabTool WHERE id = :toolId")
+                .setParameter("toolId", toolId)
+                .list();
+
+        if (toolList.size() != 1)
+            return null;
+
+        return toolList.get(0);
     }
 }

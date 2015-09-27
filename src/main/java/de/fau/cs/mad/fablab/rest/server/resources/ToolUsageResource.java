@@ -8,6 +8,7 @@ import de.fau.cs.mad.fablab.rest.core.User;
 import de.fau.cs.mad.fablab.rest.server.core.toolusage.ToolUsageFacade;
 import de.fau.cs.mad.fablab.rest.server.exceptions.Http401Exception;
 import de.fau.cs.mad.fablab.rest.server.exceptions.Http404Exception;
+import de.fau.cs.mad.fablab.rest.server.exceptions.Http503Exception;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -41,6 +42,9 @@ public class ToolUsageResource implements ToolUsageApi {
         else {
             throw new Http401Exception("Authentication or token required.");
         }
+
+        if (!(user != null && user.hasRole(Roles.ADMIN)) && !mFacade.checkIfToolsEnabled(toolId))
+            throw new Http503Exception("Tool currently not enabled.");
 
         return mFacade.create(usage);
     }

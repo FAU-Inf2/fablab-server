@@ -54,10 +54,10 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
 
             currentSession().update(ancestor);
 
-            newUsage.setCreationTime(ancestor.getCreationTime() + ancestor.getDuration() * 60 * 1000);
+            newUsage.setStartTime(ancestor.getStartTime() + ancestor.getDuration() * 60 * 1000);
         }
         else {
-            newUsage.setCreationTime(new Date().getTime());
+            newUsage.setStartTime(new Date().getTime());
         }
 
         currentSession().update(newUsage);
@@ -75,7 +75,7 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
         // auto delete usage entries, delete all entries, older than half an hour
         long now = new Date().getTime() - 30 * 60 * 1000;
         List<ToolUsage> deleteList = super.currentSession().
-                createQuery("FROM " + TABLE_NAME + " WHERE tool_id = :toolId AND (creationTime + duration * 60 * 1000) < :now")
+                createQuery("FROM " + TABLE_NAME + " WHERE tool_id = :toolId AND (starttime + duration * 60 * 1000) < :now")
                 .setParameter("toolId", id)
                 .setParameter("now", now)
                 .list();
@@ -120,7 +120,7 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
                 ancestor.setSuccessor(usage.getSuccessor());
                 currentSession().update(ancestor);
 
-                updateCreationTimes(ancestor);
+                updateStartTimes(ancestor);
             }
 
             currentSession().delete(usage);
@@ -182,7 +182,7 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
         currentSession().update(usage);
         currentSession().update(after);
 
-        updateCreationTimes(after);
+        updateStartTimes(after);
 
         return true;
     }
@@ -203,11 +203,11 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
         return null;
     }
 
-    private void updateCreationTimes(ToolUsage first) {
+    private void updateStartTimes(ToolUsage first) {
         ToolUsage ancestor = first;
         ToolUsage item;
         while ((item = ancestor.getSuccessor()) != null) {
-            item.setCreationTime(ancestor.getCreationTime() + ancestor.getDuration() * 60 * 1000);
+            item.setStartTime(ancestor.getStartTime() + ancestor.getDuration() * 60 * 1000);
             currentSession().update(item);
             ancestor = item;
         }

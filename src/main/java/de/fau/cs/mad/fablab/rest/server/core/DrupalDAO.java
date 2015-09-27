@@ -19,7 +19,7 @@ public class DrupalDAO extends AbstractDAO<FabTool> {
 
     @SuppressWarnings("unchecked")
     public List<FabTool> findAllTools() {
-        return super.currentSession().createQuery("FROM FabTool").list();
+        return super.currentSession().createQuery("FROM FabTool ORDER BY title").list();
     }
 
     //Create

@@ -1,5 +1,6 @@
 package de.fau.cs.mad.fablab.rest.server.core.toolusage;
 
+import de.fau.cs.mad.fablab.rest.core.FabTool;
 import de.fau.cs.mad.fablab.rest.core.ToolUsage;
 
 import java.util.ArrayList;
@@ -88,5 +89,13 @@ public class ToolUsageFacade {
         }
 
         return mDAO.moveAfter(usage, afterUsage);
+    }
+
+    public List<FabTool> getEnabledTools() {
+        return mDAO.getEnabledTools();
+    }
+
+    public boolean setToolEnabled(long toolId, boolean flag) {
+        return mDAO.setToolEnabled(toolId, flag);
     }
 }

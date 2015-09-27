@@ -1,12 +1,14 @@
 package de.fau.cs.mad.fablab.rest.server.resources;
 
 import de.fau.cs.mad.fablab.rest.api.ToolUsageApi;
+import de.fau.cs.mad.fablab.rest.core.FabTool;
 import de.fau.cs.mad.fablab.rest.core.Roles;
 import de.fau.cs.mad.fablab.rest.core.ToolUsage;
 import de.fau.cs.mad.fablab.rest.core.User;
 import de.fau.cs.mad.fablab.rest.server.core.toolusage.ToolUsageFacade;
 import de.fau.cs.mad.fablab.rest.server.exceptions.Http401Exception;
 import de.fau.cs.mad.fablab.rest.server.exceptions.Http404Exception;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.core.Response;
@@ -120,5 +122,24 @@ public class ToolUsageResource implements ToolUsageApi {
             return Response.ok().build();
 
         throw new Http404Exception("Usage not found.");
+    }
+
+    @Override
+    @UnitOfWork
+    public List<FabTool> getEnabledTools() {
+        return mFacade.getEnabledTools();
+    }
+
+    @Override
+    @UnitOfWork
+    public Response setToolEnabled(@Auth User user, long toolId, boolean enable) {
+        if (!user.hasRole(Roles.ADMIN)) {
+            throw new Http401Exception("Only for admins.");
+        }
+
+        if (mFacade.setToolEnabled(toolId, enable))
+            return Response.ok().build();
+
+        throw new Http404Exception("Tool not found.");
     }
 }

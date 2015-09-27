@@ -5,6 +5,7 @@ import de.fau.cs.mad.fablab.rest.core.ToolUsage;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +53,14 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
             ancestor.setSuccessor(newUsage);
 
             currentSession().update(ancestor);
+
+            newUsage.setCreationTime(ancestor.getCreationTime() + ancestor.getDuration() * 60 * 1000);
         }
+        else {
+            newUsage.setCreationTime(new Date().getTime());
+        }
+
+        currentSession().update(newUsage);
 
         return newUsage;
     }
@@ -63,6 +71,20 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
      * @return list of usage items
      */
     List<ToolUsage> getUsageForTool(long id) {
+
+        // auto delete usage entries, delete all entries, older than half an hour
+        long now = new Date().getTime() - 30 * 60 * 1000;
+        List<ToolUsage> deleteList = super.currentSession().
+                createQuery("FROM " + TABLE_NAME + " WHERE tool_id = :toolId AND (creationTime + duration * 60 * 1000) < :now")
+                .setParameter("toolId", id)
+                .setParameter("now", now)
+                .list();
+
+        for (ToolUsage del : deleteList) {
+            delete(del.getToolId(), del.getId());
+        }
+
+        // return current list of usage entries
         return super.currentSession().
                 createQuery("FROM " + TABLE_NAME + " WHERE tool_id = :toolId")
                 .setParameter("toolId", id)
@@ -97,6 +119,8 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
             if (ancestor != null) {
                 ancestor.setSuccessor(usage.getSuccessor());
                 currentSession().update(ancestor);
+
+                updateCreationTimes(ancestor);
             }
 
             currentSession().delete(usage);
@@ -158,6 +182,8 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
         currentSession().update(usage);
         currentSession().update(after);
 
+        updateCreationTimes(after);
+
         return true;
     }
 
@@ -175,5 +201,15 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
             return  usageList.get(0);
 
         return null;
+    }
+
+    private void updateCreationTimes(ToolUsage first) {
+        ToolUsage ancestor = first;
+        ToolUsage item;
+        while ((item = ancestor.getSuccessor()) != null) {
+            item.setCreationTime(ancestor.getCreationTime() + ancestor.getDuration() * 60 * 1000);
+            currentSession().update(item);
+            ancestor = item;
+        }
     }
 }

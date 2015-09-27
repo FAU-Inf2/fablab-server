@@ -10,7 +10,6 @@ import de.fau.cs.mad.fablab.rest.server.exceptions.Http404Exception;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.core.Response;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,22 +40,14 @@ public class ToolUsageResource implements ToolUsageApi {
             throw new Http401Exception("Authentication or token required.");
         }
 
-        usage.setCreationTime(new Date().getTime());
-
         return mFacade.create(usage);
     }
 
     @Override
     @UnitOfWork
     public List<ToolUsage> getUsageForTool(long toolId) {
+
         List<ToolUsage> toolUsages = mFacade.getUsageForTool(toolId);
-        for(ToolUsage toolUsage : toolUsages){
-            Date usageDate = new Date(toolUsage.getCreationTime() + (toolUsage.getDuration() * 60000));
-            Date currentDate = new Date();
-            if(usageDate.before(currentDate)){
-                mFacade.removeUsage(toolId,toolUsage.getId());
-            }
-        }
 
         return toolUsages;
     }

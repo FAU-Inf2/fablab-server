@@ -212,7 +212,7 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
 
     public boolean setToolEnabled(long toolId, boolean flag) {
         List<FabTool> toolList = super.currentSession().
-                createQuery("FROM FabTool WHERE tool_id = :toolId ORDER BY title")
+                createQuery("FROM FabTool WHERE id = :toolId ORDER BY title")
                 .setParameter("toolId", toolId)
                 .list();
 

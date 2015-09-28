@@ -15,6 +15,9 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
 
     private static final String TABLE_NAME = "ToolUsage";
 
+    // offset in milliseconds when finished machine usage entries should be deleted
+    private static final long DELETE_OFFSET = 15 * 60 * 1000;
+
     public ToolUsageDAO (SessionFactory factory) {
         super(factory);
     }
@@ -47,6 +50,8 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
                 .setParameter("tool_id", usage.getToolId())
                 .setParameter("usage_id", newUsage.getId())
                 .list();
+
+        long now = new Date().getTime();
         if (usageList.size() >= 1) {
 
             ToolUsage ancestor = usageList.get(0);
@@ -55,9 +60,12 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
             currentSession().update(ancestor);
 
             newUsage.setStartTime(ancestor.getStartTime() + ancestor.getDuration() * 60 * 1000);
+
+            if (newUsage.getStartTime() < now)
+                newUsage.setStartTime(now);
         }
         else {
-            newUsage.setStartTime(new Date().getTime());
+            newUsage.setStartTime(now);
         }
 
         currentSession().update(newUsage);
@@ -73,7 +81,7 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
     List<ToolUsage> getUsageForTool(long id) {
 
         // auto delete usage entries, delete all entries, older than half an hour
-        long now = new Date().getTime() - 30 * 60 * 1000;
+        long now = new Date().getTime() - DELETE_OFFSET;
         List<ToolUsage> deleteList = super.currentSession().
                 createQuery("FROM " + TABLE_NAME + " WHERE tool_id = :toolId AND (starttime + duration * 60 * 1000) < :now")
                 .setParameter("toolId", id)

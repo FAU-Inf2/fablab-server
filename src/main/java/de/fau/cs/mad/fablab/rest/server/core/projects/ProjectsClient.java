@@ -5,7 +5,6 @@ import de.fau.cs.mad.fablab.rest.core.ProjectFile;
 import de.fau.cs.mad.fablab.rest.core.ProjectImageUpload;
 import de.fau.cs.mad.fablab.rest.server.configuration.ProjectsConfiguration;
 import net.minidev.json.JSONObject;
-import org.apache.commons.codec.binary.Base64;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -88,9 +87,26 @@ public class ProjectsClient implements ProjectsInterface {
     public String patchProject(String gistId, ProjectFile project) {
 
         JSONObject updateGist = getJSONObject(Method.PATCH, project.getDescription(), project.getFilename(), project.getContent());
-        GistResponse response = pushToGitHub(Method.PATCH, apiUrl + "/" + gistId ,updateGist);
+        GistResponse response = pushToGitHub(Method.PATCH, apiUrl + "/" + gistId, updateGist);
 
         return response.getId();
+    }
+
+    /**
+     * Deletes an existing gist
+     *
+     * @param gistId id of the gist
+     */
+    public void deleteProject(String gistId) {
+        System.out.println("DELETE ME");
+        Client client = ClientBuilder.newClient().register(JacksonJsonProvider.class);
+
+        Invocation invocation = client.target(apiUrl + "/" + gistId).request(MediaType.APPLICATION_JSON).header("Authorization", "token " + token).buildDelete();
+        Response jsonResponse = invocation.invoke();
+
+        if (jsonResponse.getStatus() != 204) {
+            throw new RuntimeException("Failed: HTTP Error: " + jsonResponse.getStatus() + ". URL was " + apiUrl);
+        }
     }
 
     /**
@@ -159,7 +175,6 @@ public class ProjectsClient implements ProjectsInterface {
     }
 
     private String writeImageToDisk(ProjectImageUpload image) throws IOException {
-        //byte[] data = Base64.decodeBase64(image.getData());
         String path = "/tmp/" + image.getFilename();
         OutputStream stream = new FileOutputStream(new File(path));
         stream.write(image.getData());

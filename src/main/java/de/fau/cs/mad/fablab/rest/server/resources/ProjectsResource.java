@@ -7,6 +7,8 @@ import de.fau.cs.mad.fablab.rest.server.core.projects.ProjectsClient;
 import de.fau.cs.mad.fablab.rest.server.core.projects.ProjectsInterface;
 import de.fau.cs.mad.fablab.rest.server.exceptions.Http500Exception;
 
+import javax.ws.rs.DELETE;
+
 public class ProjectsResource implements ProjectsApi {
 
     private ProjectsInterface projectsInterface;
@@ -25,12 +27,22 @@ public class ProjectsResource implements ProjectsApi {
     }
 
     @Override
+    public String updateProjectOld(String gistId, ProjectFile project) {
+        return updateProject(gistId, project);
+    }
+
+    @Override
     public String updateProject(String gistId, ProjectFile project) {
         String gistUrl = projectsInterface.patchProject(gistId, project);
         if (gistUrl == null) {
             throw new Http500Exception("Project was not patched.");
         }
         return gistUrl;
+    }
+
+    @Override
+    public void deleteProject(String gistId) {
+        projectsInterface.deleteProject(gistId);
     }
 
     @Override

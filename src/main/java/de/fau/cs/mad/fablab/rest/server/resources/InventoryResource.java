@@ -77,17 +77,17 @@ public class InventoryResource implements InventoryApi {
 
         // item rows
         for (InventoryItem item : this.facade.getAll()) {
-            str.append(item.getProductId());
+            str.append(StringEscapeUtils.escapeCsv(item.getProductId()));
             str.append(CSV_SEPARATOR);
-            str.append("\"" + StringEscapeUtils.escapeCsv(item.getUUID()) + "\"");
+            str.append(StringEscapeUtils.escapeCsv(item.getUUID()));
             str.append(CSV_SEPARATOR);;
-            str.append("\"" + StringEscapeUtils.escapeCsv(item.getProductName()) + "\"");
+            str.append(StringEscapeUtils.escapeCsv(item.getProductName()));
             str.append(CSV_SEPARATOR);
             str.append(item.getAmount());
             str.append(CSV_SEPARATOR);
             str.append(item.getUpdated_at());
             str.append(CSV_SEPARATOR);
-            str.append("\"" + StringEscapeUtils.escapeCsv(item.getUserName()) + "\"");
+            str.append(StringEscapeUtils.escapeCsv(item.getUserName()));
             str.append(CSV_LINE_SEPARATOR);
         }
 

@@ -128,7 +128,9 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
                 ancestor.setSuccessor(usage.getSuccessor());
                 currentSession().update(ancestor);
 
-                updateStartTimes(ancestor);
+                // only check start times if deleted task is not in past
+                if (usage.getStartTime() * usage.getDuration() * 60 * 1000 > new Date().getTime())
+                    updateStartTimes(ancestor);
             }
 
             currentSession().delete(usage);
@@ -186,6 +188,10 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
 
         // "usage" has to successor of "after"
         after.setSuccessor(usage);
+
+        // start current task if it has no ancestor
+        if (findAncestor(after) == null)
+            after.setStartTime(new Date().getTime());
 
         currentSession().update(usage);
         currentSession().update(after);

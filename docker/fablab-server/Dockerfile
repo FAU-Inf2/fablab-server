@@ -11,7 +11,7 @@ RUN 	apt-get update && apt-get install -y --no-install-recommends \
 
 COPY	fablab-rest-server.keystore fablab-rest-server.keystore
 COPY	tuerstatus-appserver.key tuerstatus-appserver.key
-COPY	apnDev.p12 apnDev.p12
+COPY	APN.p12 APN.p12
 COPY	calendar.ics calendar.ics
 COPY	rss.xml.rss rss.xml.rss
 COPY	config.yml config.yml

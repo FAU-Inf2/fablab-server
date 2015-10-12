@@ -109,7 +109,7 @@ androidPushConfiguration:
     googlePushServiceURL: https://android.clients.google.com/gcm/send
 
 applePushConfiguration:
-  certificate: src/dist/apnDev.p12
+  certificate: src/dist/APN.p12
   password: ${APN_PASSWORD}
 
 

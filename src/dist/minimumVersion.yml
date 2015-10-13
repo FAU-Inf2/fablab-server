@@ -1,9 +1,9 @@
 minimumVersion:
   - platform: ANDROID
-    latestVersionCode: 2
-    latestVersion: v1.1
-    minimumRequiredVersionCode: 1
-    updateMessage: Neuer Endpoint und neue Features vorhanden!
+    latestVersionCode: 4
+    latestVersion: v1.3
+    minimumRequiredVersionCode: 3
+    updateMessage: New features + bugfixes
   - platform: APPLE
     latestVersionCode: 1
     latestVersion: v1.0

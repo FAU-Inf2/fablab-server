@@ -22,7 +22,7 @@ CMD		if [ ! -d "fablab-server" ]; then \
 			git clone https://github.com/FAU-Inf2/fablab-common.git && \
 			mv fablab-rest-server.keystore fablab-server/src/dist && \
 			mv tuerstatus-appserver.key fablab-server/src/dist && \
-			mv apnDev.p12 fablab-server/src/dist && \
+			mv APN.p12 fablab-server/src/dist && \
 			mv calendar.ics fablab-server/src/dist && \
 			mv rss.xml.rss fablab-server/src/dist && \
 			mv config.yml fablab-server/src/dist; \

@@ -129,7 +129,7 @@ public class ToolUsageDAO extends AbstractDAO<ToolUsage> {
                 currentSession().update(ancestor);
 
                 // only check start times if deleted task is not in past
-                if (usage.getStartTime() * usage.getDuration() * 60 * 1000 > new Date().getTime())
+                if (usage.getStartTime() + usage.getDuration() * 60 * 1000 > new Date().getTime())
                     updateStartTimes(ancestor);
             }
 

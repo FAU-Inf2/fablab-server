@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 # check if ENV var GIT_CHECKOUT_TAG is set, and checkout specific git tag
 
 if [ ! -z "$1" ]; then

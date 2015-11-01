@@ -149,6 +149,12 @@ buildNumber.properties
 #keystore file to prevent accidental check in
 *.keystore
 *.key
+*.p12
+
+env
+
+#unneeded as this file will be copied each time
+docker/config.yml
 
 #database files
 server-db.*.db

@@ -9,26 +9,24 @@ RUN 	apt-get update && apt-get install -y --no-install-recommends \
 	git \
 	openjdk-7-jdk
 
-COPY	fablab-rest-server.keystore fablab-rest-server.keystore
-COPY	tuerstatus-appserver.key tuerstatus-appserver.key
-COPY	APN.p12 APN.p12
-COPY	calendar.ics calendar.ics
-COPY	rss.xml.rss rss.xml.rss
-COPY	config.yml config.yml
+# get code # TODO I think we should not pull it but use the checked out repo from ../ -> we have to restructure the repo
+RUN git clone https://github.com/fau-fablab/app-server.git fablab-server
+RUN git clone https://github.com/FAU-Inf2/fablab-common.git
 
-#build and run the server
-CMD		if [ ! -d "fablab-server" ]; then \
-			git clone https://github.com/FAU-Inf2/fablab-server.git && \
-			git clone https://github.com/FAU-Inf2/fablab-common.git && \
-			mv fablab-rest-server.keystore fablab-server/src/dist && \
-			mv tuerstatus-appserver.key fablab-server/src/dist && \
-			mv APN.p12 fablab-server/src/dist && \
-			mv calendar.ics fablab-server/src/dist && \
-			mv rss.xml.rss fablab-server/src/dist && \
-			mv config.yml fablab-server/src/dist; \
-		fi && \
-		cd fablab-server && \
-		./docker/fablab-server/checkoutTag.sh && \
+COPY	fablab-rest-server.keystore fablab-server/src/dist/
+COPY	tuerstatus-appserver.key fablab-server/src/dist/tuerstatus-appserver.key
+COPY	APN.p12 fablab-server/src/dist/APN.p12
+#COPY	calendar.ics fablab-server/src/dist/calendar.ics
+#COPY	rss.xml.rss fablab-server/src/dist/rss.xml.rss
+COPY	config.yml fablab-server/src/dist/config.yml
+
+WORKDIR fablab-server
+
+# build the server # see other gradle tasks with ./gradew tasks
+RUN ./gradlew build
+
+# run the server
+CMD	    ./docker/checkoutTag.sh && \
 		./gradlew run
 
 EXPOSE 4433 8081

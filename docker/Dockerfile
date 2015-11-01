@@ -27,4 +27,4 @@ RUN ./gradlew build
 EXPOSE 4433 8081
 
 # run the server
-CMD ./docker/checkoutTag.sh && ./gradlew run
+CMD ./gradlew run

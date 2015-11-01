@@ -9,9 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	git \
 	openjdk-7-jdk
 
-# get code # TODO I think we should not pull it but use the checked out repo from ../ -> we have to restructure the repo
-RUN git clone https://github.com/fau-fablab/app-server.git fablab-server
-RUN git clone https://github.com/FAU-Inf2/fablab-common.git
+COPY ../app-server/ /home/fablab/
+COPY ../app-common/ /home/fablab/
 
 COPY fablab-rest-server.keystore fablab-server/src/dist/
 COPY tuerstatus-appserver.key fablab-server/src/dist/tuerstatus-appserver.key

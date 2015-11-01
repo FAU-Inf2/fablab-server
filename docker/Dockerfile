@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	git \
 	openjdk-7-jdk
 
+RUN mkdir /home/fablab
+
 COPY ../app-server/ /home/fablab/
 COPY ../app-common/ /home/fablab/
 
@@ -19,7 +21,7 @@ COPY APN.p12 fablab-server/src/dist/APN.p12
 #COPY rss.xml.rss fablab-server/src/dist/rss.xml.rss
 COPY config.yml fablab-server/src/dist/config.yml
 
-WORKDIR fablab-server
+WORKDIR /home/fablab/app-server
 
 # build the server # see other gradle tasks with ./gradew tasks
 RUN ./gradlew build

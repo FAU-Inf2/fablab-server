@@ -2,35 +2,40 @@
 
 set -e
 
+IMAGE="app-server"
+SHELL="bash"
+ENV_FILE="config.env"
+PORTS="-p 8081 -p 4433"
+
 if [ $(whoami) != "root" ]; then echo "[i] this script has to be executed as root!" && exit 1; fi
 
 if [ "$1" == "port" ]; then
-    docker port app-server
+    docker port "${IMAGE}"
 elif [ "$1" == "build" ]; then
-    docker build -t app-server .
+    docker build -t "${IMAGE}" .
 elif [ "$1" == "up" ]; then
-    if [ ! -e config.env ]; then
-        echo "[x] config.env is missing"
+    if [ ! -e "${ENV_FILE}" ]; then
+        echo "[x] ${ENV_FILE} is missing"
         exit 1
     else
-        docker build -t app-server .
-        docker run -d --name=app-server -p 8081 -p 4433 --env-file=config.env app-server
+        docker build -t "${IMAGE}" .
+        docker run -d --name="${IMAGE}" ${PORTS} --env-file="${ENV_FILE}" "${IMAGE}"
     fi
 elif [ "$1" == "run" ]; then
-    docker run -d --name=app-server -p 8081 -p 4433 --env-file=config.env app-server
+    docker run -d --name="${IMAGE}" ${PORTS} --env-file="${ENV_FILE}" "${IMAGE}"
 elif [ "$1" == "start" ]; then
-    docker start app-server
+    docker start "${IMAGE}"
 elif [ "$1" == "stop" ]; then
-    docker stop app-server
+    docker stop "${IMAGE}"
 elif [ "$1" == "restart" ]; then
-    docker restart app-server
+    docker restart "${IMAGE}"
 elif [ "$1" == "clean" ]; then
     read -p "Do you really want to delete the container including ALL data? [y/N] "
     if [ "$REPLY" == "y" ]; then
-        docker rm -v app-server
+        docker rm -v "${IMAGE}"
     fi
 elif [ "$1" == "shell" ]; then
-    docker exec -it app-server bash
+    docker exec -it "${IMAGE}" "${SHELL}"
 else
     echo "Usage: manage.sh [COMMAND]"
     echo ""

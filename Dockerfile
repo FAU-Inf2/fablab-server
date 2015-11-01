@@ -11,15 +11,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN mkdir /home/fablab
 
-COPY ../app-server/ /home/fablab/
-COPY ../app-common/ /home/fablab/
+COPY app-server/ /home/fablab/app-server
+COPY app-common/ /home/fablab/app-common
 
-COPY fablab-rest-server.keystore fablab-server/src/dist/
-COPY tuerstatus-appserver.key fablab-server/src/dist/tuerstatus-appserver.key
-COPY APN.p12 fablab-server/src/dist/APN.p12
+#COPY fablab-rest-server.keystore fablab-server/src/dist/
+#COPY tuerstatus-appserver.key fablab-server/src/dist/tuerstatus-appserver.key
+#COPY APN.p12 fablab-server/src/dist/APN.p12
 #COPY calendar.ics fablab-server/src/dist/calendar.ics
 #COPY rss.xml.rss fablab-server/src/dist/rss.xml.rss
-COPY config.yml fablab-server/src/dist/config.yml
+#COPY config.yml fablab-server/src/dist/config.yml
 
 WORKDIR /home/fablab/app-server
 

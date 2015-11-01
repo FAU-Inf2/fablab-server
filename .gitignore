@@ -151,7 +151,8 @@ buildNumber.properties
 *.key
 *.p12
 
-env
+# environment variables
+config.env
 
 #unneeded as this file will be copied each time
 docker/config.yml

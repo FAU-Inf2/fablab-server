@@ -146,13 +146,23 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 
-#keystore file to prevent accidental check in
+# java keystore
 *.keystore
+
+# java truststore
+*.truststore
+
+# keyfiles
 *.key
+*.p12
+
+# dropwizard config files
+conf/config.yml
+conf/minimumVersion.yml
 
 #database files
 server-db.*.db
-src/dist/schema.sql
+schema.sql
 
 #log files
 *.log

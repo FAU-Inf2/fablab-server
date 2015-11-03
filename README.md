@@ -1,57 +1,34 @@
-# fablab-server [![Build Status](https://travis-ci.org/FAU-Inf2/fablab-server.svg?branch=master)](https://travis-ci.org/FAU-Inf2/fablab-server)
+# app-server
 
-fablab-server is a REST server based on [Dropwizard](http://www.dropwizard.io) which is currently used by the following apps:
+app-server is a REST server based on [Dropwizard](http://www.dropwizard.io) which is currently used by the following apps:
 - [fablab-android](https://github.com/FAU-Inf2/fablab-android)
 - [fablab-iOS](https://github.com/FAU-Inf2/fablab-ios)
 - [fablab-HTML](https://github.com/FAU-Inf2/fablab-html)
 
-## Build
+## Deployment
 
-To build and run the server, just type:
-    
-    //set environment variables needed for admin authentication
-    export hostname=<HOSTNAME_OF_YOUR_SERVER>
-    
-    export USER_ADMIN=<FABLAB_ADMIN_USER>
-    export PASSWORD_ADMIN=<FABLAB_ADMIN_PASSWORD>
-    export USER_INVENTORY=<FABLAB_INVENTORY_USER>
-    export PASSWORD_INVENTORY=<FABLAB_INVENTORY_PASSWORD>
-    
-    export adminUsername=<DROPWIZARD_ADMIN_USER>
-    export adminPassword=<DROPWIZARD_ADMIN_PASSWORD>
-    
-    export openerp_hostname=<OPENERP_HOSTNAME>
-    export openerp_database=<OPENERP_DATABASE>
-    export openerp_user=<OPENERP_USER>
-    export openerp_password=<OPENERP_PASSWORD>
-    
-    export FABLAB_KEYSTORE_PASSWORD=<SSL_KEYSTORE_PASSWORD>
-    export FABLAB_TRUSTSTORE_PATH=<PATH_TO_DROPWIZARD_TRUSTSTORE>
-    export FABLAB_REST_SERVER_TYPE=<SSL_CERT_ALIAS>
-    
-    export pushAPIkey=<ANDROID_GCM_API_KEY>
-    export pushServiceURL="https://android.clients.google.com/gcm/send"
-    
-    export drupalAdmin=<DRUPAL_ADMIN_USER>
-    export drupalPassword=<DRUPAL_PASSWORD>
-    export drupalDBUser=<DRUPAL_DB_USER>
-    export adminPassword=<DRUPAL_ADMIN_PASSWORD>
-    export drupalPort=<DRUPAL_PORT>
-    
-    export APN_PASSWORD=<APPLE_PUSH_KEY_PASSWORD>
-    
-    export apiKey=<PASSWORD_FOR_CHECKOUT_API>
-    
-    //start the server
-    ./gradlew run
-    
-    //start the server inside a docker container
-    sh docker/fablab-server/create.sh && sh docker/fablab-server/start.sh
-    
-<b>NOTE : if any environment variable is missing, the server will not start!</b>
+The following files have to be present in order to run the server:
 
-The server will listen on port 4433 (SSL) for application requests and port 8081 (SSL) for administrative requests. 
-User credentials for the administrative interface, which is protected by a basic HTTP authentication challenge, have to be provided by the environment variables 'adminUsername' and 'adminPassword'. Passwords and configuration (i.e. for OpenErpClient) can also be supplied in directly config.yml.
+- Apple Push Certificate
+- Java Keystore with ssl cert inside
+
+Copy them to `./conf`.
+
+After that you have to copy `app-server/src/dist/{config.yml.example,minimumVersion.yml.example}` to `app-server/src/dist/{config.yml,minimumVersion.yml}` and adapt them to your needs.
+
+Finally, build and run the server with
+
+```bash
+sudo ./manage-docker.sh up
+```
+
+The container will listen on port 443 for application requests and port 8081 (SSL) for administrative requests. 
+
+To find where these ports are bound to execute
+
+```bash
+sudo ./manage-docker.sh port
+```
 
 ## Libraries
 fablab-server uses the following libraries and software:
@@ -62,8 +39,3 @@ fablab-server uses the following libraries and software:
 * [jsoup:1.8.2](http://jsoup.org)  License: [MIT License](http://jsoup.org/license)
 * [cron4j:2.2.5](http://www.sauronsoftware.it/projects/cron4j/) License: [LGPL](http://www.sauronsoftware.it/projects/cron4j/)
 * [pushy:0.4.3](https://github.com/relayrides/pushy) License: [MIT](https://github.com/relayrides/pushy)
-
-## License
-    
-## Contact
-Feel free to contact us: fablab@i2.cs.fau.de

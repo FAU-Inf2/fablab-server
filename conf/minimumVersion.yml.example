@@ -1,0 +1,11 @@
+minimumVersion:
+  - platform: ANDROID
+    latestVersionCode: 1337
+    latestVersion: v1.33.7
+    minimumRequiredVersionCode: 1
+    updateMessage: bugfixes[tm]
+  - platform: APPLE
+    latestVersionCode: 1337
+    latestVersion: v1.33.7
+    minimumRequiredVersionCode: 1
+    updateMessage: bugfixes[tm]

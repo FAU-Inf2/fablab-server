@@ -1,6 +1,6 @@
-# fablab-server
+# app-server
 
-fablab-server is a REST server based on [Dropwizard](http://www.dropwizard.io) which is currently used by the following apps:
+app-server is a REST server based on [Dropwizard](http://www.dropwizard.io) which is currently used by the following apps:
 - [fablab-android](https://github.com/FAU-Inf2/fablab-android)
 - [fablab-iOS](https://github.com/FAU-Inf2/fablab-ios)
 - [fablab-HTML](https://github.com/FAU-Inf2/fablab-html)
@@ -12,9 +12,9 @@ The following files have to be present in order to run the server:
 - Apple Push Certificate
 - Java Keystore with ssl cert inside
 
-Copy them to `app-server/src/dist/`.
+Copy them to `./conf`.
 
-After that you have to copy `app-server/src/dist/{config.yml.example,minimumVersion.yml.example}` to `app-server/src/dist/{`config.yml,minimumVersion.yml}` and adapt them to your needs.
+After that you have to copy `app-server/src/dist/{config.yml.example,minimumVersion.yml.example}` to `app-server/src/dist/{config.yml,minimumVersion.yml}` and adapt them to your needs.
 
 Finally, build and run the server with
 
@@ -39,5 +39,3 @@ fablab-server uses the following libraries and software:
 * [jsoup:1.8.2](http://jsoup.org)  License: [MIT License](http://jsoup.org/license)
 * [cron4j:2.2.5](http://www.sauronsoftware.it/projects/cron4j/) License: [LGPL](http://www.sauronsoftware.it/projects/cron4j/)
 * [pushy:0.4.3](https://github.com/relayrides/pushy) License: [MIT](https://github.com/relayrides/pushy)
-
-## License

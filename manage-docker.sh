@@ -7,6 +7,7 @@ CONTAINER="${IMAGE}"
 SHELL="bash"
 ENV_FILE="config.env"
 PORTS="-p 8081 -p 4433"
+VOLUMES="-v $(pwd)/conf/:/home/fablab/app-server/src/dist/"
 
 if [ $(whoami) != "root" ]; then echo "[i] this script has to be executed as root!" && exit 1; fi
 
@@ -15,15 +16,15 @@ if [ "$1" == "port" ]; then
 elif [ "$1" == "build" ]; then
     docker build -t "${IMAGE}" .
 elif [ "$1" == "up" ]; then
-    if [ ! -e "${ENV_FILE}" ]; then
-        echo "[x] ${ENV_FILE} is missing"
+    if [ ! -e app-server/src/dist/config.yml && ! -e app-server/src/dist/minimumVersion.yml ]; then
+        echo "[x] app-server/src/dist/config.yml or app-server/src/dist/minimumVersion.yml is missing"
         exit 1
     else
         docker build -t "${IMAGE}" .
-        docker run -d --name="${IMAGE}" ${PORTS} --env-file="${ENV_FILE}" "${CONTAINER}"
+        docker run -d --name="${CONTAINER}" "${PORTS}" "${VOLUMES}" "${IMAGE}"
     fi
 elif [ "$1" == "run" ]; then
-    docker run -d --name="${IMAGE}" ${PORTS} --env-file="${ENV_FILE}" "${CONTAINER}"
+    docker run -d --name="${CONTAINER}" "${PORTS}" "${VOLUMES}" "${IMAGE}"
 elif [ "$1" == "start" ]; then
     docker start "${CONTAINER}"
 elif [ "$1" == "stop" ]; then

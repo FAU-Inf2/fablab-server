@@ -1,0 +1,123 @@
+logging:
+  level: INFO
+  appenders:
+    - type: console
+    - type: file
+      archive: false
+      currentLogFilename: src/dist/log/server_info.log
+      threshold: ALL
+      timeZone: UTC
+  loggers:
+    "de.fau.cs.mad.fablab.rest.server.resources.SpaceAPIResource": INFO
+
+spaceapi:
+  endpoint: http://spaceapi.net
+  space: my_fablab
+  keyFile: src/dist/tuerstatus-appserver.key
+  hashAlgorithm: HmacSHA256
+
+network:
+  hostname: app.example.com
+  adminPort: 8081
+
+server:
+  requestLog:
+    timeZone: UTC
+    appenders:
+      - type: console
+      - type: file
+        currentLogFilename: src/dist/log/server_requests.log
+        threshold: ALL
+        archive: true
+        archivedLogFilenamePattern: src/dist/log/request.%d.log.gz
+        archivedFileCount: 5
+
+  applicationConnectors:
+    - type: https
+      port: 443
+      keyStorePath: src/dist/server.keystore
+      keyStorePassword: changeme
+      trustStorePath: src/dist/server.truststore
+      certAlias: prodca
+      validateCerts: true
+
+  adminConnectors:
+    - type: https
+      port: 8081
+      keyStorePath: src/dist/server.keystore
+      keyStorePassword: changeme
+      trustStorePath: src/dist/server.truststore
+      certAlias: prodca
+      validateCerts: true
+
+# H2 DB
+database:
+    driverClass: org.h2.Driver
+    user: db
+    password: changeme
+    logValidationErrors: false
+    url: jdbc:h2:file:/opt/database/fablab-db
+
+    properties:
+      hibernate.dialect: org.hibernate.dialect.H2Dialect
+      hibernate.hbm2ddl.auto: update
+
+admin:
+    role: admin
+    username: admin
+    password: changeme
+
+openerp:
+    username: oerp
+    password: changeme
+    hostname: https://example.com
+    database: production
+
+ical:
+    endpoint: https://example.com
+    icalUrl: /termine/ical
+    fallback: src/dist/calendar.ics
+
+drupalNews:
+    feedurl: /rss.xml
+    url: 127.0.0.1
+    port: 12345
+    nodeEndpoint: /rest/node
+    fallback: src/dist/rss.xml.rss
+
+generalData:
+    fabMail: mail@example.com
+    feedbackMail: mail@example.com
+    fabUrl: https://example.com
+
+androidPushConfiguration:
+    pushAPIRegistrationId: myapikey
+    googlePushServiceURL: https://android.clients.google.com/gcm/send
+
+applePushConfiguration:
+  certificate: src/dist/APN.p12
+  password: changeme
+
+versionCheck:
+  path: src/dist/minimumVersion.yml
+
+users:
+  - username: admin
+    password: changeme
+    roles:
+      - ADMIN
+      - USER
+  - username: inventory
+    password: changeme
+    roles:
+      - INVENTORY
+      - USER
+
+checkoutApiKey:
+  key: myapikey
+
+projects:
+  token: mytoken
+  apiUrl: https://api.github.com/gists
+  gistUrl: https://gist.githubusercontent.com/
+  gistUser: gistuser
